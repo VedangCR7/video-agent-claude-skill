@@ -1,56 +1,82 @@
 ---
 name: AI Content Pipeline
 description: Generate AI content (images, videos, audio) using YAML pipelines with 28+ models. Run tests, estimate costs, and manage outputs.
-dependencies: python>=3.8
+dependencies: python>=3.10
 ---
 
-# AIContentPipeline Skill
+# AI Content Pipeline Skill
 
-This skill helps you work with the AI Content Pipeline - a unified Python package for multi-modal AI content generation.
+Generate AI content (images, videos, audio) using this unified Python package.
 
-## Quick Reference Commands
+## IMPORTANT: First-Time Setup Check
 
-### Pipeline Execution
+**Before running ANY pipeline commands, you MUST check if the environment is set up:**
+
 ```bash
-# Activate virtual environment first
-source venv/bin/activate  # Linux/Mac
-venv\Scripts\activate     # Windows
+# Check if venv exists (Windows)
+if exist venv\Scripts\python.exe (echo "venv exists") else (echo "venv NOT found - run setup")
 
-# Run a pipeline from YAML config
-ai-content-pipeline run-chain --config input/pipelines/config.yaml
-
-# Run with parallel execution (2-3x faster)
-PIPELINE_PARALLEL_ENABLED=true ai-content-pipeline run-chain --config config.yaml
-
-# Use short alias
-aicp run-chain --config config.yaml
+# Check if venv exists (Linux/Mac)
+test -f venv/bin/python && echo "venv exists" || echo "venv NOT found - run setup"
 ```
 
-### Single Operations
+**If venv does NOT exist, run this setup first:**
+
 ```bash
-# Generate a single image
-ai-content-pipeline generate-image --text "A beautiful sunset" --model flux_dev
+# Windows Setup
+python -m venv venv
+venv\Scripts\pip install -e .
 
-# Create video from text (text -> image -> video)
-ai-content-pipeline create-video --text "A beautiful sunset"
-
-# List all available models
-ai-content-pipeline list-models
+# Linux/Mac Setup
+python3 -m venv venv
+source venv/bin/activate
+pip install -e .
 ```
 
-### Testing
+## Running Commands
+
+**All commands must use the venv Python directly:**
+
 ```bash
-# Quick smoke tests (30 seconds)
-python tests/test_core.py
+# Windows - Use venv\Scripts\python directly
+venv\Scripts\python -m packages.core.ai_content_pipeline.ai_content_pipeline --help
 
-# Full integration tests (2-3 minutes)
-python tests/test_integration.py
+# Or after pip install -e . you can use:
+venv\Scripts\ai-content-pipeline --help
+venv\Scripts\aicp --help
 
-# Run all tests
-python tests/run_all_tests.py
+# Linux/Mac
+./venv/bin/python -m packages.core.ai_content_pipeline.ai_content_pipeline --help
+./venv/bin/ai-content-pipeline --help
+```
 
-# Quick test mode
-python tests/run_all_tests.py --quick
+## Quick Commands (after setup)
+
+### Generate Image
+```bash
+# Windows
+venv\Scripts\ai-content-pipeline generate-image --text "your prompt" --model flux_dev
+
+# Linux/Mac
+./venv/bin/ai-content-pipeline generate-image --text "your prompt" --model flux_dev
+```
+
+### Run Pipeline
+```bash
+# Windows
+venv\Scripts\ai-content-pipeline run-chain --config input/pipelines/config.yaml
+
+# Linux/Mac
+./venv/bin/ai-content-pipeline run-chain --config input/pipelines/config.yaml
+```
+
+### List Models
+```bash
+# Windows
+venv\Scripts\ai-content-pipeline list-models
+
+# Linux/Mac
+./venv/bin/ai-content-pipeline list-models
 ```
 
 ## Available AI Models (28 Total)
@@ -106,24 +132,9 @@ steps:
       duration: 5
 ```
 
-### Parameter Templating
-Use `{{step_N.output}}` to reference outputs from previous steps.
+## Environment Variables
 
-## Cost Estimation
-
-Typical costs per operation:
-- **Text-to-Image**: $0.001-0.004 per image
-- **Image-to-Image**: $0.01-0.05 per modification
-- **Image-to-Video**: $0.08-6.00 per video (model dependent)
-
-Always estimate before large pipelines:
-```bash
-ai-content-pipeline estimate --config config.yaml
-```
-
-## Environment Setup
-
-Required environment variables in `.env`:
+Required in `.env` file:
 ```
 FAL_KEY=your_fal_api_key
 PROJECT_ID=your-gcp-project-id
@@ -133,35 +144,20 @@ OPENROUTER_API_KEY=your_openrouter_key
 GEMINI_API_KEY=your_gemini_key
 ```
 
-## Project Structure
+## Cost Estimation
 
+- **Text-to-Image**: $0.001-0.004 per image
+- **Image-to-Image**: $0.01-0.05 per modification
+- **Image-to-Video**: $0.08-6.00 per video (model dependent)
+
+## Testing
+
+```bash
+# Windows
+venv\Scripts\python tests/test_core.py
+venv\Scripts\python tests/run_all_tests.py --quick
+
+# Linux/Mac
+./venv/bin/python tests/test_core.py
+./venv/bin/python tests/run_all_tests.py --quick
 ```
-ai-content-pipeline/
-├── packages/
-│   ├── core/ai_content_pipeline/    # Main pipeline
-│   ├── providers/                   # Google Veo, FAL AI
-│   └── services/                    # TTS, video tools
-├── input/                           # Pipeline configs
-├── output/                          # Generated content
-└── tests/                           # Test suites
-```
-
-## Common Tasks
-
-### Creating a New Pipeline
-1. Create YAML config in `input/pipelines/`
-2. Define steps with model and parameters
-3. Use `{{step_N.output}}` for chaining
-4. Run with `aicp run-chain --config your_config.yaml`
-
-### Adding a New Model
-1. Check `packages/providers/` for the provider
-2. Implement model interface
-3. Register in model registry
-4. Add to list-models output
-
-### Debugging Pipeline Issues
-1. Run with verbose logging
-2. Check `output/` for intermediate files
-3. Verify API keys in `.env`
-4. Test individual steps manually
