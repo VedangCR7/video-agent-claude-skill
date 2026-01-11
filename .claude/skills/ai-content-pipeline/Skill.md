@@ -4,7 +4,7 @@ description: Generate AI content (images, videos, audio) using YAML pipelines wi
 dependencies: python>=3.8
 ---
 
-# AI Content Pipeline Skill
+# AIContentPipeline Skill
 
 This skill helps you work with the AI Content Pipeline - a unified Python package for multi-modal AI content generation.
 
