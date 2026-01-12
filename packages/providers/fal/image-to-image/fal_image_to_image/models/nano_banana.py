@@ -85,8 +85,8 @@ class NanoBananaProEditModel(BaseModel):
     def prepare_arguments(
         self,
         prompt: str,
-        image_url: str = None,
-        image_urls: List[str] = None,
+        image_url: Optional[str] = None,
+        image_urls: Optional[List[str]] = None,
         **kwargs
     ) -> Dict[str, Any]:
         """
@@ -114,7 +114,8 @@ class NanoBananaProEditModel(BaseModel):
         if image_urls:
             urls = validate_image_urls(image_urls, min_count=1, max_count=4)
         elif image_url:
-            urls = [image_url]
+            # Validate single URL by wrapping in list
+            urls = validate_image_urls([image_url], min_count=1, max_count=1)
         else:
             raise ValueError("Either image_url or image_urls must be provided")
 
