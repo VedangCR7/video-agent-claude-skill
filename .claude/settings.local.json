@@ -23,7 +23,8 @@
       "Bash(pip install:*)",
       "Bash(ai-content-pipeline list-models:*)",
       "Bash(git check-ignore:*)",
-      "Bash(python:*)"
+      "Bash(python:*)",
+      "Bash(git status:*)"
     ]
   }
 }
