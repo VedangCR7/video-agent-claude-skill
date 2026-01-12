@@ -129,7 +129,7 @@ class UnifiedTextToImageGenerator:
             "model_key": "nano_banana_pro",
             "name": "Nano Banana Pro",
             "resolution": "1024x1024",
-            "cost_per_image": 0.015,
+            "cost_per_image": 0.002,  # Text-to-image generation cost
             "quality": "high",
             "speed": "fast",
             "use_case": "Fast high-quality generation"
@@ -139,7 +139,7 @@ class UnifiedTextToImageGenerator:
             "model_key": "gpt_image_1_5",
             "name": "GPT Image 1.5",
             "resolution": "1024x1024",
-            "cost_per_image": 0.02,
+            "cost_per_image": 0.003,  # Text-to-image generation cost
             "quality": "high",
             "speed": "medium",
             "use_case": "GPT-powered generation"
