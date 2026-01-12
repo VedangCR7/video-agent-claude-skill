@@ -191,7 +191,7 @@ class FALTextToImageGenerator:
                     'full_result': result
                 }
 
-                print(f"✅ Image generated successfully!")
+                print("✅ Image generated successfully!")
                 if is_base64_url:
                     print(f"📦 Received base64 image data ({len(raw_url) / 1024:.1f} KB)")
                 else:
