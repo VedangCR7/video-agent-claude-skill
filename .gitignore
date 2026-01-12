@@ -113,6 +113,9 @@ test_env/
 # IDE files
 .vscode/
 .idea/
+
+# Claude Code local settings (contains machine-specific permissions)
+.claude/settings.local.json
 *.swp
 *.swo
 *~
