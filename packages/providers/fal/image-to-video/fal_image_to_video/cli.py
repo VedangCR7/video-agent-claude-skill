@@ -24,10 +24,12 @@ def cmd_generate(args):
     image_url = args.image
     start_frame = None
 
-    # If it's a local file, use start_frame parameter
+    # If it's a local file path, pass it via start_frame parameter.
+    # The generator will upload the local file and use it as the image source.
+    # image_url is ignored when start_frame is provided (see generator.py:141-153).
     if not image_url.startswith(('http://', 'https://')):
         start_frame = image_url
-        image_url = "placeholder"  # Will be overridden
+        image_url = None
 
     print(f"🎬 Generating video with {args.model}...")
     print(f"   Image: {args.image}")
