@@ -43,7 +43,14 @@ Create reusable enums that can be shared across models:
 from enum import Enum
 
 class AspectRatio(str, Enum):
-    """Standard aspect ratios used across FAL models."""
+    """
+    Standard aspect ratios used across FAL models.
+
+    Note: This is a superset of all aspect ratios supported by any FAL model.
+    Individual models may only support a subset of these values.
+    Use model-specific validator lists (e.g., NANO_BANANA_ASPECT_RATIOS)
+    to validate for a specific model's API.
+    """
     AUTO = "auto"
     ULTRA_WIDE_21_9 = "21:9"
     WIDESCREEN_16_9 = "16:9"
@@ -55,7 +62,7 @@ class AspectRatio(str, Enum):
     PORTRAIT_3_4 = "3:4"
     PORTRAIT_2_3 = "2:3"
     VERTICAL_9_16 = "9:16"
-    VERTICAL_9_21 = "9:21"
+    VERTICAL_9_21 = "9:21"  # Not supported by all models (e.g., Nano Banana)
 
 class Resolution(str, Enum):
     """Resolution options for supported models."""
@@ -77,6 +84,8 @@ Add validators that can be reused across models:
 ```python
 # Add to: packages/providers/fal/image-to-image/fal_image_to_image/utils/validators.py
 
+# Model-specific subset of AspectRatio enum values supported by Nano Banana Pro Edit API
+# Note: This is a subset of the shared AspectRatio enum (excludes "9:21" which this model doesn't support)
 NANO_BANANA_ASPECT_RATIOS = [
     "auto", "21:9", "16:9", "3:2", "4:3", "5:4",
     "1:1", "4:5", "3:4", "2:3", "9:16"
