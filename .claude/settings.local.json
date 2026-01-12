@@ -7,7 +7,18 @@
       "Bash(git push:*)",
       "Bash(git commit:*)",
       "Bash(git checkout:*)",
-      "Bash(gh repo:*)"
+      "Bash(gh repo:*)",
+      "Bash(gh pr create:*)",
+      "Bash(ai-content-pipeline generate-image:*)",
+      "Bash(venvScriptsactivate)",
+      "Bash(.venvScriptsactivate)",
+      "Bash(cmd /c \"venv\\\\Scripts\\\\activate && ai-content-pipeline generate-image --text \"\"A stunning supermodel with flawless skin, elegant pose, professional fashion photography, studio lighting, high-end editorial style, Vogue magazine quality\"\" --model flux_dev\")",
+      "Bash(cmd /c \"if exist venv\\\\Scripts\\\\python.exe \\(echo venv EXISTS\\) else \\(echo venv NOT FOUND\\)\")",
+      "Bash(python -m venv:*)",
+      "Bash(venv\\\\Scripts\\\\pip install:*)",
+      "Bash(cmd /c \"venv\\\\Scripts\\\\pip install -e .\")",
+      "Bash(dir:*)",
+      "Bash(powershell -Command:*)"
     ]
   }
 }
