@@ -429,7 +429,7 @@ class FALTextToImageGenerator:
 
             # Download the image
             print(f"⬇️ Downloading image to: {filepath}")
-            response = requests.get(image_url, stream=True)
+            response = requests.get(image_url, stream=True, timeout=30)
             response.raise_for_status()
 
             with open(filepath, 'wb') as f:
