@@ -4,6 +4,7 @@
 
 **Implemented:** 2025-01-12
 **Tests:** 54 passing (26 new + 28 existing)
+**CLI:** Fully implemented and tested
 **Commit:** See git history
 
 ## Overview
@@ -997,3 +998,98 @@ These can be enabled by updating `MODEL_EXTENDED_FEATURES` when API support is c
   - Added: `generate_with_interpolation()` - convenience method for Kling frame interpolation
   - Added: `get_model_features()` - get feature support for a model
   - Added: `supports_feature()` - check if model supports a feature
+
+- `packages/providers/fal/image-to-video/fal_image_to_video/cli.py` (NEW)
+  - Full argparse CLI with commands: `generate`, `interpolate`, `list-models`, `model-info`
+  - Supports all extended parameters via command-line flags
+
+---
+
+## CLI Implementation
+
+### File: `packages/providers/fal/image-to-video/fal_image_to_video/cli.py`
+
+The CLI provides command-line access to all image-to-video functionality.
+
+### Commands
+
+#### generate
+Generate video from image with extended parameters.
+
+```bash
+python -m fal_image_to_video.cli generate \
+  --image path/to/image.png \
+  --model kling_2_6_pro \
+  --prompt "Your prompt" \
+  --duration 5 \
+  --output output/
+```
+
+**Options:**
+- `--image, -i` (required): Input image path or URL
+- `--model, -m`: Model to use (default: kling_2_6_pro)
+- `--prompt, -p` (required): Text prompt for video generation
+- `--duration, -d`: Video duration (default: 5)
+- `--output, -o`: Output directory (default: output)
+- `--end-frame`: End frame for interpolation (Kling only)
+- `--negative-prompt`: Negative prompt (default: blur, distortion, low quality)
+- `--cfg-scale`: CFG scale 0-1 (default: 0.5)
+- `--audio`: Generate audio (Veo only)
+
+#### interpolate
+Generate video interpolating between two frames.
+
+```bash
+python -m fal_image_to_video.cli interpolate \
+  --start-frame start.png \
+  --end-frame end.png \
+  --model kling_2_6_pro \
+  --prompt "Smooth transition"
+```
+
+**Options:**
+- `--start-frame, -s` (required): Start frame image
+- `--end-frame, -e` (required): End frame image
+- `--model, -m`: Model (Kling only)
+- `--prompt, -p` (required): Text prompt
+- `--duration, -d`: Duration (default: 5)
+
+#### list-models
+List all available models with pricing.
+
+```bash
+python -m fal_image_to_video.cli list-models
+```
+
+#### model-info
+Show detailed information for a model.
+
+```bash
+python -m fal_image_to_video.cli model-info kling_2_6_pro
+```
+
+### Tested CLI Output
+
+```
+$ python -m fal_image_to_video.cli generate \
+  --image output/miranda_beach_sunset.png \
+  --model kling_2_6_pro \
+  --prompt "Woman walks on beach at sunset" \
+  --duration 5 \
+  --output output/
+
+🎬 Generating video with kling_2_6_pro...
+   Image: output/miranda_beach_sunset.png
+   Duration: 5
+📤 Uploading file: output/miranda_beach_sunset.png
+✅ File uploaded: https://v3b.fal.media/files/...
+🎬 Generating video with Kling Video v2.6 Pro...
+✅ Generation completed in 78.90 seconds
+📥 Downloading video...
+✅ Video saved: output/kling_2_6_pro_video_1768199447.mp4
+
+✅ Success!
+   📁 Output: output/kling_2_6_pro_video_1768199447.mp4
+   💰 Cost: $0.50
+   ⏱️ Time: 78.9s
+```
