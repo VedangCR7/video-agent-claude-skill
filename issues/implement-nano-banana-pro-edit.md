@@ -315,6 +315,48 @@ def validate_image_urls(
         )
 
     return image_urls
+
+
+def validate_output_format(output_format: str) -> str:
+    """
+    Validate output format.
+
+    Args:
+        output_format: Output format string (jpeg, png, webp)
+
+    Returns:
+        Validated output format
+
+    Raises:
+        ValueError: If format is not supported
+    """
+    valid_formats = ["jpeg", "png", "webp"]
+    if output_format not in valid_formats:
+        raise ValueError(
+            f"Output format must be one of {valid_formats}, got: {output_format}"
+        )
+    return output_format
+
+
+def validate_num_images(num_images: int, max_images: int = 4) -> int:
+    """
+    Validate number of images to generate.
+
+    Args:
+        num_images: Number of images to generate
+        max_images: Maximum allowed images
+
+    Returns:
+        Validated number of images
+
+    Raises:
+        ValueError: If count is invalid
+    """
+    if not isinstance(num_images, int) or num_images < 1:
+        raise ValueError(f"num_images must be a positive integer, got: {num_images}")
+    if num_images > max_images:
+        raise ValueError(f"num_images must be <= {max_images}, got: {num_images}")
+    return num_images
 ```
 
 ### Step 3: Fix nano_banana.py Model
