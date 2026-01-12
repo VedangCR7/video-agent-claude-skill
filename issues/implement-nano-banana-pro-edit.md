@@ -186,6 +186,9 @@ NANO_BANANA_ASPECT_RATIOS = [
 # Add resolution enum
 RESOLUTIONS = ["1K", "2K", "4K"]
 
+# Add output format options
+OUTPUT_FORMATS = ["jpeg", "png", "webp"]
+
 # Update DEFAULT_VALUES - REMOVE wrong parameters
 DEFAULT_VALUES = {
     # ... existing models ...
