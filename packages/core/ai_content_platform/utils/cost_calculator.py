@@ -126,6 +126,13 @@ class CostCalculator:
             
             # Get model-specific cost or default
             model = step.parameters.get("model", "default")
+
+            # Handle resolution-based pricing for nano_banana_pro_edit
+            if model == "nano_banana_pro_edit":
+                resolution = step.parameters.get("resolution", "1K")
+                if resolution == "4K":
+                    model = "nano_banana_pro_edit_4k"  # Use 4K pricing key
+
             base_cost = cost_data.get(model, cost_data.get("default", 0.0))
             
             # Apply step-specific multipliers
