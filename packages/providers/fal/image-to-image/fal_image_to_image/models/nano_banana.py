@@ -4,8 +4,11 @@ Nano Banana Pro Edit model implementation
 This model supports multi-image editing and composition with resolution control.
 """
 
+import logging
 from typing import Dict, Any, List, Optional
 from .base import BaseModel
+
+logger = logging.getLogger(__name__)
 from ..config.constants import MODEL_INFO, DEFAULT_VALUES
 from ..utils.validators import (
     validate_nano_banana_aspect_ratio,
@@ -64,11 +67,11 @@ class NanoBananaProEditModel(BaseModel):
 
         # Warn about 4K resolution cost
         if validated_resolution == "4K":
-            print("⚠️  Warning: 4K resolution costs $0.030/image (double the 1K/2K rate)")
+            logger.warning("4K resolution costs $0.030/image (double the 1K/2K rate)")
 
         # Warn about web search cost
         if enable_web_search:
-            print("ℹ️  Web search enabled: +$0.015 per request")
+            logger.info("Web search enabled: +$0.015 per request")
 
         return {
             "aspect_ratio": validated_aspect_ratio,
