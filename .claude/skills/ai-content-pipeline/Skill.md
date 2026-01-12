@@ -1,6 +1,6 @@
 ---
 name: AI Content Pipeline
-description: Generate AI content (images, videos, audio) using YAML pipelines with 28+ models. Run tests, estimate costs, and manage outputs.
+description: Generate AI content (images, videos, audio) using YAML pipelines with 32+ models. Run tests, estimate costs, and manage outputs.
 dependencies: python>=3.10
 ---
 
@@ -79,15 +79,17 @@ venv\Scripts\ai-content-pipeline list-models
 ./venv/bin/ai-content-pipeline list-models
 ```
 
-## Available AI Models (28 Total)
+## Available AI Models (32 Total)
 
-### Text-to-Image (4 models)
+### Text-to-Image (6 models)
 | Model | Key | Description |
 |-------|-----|-------------|
 | FLUX.1 Dev | `flux_dev` | Highest quality, 12B parameters |
 | FLUX.1 Schnell | `flux_schnell` | Fastest inference |
 | Imagen 4 | `imagen_4` | Google's photorealistic model |
 | Seedream v3 | `seedream_v3` | Multilingual support |
+| Nano Banana Pro | `nano_banana_pro` | Fast, high-quality generation |
+| GPT Image 1.5 | `gpt_image_1_5` | GPT-powered image generation |
 
 ### Image-to-Video (4 models)
 | Model | Key | Description |
@@ -97,8 +99,9 @@ venv\Scripts\ai-content-pipeline list-models
 | Hailuo | `hailuo` | MiniMax video generation |
 | Kling | `kling` | High-quality video synthesis |
 
-### Image-to-Image (6 models)
+### Image-to-Image (8 models)
 - Photon Flash, Photon Base, FLUX variants, Clarity Upscaler
+- Nano Banana Pro Edit, GPT Image 1.5 Edit
 
 ### Image Understanding (7 models)
 - Gemini variants for description, classification, OCR, Q&A
