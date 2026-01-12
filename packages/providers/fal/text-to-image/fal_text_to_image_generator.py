@@ -37,8 +37,10 @@ class FALTextToImageGenerator:
     MODEL_ENDPOINTS = {
         "imagen4": "fal-ai/imagen4/preview/fast",
         "seedream": "fal-ai/bytedance/seedream/v3/text-to-image",
-        "flux_schnell": "fal-ai/flux-1/schnell", 
-        "flux_dev": "fal-ai/flux-1/dev"
+        "flux_schnell": "fal-ai/flux-1/schnell",
+        "flux_dev": "fal-ai/flux-1/dev",
+        "nano_banana_pro": "fal-ai/nano-banana-pro",
+        "gpt_image_1_5": "fal-ai/gpt-image-1.5"
     }
     
     def __init__(self, api_key: Optional[str] = None):
@@ -78,11 +80,23 @@ class FALTextToImageGenerator:
                 "enable_safety_checker": True
             },
             "flux_dev": {
-                "image_size": "landscape_4_3",  # Options: square_hd, square, portrait_4_3, portrait_16_9, landscape_4_3, landscape_16_9  
+                "image_size": "landscape_4_3",  # Options: square_hd, square, portrait_4_3, portrait_16_9, landscape_4_3, landscape_16_9
                 "num_inference_steps": 28,  # Dev typically uses more steps for quality
                 "guidance_scale": 3.5,
                 "num_images": 1,
                 "enable_safety_checker": True
+            },
+            "nano_banana_pro": {
+                "image_size": "landscape_4_3",
+                "num_inference_steps": 4,
+                "num_images": 1,
+                "sync_mode": True,
+                "enable_safety_checker": True
+            },
+            "gpt_image_1_5": {
+                "image_size": "landscape_4_3",
+                "num_images": 1,
+                "sync_mode": True
             }
         }
     
@@ -571,6 +585,24 @@ class FALTextToImageGenerator:
                 "supported_features": ["Negative prompts", "Guidance scale", "Safety checker"],
                 "max_steps": 50,
                 "supports_negative_prompt": True
+            },
+            "nano_banana_pro": {
+                "name": "Nano Banana Pro",
+                "endpoint": self.MODEL_ENDPOINTS["nano_banana_pro"],
+                "description": "Fast, high-quality image generation model",
+                "strengths": ["Fast generation", "High quality", "Cost-effective"],
+                "supported_features": ["Safety checker", "Multiple aspect ratios"],
+                "max_steps": 4,
+                "supports_negative_prompt": False
+            },
+            "gpt_image_1_5": {
+                "name": "GPT Image 1.5",
+                "endpoint": self.MODEL_ENDPOINTS["gpt_image_1_5"],
+                "description": "GPT-powered image generation model",
+                "strengths": ["GPT-powered", "Natural language understanding", "High quality"],
+                "supported_features": ["Multiple aspect ratios", "Sync mode"],
+                "max_steps": 1,
+                "supports_negative_prompt": False
             }
         }
     
@@ -687,7 +719,7 @@ class FALTextToImageGenerator:
         # Define valid parameters for each model
         valid_params = {
             "imagen4": {
-                "image_size", "num_inference_steps", "guidance_scale", 
+                "image_size", "num_inference_steps", "guidance_scale",
                 "num_images", "enable_safety_checker"
             },
             "seedream": {
@@ -695,12 +727,19 @@ class FALTextToImageGenerator:
                 "num_images", "seed", "negative_prompt"
             },
             "flux_schnell": {
-                "image_size", "num_inference_steps", "num_images", 
+                "image_size", "num_inference_steps", "num_images",
                 "enable_safety_checker"
             },
             "flux_dev": {
                 "image_size", "num_inference_steps", "guidance_scale",
                 "num_images", "enable_safety_checker", "negative_prompt"
+            },
+            "nano_banana_pro": {
+                "image_size", "num_inference_steps", "num_images",
+                "sync_mode", "enable_safety_checker"
+            },
+            "gpt_image_1_5": {
+                "image_size", "num_images", "sync_mode"
             }
         }
         

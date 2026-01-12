@@ -202,78 +202,78 @@ self.model_defaults["gpt_image_1_5"] = {
 ## Implementation Tasks (Subtasks < 10 min each)
 
 ### Phase 1: Research & Documentation
-- [ ] **1.1** Fetch Nano Banana Pro API spec - document parameters, response format
-- [ ] **1.2** Fetch GPT Image 1.5 API spec - document parameters, response format
-- [ ] **1.3** Fetch Nano Banana Pro Edit API spec - document parameters, response format
-- [ ] **1.4** Fetch GPT Image 1.5 Edit API spec - document parameters, response format
-- [ ] **1.5** Document cost per request for each model from FAL pricing
+- [x] **1.1** Fetch Nano Banana Pro API spec - document parameters, response format
+- [x] **1.2** Fetch GPT Image 1.5 API spec - document parameters, response format
+- [x] **1.3** Fetch Nano Banana Pro Edit API spec - document parameters, response format
+- [x] **1.4** Fetch GPT Image 1.5 Edit API spec - document parameters, response format
+- [x] **1.5** Document cost per request for each model from FAL pricing
 
 ### Phase 2: Text-to-Image - Nano Banana Pro
-- [ ] **2.1** Add endpoint to `MODEL_ENDPOINTS` in `fal_text_to_image_generator.py`
-- [ ] **2.2** Add default parameters to `model_defaults` in `fal_text_to_image_generator.py`
-- [ ] **2.3** Add model info to `get_model_info()` in `text_to_image.py`
-- [ ] **2.4** Add to `SUPPORTED_MODELS` in `constants.py`
-- [ ] **2.5** Add to `COST_ESTIMATES` in `constants.py`
-- [ ] **2.6** Add cost rate to `cost_calculator.py`
-- [ ] **2.7** Write unit test for Nano Banana Pro generation
+- [x] **2.1** Add endpoint to `MODEL_ENDPOINTS` in `fal_text_to_image_generator.py`
+- [x] **2.2** Add default parameters to `model_defaults` in `fal_text_to_image_generator.py`
+- [x] **2.3** Add model info to `get_model_info()` in `text_to_image.py`
+- [x] **2.4** Add to `SUPPORTED_MODELS` in `constants.py`
+- [x] **2.5** Add to `COST_ESTIMATES` in `constants.py`
+- [x] **2.6** Add cost rate to `cost_calculator.py`
+- [x] **2.7** Write unit test for Nano Banana Pro generation
 
 ### Phase 3: Text-to-Image - GPT Image 1.5
-- [ ] **3.1** Add endpoint to `MODEL_ENDPOINTS` in `fal_text_to_image_generator.py`
-- [ ] **3.2** Add default parameters to `model_defaults` in `fal_text_to_image_generator.py`
-- [ ] **3.3** Add model info to `get_model_info()` in `text_to_image.py`
-- [ ] **3.4** Add to `SUPPORTED_MODELS` in `constants.py`
-- [ ] **3.5** Add to `COST_ESTIMATES` in `constants.py`
-- [ ] **3.6** Add cost rate to `cost_calculator.py`
-- [ ] **3.7** Write unit test for GPT Image 1.5 generation
+- [x] **3.1** Add endpoint to `MODEL_ENDPOINTS` in `fal_text_to_image_generator.py`
+- [x] **3.2** Add default parameters to `model_defaults` in `fal_text_to_image_generator.py`
+- [x] **3.3** Add model info to `get_model_info()` in `text_to_image.py`
+- [x] **3.4** Add to `SUPPORTED_MODELS` in `constants.py`
+- [x] **3.5** Add to `COST_ESTIMATES` in `constants.py`
+- [x] **3.6** Add cost rate to `cost_calculator.py`
+- [x] **3.7** Write unit test for GPT Image 1.5 generation
 
 ### Phase 4: Image-to-Image - Nano Banana Pro Edit
-- [ ] **4.1** Add endpoint to `MODEL_ENDPOINTS` in i2i `constants.py`
-- [ ] **4.2** Add display name to `MODEL_DISPLAY_NAMES` in i2i `constants.py`
-- [ ] **4.3** Add defaults to `DEFAULT_VALUES` in i2i `constants.py`
-- [ ] **4.4** Add info to `MODEL_INFO` in i2i `constants.py`
-- [ ] **4.5** Create `nano_banana.py` - define class structure
-- [ ] **4.6** Implement `validate_parameters()` method
-- [ ] **4.7** Implement `prepare_arguments()` method
-- [ ] **4.8** Implement `get_model_info()` method
-- [ ] **4.9** Add export to `models/__init__.py`
-- [ ] **4.10** Register in `generator.py` models dict
-- [ ] **4.11** Add to available models in `image_to_image.py`
-- [ ] **4.12** Add to `SUPPORTED_MODELS` in core `constants.py`
-- [ ] **4.13** Add to `COST_ESTIMATES` in core `constants.py`
-- [ ] **4.14** Add cost rate to `cost_calculator.py`
-- [ ] **4.15** Write unit test for Nano Banana Pro Edit
+- [x] **4.1** Add endpoint to `MODEL_ENDPOINTS` in i2i `constants.py`
+- [x] **4.2** Add display name to `MODEL_DISPLAY_NAMES` in i2i `constants.py`
+- [x] **4.3** Add defaults to `DEFAULT_VALUES` in i2i `constants.py`
+- [x] **4.4** Add info to `MODEL_INFO` in i2i `constants.py`
+- [x] **4.5** Create `nano_banana.py` - define class structure
+- [x] **4.6** Implement `validate_parameters()` method
+- [x] **4.7** Implement `prepare_arguments()` method
+- [x] **4.8** Implement `get_model_info()` method
+- [x] **4.9** Add export to `models/__init__.py`
+- [x] **4.10** Register in `generator.py` models dict
+- [x] **4.11** Add to available models in `image_to_image.py`
+- [x] **4.12** Add to `SUPPORTED_MODELS` in core `constants.py`
+- [x] **4.13** Add to `COST_ESTIMATES` in core `constants.py`
+- [x] **4.14** Add cost rate to `cost_calculator.py`
+- [x] **4.15** Write unit test for Nano Banana Pro Edit
 
 ### Phase 5: Image-to-Image - GPT Image 1.5 Edit
-- [ ] **5.1** Add endpoint to `MODEL_ENDPOINTS` in i2i `constants.py`
-- [ ] **5.2** Add display name to `MODEL_DISPLAY_NAMES` in i2i `constants.py`
-- [ ] **5.3** Add defaults to `DEFAULT_VALUES` in i2i `constants.py`
-- [ ] **5.4** Add info to `MODEL_INFO` in i2i `constants.py`
-- [ ] **5.5** Create `gpt_image.py` - define class structure
-- [ ] **5.6** Implement `validate_parameters()` method
-- [ ] **5.7** Implement `prepare_arguments()` method
-- [ ] **5.8** Implement `get_model_info()` method
-- [ ] **5.9** Add export to `models/__init__.py`
-- [ ] **5.10** Register in `generator.py` models dict
-- [ ] **5.11** Add to available models in `image_to_image.py`
-- [ ] **5.12** Add to `SUPPORTED_MODELS` in core `constants.py`
-- [ ] **5.13** Add to `COST_ESTIMATES` in core `constants.py`
-- [ ] **5.14** Add cost rate to `cost_calculator.py`
-- [ ] **5.15** Write unit test for GPT Image 1.5 Edit
+- [x] **5.1** Add endpoint to `MODEL_ENDPOINTS` in i2i `constants.py`
+- [x] **5.2** Add display name to `MODEL_DISPLAY_NAMES` in i2i `constants.py`
+- [x] **5.3** Add defaults to `DEFAULT_VALUES` in i2i `constants.py`
+- [x] **5.4** Add info to `MODEL_INFO` in i2i `constants.py`
+- [x] **5.5** Create `gpt_image.py` - define class structure
+- [x] **5.6** Implement `validate_parameters()` method
+- [x] **5.7** Implement `prepare_arguments()` method
+- [x] **5.8** Implement `get_model_info()` method
+- [x] **5.9** Add export to `models/__init__.py`
+- [x] **5.10** Register in `generator.py` models dict
+- [x] **5.11** Add to available models in `image_to_image.py`
+- [x] **5.12** Add to `SUPPORTED_MODELS` in core `constants.py`
+- [x] **5.13** Add to `COST_ESTIMATES` in core `constants.py`
+- [x] **5.14** Add cost rate to `cost_calculator.py`
+- [x] **5.15** Write unit test for GPT Image 1.5 Edit
 
 ### Phase 6: Integration & Validation
-- [ ] **6.1** Run existing test suite - verify no regressions
-- [ ] **6.2** Test `ai-content-pipeline list-models` shows new models
-- [ ] **6.3** Test text-to-image generation with Nano Banana Pro
-- [ ] **6.4** Test text-to-image generation with GPT Image 1.5
-- [ ] **6.5** Test image-to-image with Nano Banana Pro Edit
-- [ ] **6.6** Test image-to-image with GPT Image 1.5 Edit
-- [ ] **6.7** Verify cost estimation accuracy for new models
+- [x] **6.1** Run existing test suite - verify no regressions
+- [x] **6.2** Test `ai-content-pipeline list-models` shows new models
+- [ ] **6.3** Test text-to-image generation with Nano Banana Pro (requires API key)
+- [ ] **6.4** Test text-to-image generation with GPT Image 1.5 (requires API key)
+- [ ] **6.5** Test image-to-image with Nano Banana Pro Edit (requires API key)
+- [ ] **6.6** Test image-to-image with GPT Image 1.5 Edit (requires API key)
+- [x] **6.7** Verify cost estimation accuracy for new models
 
 ### Phase 7: Documentation & Cleanup
-- [ ] **7.1** Update README with new models in "Available AI Models" section
+- [x] **7.1** Update README with new models in "Available AI Models" section
 - [ ] **7.2** Add example YAML configs using new models
-- [ ] **7.3** Update CLAUDE.md if model count changed
-- [ ] **7.4** Git commit and push changes
+- [x] **7.3** Update CLAUDE.md if model count changed
+- [x] **7.4** Git commit and push changes
 
 ---
 

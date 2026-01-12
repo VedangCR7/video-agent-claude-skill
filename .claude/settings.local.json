@@ -18,7 +18,12 @@
       "Bash(venv\\\\Scripts\\\\pip install:*)",
       "Bash(cmd /c \"venv\\\\Scripts\\\\pip install -e .\")",
       "Bash(dir:*)",
-      "Bash(powershell -Command:*)"
+      "Bash(powershell -Command:*)",
+      "Bash(git rm:*)",
+      "Bash(pip install:*)",
+      "Bash(ai-content-pipeline list-models:*)",
+      "Bash(git check-ignore:*)",
+      "Bash(python:*)"
     ]
   }
 }
