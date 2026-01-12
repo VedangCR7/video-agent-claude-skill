@@ -537,25 +537,25 @@ def save_base64_image(data_url: str, output_dir: Path, index: int) -> Path:
 ## Checklist
 
 ### Phase 1: Fix Current Bugs (Required)
-- [ ] Remove wrong parameters (`strength`, `num_inference_steps`) from constants
-- [ ] Add correct parameters (`aspect_ratio`, `resolution`, `output_format`)
-- [ ] Add `NANO_BANANA_ASPECT_RATIOS` constant with all 11 options
-- [ ] Add `RESOLUTIONS` constant with 1K/2K/4K
-- [ ] Rewrite `nano_banana.py` with correct API parameters
+- [x] Remove wrong parameters (`strength`, `num_inference_steps`) from constants
+- [x] Add correct parameters (`aspect_ratio`, `resolution`, `output_format`)
+- [x] Add `NANO_BANANA_ASPECT_RATIOS` constant with all 11 options
+- [x] Add `RESOLUTIONS` constant with 1K/2K/4K
+- [x] Rewrite `nano_banana.py` with correct API parameters
 
 ### Phase 2: Add Validators (Required)
-- [ ] Add `validate_nano_banana_aspect_ratio()` function
-- [ ] Add `validate_resolution()` function
-- [ ] Add `validate_image_urls()` function for multi-image support
+- [x] Add `validate_nano_banana_aspect_ratio()` function
+- [x] Add `validate_resolution()` function
+- [x] Add `validate_image_urls()` function for multi-image support
 
 ### Phase 3: Handle Responses (Required)
-- [ ] Add base64 data URL handling to file_utils.py
+- [x] Add base64 data URL handling to file_utils.py
 - [ ] Test with real API calls
 
 ### Phase 4: Cost & Documentation (Recommended)
-- [ ] Update cost calculator with resolution-aware pricing
+- [x] Update cost calculator with resolution-aware pricing
 - [ ] Add warning when 4K resolution selected (double cost)
-- [ ] Update MODEL_INFO with accurate capabilities
+- [x] Update MODEL_INFO with accurate capabilities
 - [ ] Add unit tests for validators
 
 ### Phase 5: CLI & YAML Support (Future)

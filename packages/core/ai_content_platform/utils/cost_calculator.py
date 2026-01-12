@@ -55,7 +55,8 @@ class CostCalculator:
             },
             StepType.IMAGE_TO_IMAGE: {
                 "luma-photon-flash": 0.01,
-                "nano_banana_pro_edit": 0.015,
+                "nano_banana_pro_edit": 0.015,      # 1K/2K resolution
+                "nano_banana_pro_edit_4k": 0.030,   # 4K resolution (double rate)
                 "gpt_image_1_5_edit": 0.02,
                 "default": 0.01
             },
