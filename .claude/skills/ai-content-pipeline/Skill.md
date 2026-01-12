@@ -87,7 +87,7 @@ venv\Scripts\ai-content-pipeline list-models
 
 ## Available AI Models (37 Total)
 
-### Text-to-Image (6 models)
+### Text-to-Image (8 models)
 | Model | Key | Description |
 |-------|-----|-------------|
 | Nano Banana Pro | `nano_banana_pro` | Fast, high-quality generation |
@@ -96,6 +96,8 @@ venv\Scripts\ai-content-pipeline list-models
 | FLUX.1 Schnell | `flux_schnell` | Fastest inference |
 | Imagen 4 | `imagen_4` | Google's photorealistic model |
 | Seedream v3 | `seedream_v3` | Multilingual support |
+| Seedream 3 | `seedream3` | High-resolution generation |
+| Runway Gen-4 | `gen4` | Multi-reference guided generation |
 
 ### Image-to-Video (9 models)
 | Model | Key | Description |
