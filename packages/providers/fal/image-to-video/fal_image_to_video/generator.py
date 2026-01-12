@@ -18,8 +18,16 @@ from .models import (
     Sora2ProModel,
     Veo31FastModel
 )
-from .utils.file_utils import upload_image, ensure_output_directory
-from .config.constants import SUPPORTED_MODELS, MODEL_INFO
+from .utils.file_utils import (
+    upload_image,
+    upload_file,
+    upload_images,
+    upload_audio,
+    upload_video,
+    ensure_output_directory,
+    is_url
+)
+from .config.constants import SUPPORTED_MODELS, MODEL_INFO, MODEL_EXTENDED_FEATURES
 
 load_dotenv()
 
@@ -83,6 +91,12 @@ class FALImageToVideoGenerator:
         model: str = "hailuo",
         output_dir: Optional[str] = None,
         use_async: bool = False,
+        # Extended parameters
+        start_frame: Optional[str] = None,
+        end_frame: Optional[str] = None,
+        ref_images: Optional[List[str]] = None,
+        audio: Optional[str] = None,
+        ref_video: Optional[str] = None,
         **kwargs
     ) -> Dict[str, Any]:
         """
@@ -90,10 +104,15 @@ class FALImageToVideoGenerator:
 
         Args:
             prompt: Text description for video generation
-            image_url: URL of input image
+            image_url: URL of input image (or use start_frame)
             model: Model to use (default: "hailuo")
             output_dir: Custom output directory
             use_async: Whether to use async processing
+            start_frame: Starting frame image (overrides image_url if provided)
+            end_frame: Ending frame image for interpolation (Kling models)
+            ref_images: Reference images for consistency (future support)
+            audio: Audio file for synchronization (future support)
+            ref_video: Reference video for motion/style (future support)
             **kwargs: Model-specific parameters
 
         Returns:
@@ -116,9 +135,78 @@ class FALImageToVideoGenerator:
                 f"Supported: {list(self.models.keys())}"
             )
 
+        # Get model feature support
+        features = MODEL_EXTENDED_FEATURES.get(model, {})
+
+        # Process start_frame (overrides image_url)
+        effective_image_url = image_url
+        if start_frame:
+            if not is_url(start_frame):
+                effective_image_url = upload_file(start_frame)
+                if not effective_image_url:
+                    return {
+                        "success": False,
+                        "error": f"Failed to upload start_frame: {start_frame}",
+                        "model": model
+                    }
+            else:
+                effective_image_url = start_frame
+
+        # Process end_frame if supported
+        if end_frame:
+            if not features.get("end_frame"):
+                print(f"⚠️ Model {model} does not support end_frame parameter, ignoring")
+            else:
+                if not is_url(end_frame):
+                    end_frame = upload_file(end_frame)
+                    if not end_frame:
+                        return {
+                            "success": False,
+                            "error": "Failed to upload end_frame",
+                            "model": model
+                        }
+                kwargs["end_frame"] = end_frame
+
+        # Process ref_images if supported (future)
+        if ref_images:
+            if not features.get("ref_images"):
+                print(f"⚠️ Model {model} does not support ref_images parameter, ignoring")
+            else:
+                kwargs["ref_images"] = upload_images(ref_images)
+
+        # Process audio if supported (future)
+        if audio:
+            if not features.get("audio_input"):
+                print(f"⚠️ Model {model} does not support audio input parameter, ignoring")
+            else:
+                if not is_url(audio):
+                    audio = upload_audio(audio)
+                    if not audio:
+                        return {
+                            "success": False,
+                            "error": "Failed to upload audio",
+                            "model": model
+                        }
+                kwargs["audio_url"] = audio
+
+        # Process ref_video if supported (future)
+        if ref_video:
+            if not features.get("ref_video"):
+                print(f"⚠️ Model {model} does not support ref_video parameter, ignoring")
+            else:
+                if not is_url(ref_video):
+                    ref_video = upload_video(ref_video)
+                    if not ref_video:
+                        return {
+                            "success": False,
+                            "error": "Failed to upload ref_video",
+                            "model": model
+                        }
+                kwargs["ref_video_url"] = ref_video
+
         return self.models[model].generate(
             prompt=prompt,
-            image_url=image_url,
+            image_url=effective_image_url,
             output_dir=output_dir,
             use_async=use_async,
             **kwargs
@@ -329,3 +417,73 @@ class FALImageToVideoGenerator:
                 "features": info.get("features", [])
             }
         return comparison
+
+    # Extended parameter methods
+    def generate_with_interpolation(
+        self,
+        prompt: str,
+        start_frame: str,
+        end_frame: str,
+        model: str = "kling_2_6_pro",
+        duration: str = "5",
+        **kwargs
+    ) -> Dict[str, Any]:
+        """
+        Generate video interpolating between two frames.
+
+        Only supported by Kling models.
+
+        Args:
+            prompt: Text description for video generation
+            start_frame: Starting frame image path/URL
+            end_frame: Ending frame image path/URL
+            model: Model to use (default: "kling_2_6_pro")
+            duration: Video duration
+            **kwargs: Additional parameters
+
+        Returns:
+            Dictionary containing generation results
+        """
+        if model not in ["kling_2_1", "kling_2_6_pro"]:
+            raise ValueError(
+                f"Frame interpolation only supported by Kling models. "
+                f"Got: {model}"
+            )
+
+        return self.generate_video(
+            prompt=prompt,
+            image_url=start_frame,
+            model=model,
+            start_frame=start_frame,
+            end_frame=end_frame,
+            duration=duration,
+            **kwargs
+        )
+
+    def get_model_features(self, model: str) -> Dict[str, bool]:
+        """
+        Get extended feature support for a model.
+
+        Args:
+            model: Model key
+
+        Returns:
+            Dictionary of feature support flags
+        """
+        if model not in MODEL_EXTENDED_FEATURES:
+            raise ValueError(f"Unknown model: {model}")
+        return MODEL_EXTENDED_FEATURES[model].copy()
+
+    def supports_feature(self, model: str, feature: str) -> bool:
+        """
+        Check if a model supports a specific feature.
+
+        Args:
+            model: Model key
+            feature: Feature name (start_frame, end_frame, ref_images, etc.)
+
+        Returns:
+            True if feature is supported
+        """
+        features = MODEL_EXTENDED_FEATURES.get(model, {})
+        return features.get(feature, False)

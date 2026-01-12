@@ -1,8 +1,10 @@
 """
 Kling Video model implementations (v2.1 and v2.6 Pro).
+
+Supports frame interpolation via end_frame parameter (tail_image_url).
 """
 
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 from .base import BaseVideoModel
 from ..config.constants import MODEL_INFO, DEFAULT_VALUES, DURATION_OPTIONS
 
@@ -13,7 +15,8 @@ class KlingModel(BaseVideoModel):
 
     API Parameters:
         - prompt: Text description
-        - image_url: Input image URL
+        - image_url: Input image URL (start frame)
+        - tail_image_url: End frame for interpolation (optional)
         - duration: 5, 10 seconds
         - negative_prompt: Elements to avoid
         - cfg_scale: Guidance scale (0-1)
@@ -31,6 +34,7 @@ class KlingModel(BaseVideoModel):
         duration = kwargs.get("duration", defaults.get("duration", "5"))
         negative_prompt = kwargs.get("negative_prompt", defaults.get("negative_prompt", "blur, distort, and low quality"))
         cfg_scale = kwargs.get("cfg_scale", defaults.get("cfg_scale", 0.5))
+        end_frame = kwargs.get("end_frame")  # Optional end frame for interpolation
 
         # Validate duration
         valid_durations = DURATION_OPTIONS.get("kling_2_1", ["5", "10"])
@@ -44,7 +48,8 @@ class KlingModel(BaseVideoModel):
         return {
             "duration": duration,
             "negative_prompt": negative_prompt,
-            "cfg_scale": cfg_scale
+            "cfg_scale": cfg_scale,
+            "end_frame": end_frame
         }
 
     def prepare_arguments(
@@ -54,13 +59,20 @@ class KlingModel(BaseVideoModel):
         **kwargs
     ) -> Dict[str, Any]:
         """Prepare API arguments for Kling v2.1."""
-        return {
+        args = {
             "prompt": prompt,
             "image_url": image_url,
             "duration": kwargs.get("duration", "5"),
             "negative_prompt": kwargs.get("negative_prompt", "blur, distort, and low quality"),
             "cfg_scale": kwargs.get("cfg_scale", 0.5)
         }
+
+        # Add end frame for interpolation (tail_image_url)
+        end_frame = kwargs.get("end_frame")
+        if end_frame:
+            args["tail_image_url"] = end_frame
+
+        return args
 
     def get_model_info(self) -> Dict[str, Any]:
         """Get Kling v2.1 model information."""
@@ -77,7 +89,8 @@ class Kling26ProModel(BaseVideoModel):
 
     API Parameters:
         - prompt: Text description
-        - image_url: Input image URL
+        - image_url: Input image URL (start frame)
+        - tail_image_url: End frame for interpolation (optional)
         - duration: 5, 10 seconds
         - negative_prompt: Elements to avoid
         - cfg_scale: Guidance scale (0-1)
@@ -95,6 +108,7 @@ class Kling26ProModel(BaseVideoModel):
         duration = kwargs.get("duration", defaults.get("duration", "5"))
         negative_prompt = kwargs.get("negative_prompt", defaults.get("negative_prompt", "blur, distort, and low quality"))
         cfg_scale = kwargs.get("cfg_scale", defaults.get("cfg_scale", 0.5))
+        end_frame = kwargs.get("end_frame")  # Optional end frame for interpolation
 
         # Validate duration
         valid_durations = DURATION_OPTIONS.get("kling_2_6_pro", ["5", "10"])
@@ -108,7 +122,8 @@ class Kling26ProModel(BaseVideoModel):
         return {
             "duration": duration,
             "negative_prompt": negative_prompt,
-            "cfg_scale": cfg_scale
+            "cfg_scale": cfg_scale,
+            "end_frame": end_frame
         }
 
     def prepare_arguments(
@@ -118,13 +133,20 @@ class Kling26ProModel(BaseVideoModel):
         **kwargs
     ) -> Dict[str, Any]:
         """Prepare API arguments for Kling v2.6 Pro."""
-        return {
+        args = {
             "prompt": prompt,
             "image_url": image_url,
             "duration": kwargs.get("duration", "5"),
             "negative_prompt": kwargs.get("negative_prompt", "blur, distort, and low quality"),
             "cfg_scale": kwargs.get("cfg_scale", 0.5)
         }
+
+        # Add end frame for interpolation (tail_image_url)
+        end_frame = kwargs.get("end_frame")
+        if end_frame:
+            args["tail_image_url"] = end_frame
+
+        return args
 
     def get_model_info(self) -> Dict[str, Any]:
         """Get Kling v2.6 Pro model information."""

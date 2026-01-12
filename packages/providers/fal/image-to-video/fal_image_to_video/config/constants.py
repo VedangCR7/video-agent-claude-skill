@@ -135,48 +135,126 @@ MODEL_INFO = {
         "provider": "MiniMax",
         "description": "Standard image-to-video with prompt optimization",
         "max_duration": 10,
-        "features": ["prompt_optimizer"]
+        "features": ["prompt_optimizer"],
+        "extended_params": ["start_frame"]
     },
     "kling_2_1": {
         "name": "Kling Video v2.1",
         "provider": "Kuaishou",
-        "description": "High-quality generation with negative prompts",
+        "description": "High-quality generation with negative prompts and frame interpolation",
         "max_duration": 10,
-        "features": ["negative_prompt", "cfg_scale"]
+        "features": ["negative_prompt", "cfg_scale", "frame_interpolation"],
+        "extended_params": ["start_frame", "end_frame"]
     },
     "kling_2_6_pro": {
         "name": "Kling Video v2.6 Pro",
         "provider": "Kuaishou",
-        "description": "Professional tier with enhanced quality",
+        "description": "Professional tier with enhanced quality and frame interpolation",
         "max_duration": 10,
-        "features": ["negative_prompt", "cfg_scale", "professional_quality"]
+        "features": ["negative_prompt", "cfg_scale", "professional_quality", "frame_interpolation"],
+        "extended_params": ["start_frame", "end_frame"]
     },
     "seedance_1_5_pro": {
         "name": "ByteDance Seedance v1.5 Pro",
         "provider": "ByteDance",
         "description": "Advanced motion synthesis with seed control",
         "max_duration": 10,
-        "features": ["seed_control", "motion_quality"]
+        "features": ["seed_control", "motion_quality"],
+        "extended_params": ["start_frame"]
     },
     "sora_2": {
         "name": "Sora 2",
         "provider": "OpenAI (via FAL)",
         "description": "OpenAI's image-to-video model",
         "max_duration": 12,
-        "features": ["aspect_ratio", "resolution"]
+        "features": ["aspect_ratio", "resolution"],
+        "extended_params": ["start_frame"]
     },
     "sora_2_pro": {
         "name": "Sora 2 Pro",
         "provider": "OpenAI (via FAL)",
         "description": "Professional Sora with 1080p support",
         "max_duration": 12,
-        "features": ["aspect_ratio", "resolution", "1080p"]
+        "features": ["aspect_ratio", "resolution", "1080p"],
+        "extended_params": ["start_frame"]
     },
     "veo_3_1_fast": {
         "name": "Veo 3.1 Fast",
         "provider": "Google (via FAL)",
         "description": "Fast video generation with optional audio",
         "max_duration": 8,
-        "features": ["audio_generation", "auto_fix", "fast_processing"]
+        "features": ["audio_generation", "auto_fix", "fast_processing"],
+        "extended_params": ["start_frame", "audio_generate"]
     }
+}
+
+# Extended parameter support per model
+# This matrix defines which advanced parameters each model supports
+MODEL_EXTENDED_FEATURES = {
+    "hailuo": {
+        "start_frame": True,
+        "end_frame": False,
+        "ref_images": False,
+        "audio_input": False,
+        "audio_generate": False,
+        "ref_video": False,
+    },
+    "kling_2_1": {
+        "start_frame": True,
+        "end_frame": True,  # tail_image_url
+        "ref_images": False,
+        "audio_input": False,
+        "audio_generate": False,
+        "ref_video": False,
+    },
+    "kling_2_6_pro": {
+        "start_frame": True,
+        "end_frame": True,  # tail_image_url
+        "ref_images": False,
+        "audio_input": False,
+        "audio_generate": False,
+        "ref_video": False,
+    },
+    "seedance_1_5_pro": {
+        "start_frame": True,
+        "end_frame": False,
+        "ref_images": False,
+        "audio_input": False,
+        "audio_generate": False,
+        "ref_video": False,
+    },
+    "sora_2": {
+        "start_frame": True,
+        "end_frame": False,
+        "ref_images": False,
+        "audio_input": False,
+        "audio_generate": False,
+        "ref_video": False,
+    },
+    "sora_2_pro": {
+        "start_frame": True,
+        "end_frame": False,
+        "ref_images": False,
+        "audio_input": False,
+        "audio_generate": False,
+        "ref_video": False,
+    },
+    "veo_3_1_fast": {
+        "start_frame": True,
+        "end_frame": False,
+        "ref_images": False,
+        "audio_input": False,
+        "audio_generate": True,  # generate_audio parameter
+        "ref_video": False,
+    },
+}
+
+# API parameter mapping for extended features
+EXTENDED_PARAM_MAPPING = {
+    "start_frame": "image_url",
+    "end_frame": {
+        "kling_2_1": "tail_image_url",
+        "kling_2_6_pro": "tail_image_url",
+    },
+    "audio_generate": "generate_audio",
 }
