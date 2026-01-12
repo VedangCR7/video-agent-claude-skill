@@ -92,11 +92,20 @@ class NanoBananaProEditModel(BaseModel):
         This model supports multiple input images via image_urls parameter.
         For backwards compatibility, image_url (singular) is also accepted.
 
+        Note:
+            Callers should invoke validate_parameters() before this method
+            to ensure kwargs values (aspect_ratio, resolution, output_format,
+            num_images) are valid. The base class's generate() method handles
+            this automatically.
+
         Args:
             prompt: Edit instruction
             image_url: Single image URL (backwards compatibility)
             image_urls: List of image URLs (preferred)
-            **kwargs: Additional parameters
+            **kwargs: Pre-validated parameters from validate_parameters()
+
+        Returns:
+            Dictionary of API arguments ready for the FAL endpoint
         """
         # Handle both single and multiple image inputs
         if image_urls:
