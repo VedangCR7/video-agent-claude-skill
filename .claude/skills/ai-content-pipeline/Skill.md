@@ -90,12 +90,12 @@ venv\Scripts\ai-content-pipeline list-models
 ### Text-to-Image (6 models)
 | Model | Key | Description |
 |-------|-----|-------------|
+| Nano Banana Pro | `nano_banana_pro` | Fast, high-quality generation |
+| GPT Image 1.5 | `gpt_image_1_5` | GPT-powered image generation |
 | FLUX.1 Dev | `flux_dev` | Highest quality, 12B parameters |
 | FLUX.1 Schnell | `flux_schnell` | Fastest inference |
 | Imagen 4 | `imagen_4` | Google's photorealistic model |
 | Seedream v3 | `seedream_v3` | Multilingual support |
-| Nano Banana Pro | `nano_banana_pro` | Fast, high-quality generation |
-| GPT Image 1.5 | `gpt_image_1_5` | GPT-powered image generation |
 
 ### Image-to-Video (4 models)
 | Model | Key | Description |
