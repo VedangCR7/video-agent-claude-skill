@@ -186,10 +186,13 @@ class UnifiedTextToImageGenerator(BaseContentModel):
         """Get list of available text-to-image models."""
         available = []
 
-        # Check unified generator first (supports more models)
+        # Check unified generator first (supports FAL + Replicate models)
         if self._unified_generator:
+            # FAL models
             available.extend(["flux_dev", "flux_schnell", "imagen4", "seedream_v3", "nano_banana_pro", "gpt_image_1_5"])
-        # Fallback to FAL generator
+            # Replicate models (only available via unified generator)
+            available.extend(["seedream3", "gen4"])
+        # Fallback to FAL generator (FAL models only)
         elif self._fal_generator:
             available.extend(["flux_dev", "flux_schnell", "imagen4", "seedream_v3", "nano_banana_pro", "gpt_image_1_5"])
 
@@ -275,9 +278,25 @@ class UnifiedTextToImageGenerator(BaseContentModel):
                 "best_for": "Natural language understanding, creative prompts",
                 "cost_per_image": "$0.003",
                 "avg_time": "8 seconds"
+            },
+            "seedream3": {
+                "name": "ByteDance Seedream-3",
+                "provider": "Replicate",
+                "description": "High-resolution generation up to 2048px",
+                "best_for": "High-resolution images, detailed scenes",
+                "cost_per_image": "$0.003",
+                "avg_time": "15 seconds"
+            },
+            "gen4": {
+                "name": "Runway Gen-4 Image",
+                "provider": "Replicate",
+                "description": "Multi-reference guided generation",
+                "best_for": "Cinematic quality, reference-based generation",
+                "cost_per_image": "$0.08",
+                "avg_time": "20 seconds"
             }
         }
-        
+
         return model_info.get(model, {})
     
     def compare_models(self, prompt: str, models: List[str] = None) -> Dict[str, Dict[str, Any]]:
