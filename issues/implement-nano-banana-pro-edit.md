@@ -231,15 +231,10 @@ MODEL_INFO = {
 
 ```python
 # Add these new validators:
+# Note: Import constants from constants.py to maintain single source of truth
 
 from typing import List
-
-NANO_BANANA_ASPECT_RATIOS = [
-    "auto", "21:9", "16:9", "3:2", "4:3", "5:4",
-    "1:1", "4:5", "3:4", "2:3", "9:16"
-]
-
-RESOLUTIONS = ["1K", "2K", "4K"]
+from ..config.constants import NANO_BANANA_ASPECT_RATIOS, RESOLUTIONS, OUTPUT_FORMATS
 
 
 def validate_nano_banana_aspect_ratio(aspect_ratio: str) -> str:

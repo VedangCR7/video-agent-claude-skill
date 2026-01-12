@@ -2,7 +2,7 @@
 Unit tests for Nano Banana Pro Edit validators.
 
 Tests validate_nano_banana_aspect_ratio(), validate_resolution(),
-and validate_image_urls() functions.
+validate_image_urls(), validate_output_format(), and validate_num_images() functions.
 """
 
 import pytest
@@ -18,7 +18,8 @@ from fal_image_to_image.utils.validators import (
     validate_nano_banana_aspect_ratio,
     validate_resolution,
     validate_image_urls,
-    validate_output_format
+    validate_output_format,
+    validate_num_images
 )
 
 
@@ -135,6 +136,53 @@ class TestValidateOutputFormat:
             with pytest.raises(ValueError) as exc_info:
                 validate_output_format(fmt)
             assert "Output format must be one of" in str(exc_info.value)
+
+
+class TestValidateNumImages:
+    """Tests for validate_num_images function."""
+
+    def test_valid_num_images(self):
+        """Valid number of images within default range (1-10)."""
+        valid_nums = [1, 2, 5, 10]
+        for num in valid_nums:
+            result = validate_num_images(num)
+            assert result == num
+
+    def test_boundary_values(self):
+        """Edge case: boundary values should be valid."""
+        # Lower boundary
+        assert validate_num_images(1) == 1
+        # Upper boundary with default max
+        assert validate_num_images(10) == 10
+        # Custom max boundary
+        assert validate_num_images(4, max_images=4) == 4
+
+    def test_zero_raises_error(self):
+        """Zero images should raise ValueError."""
+        with pytest.raises(ValueError) as exc_info:
+            validate_num_images(0)
+        assert "Number of images must be between 1 and" in str(exc_info.value)
+
+    def test_negative_raises_error(self):
+        """Negative number should raise ValueError."""
+        with pytest.raises(ValueError) as exc_info:
+            validate_num_images(-1)
+        assert "Number of images must be between 1 and" in str(exc_info.value)
+
+    def test_exceeds_default_max_raises_error(self):
+        """Exceeding default max (10) should raise ValueError."""
+        with pytest.raises(ValueError) as exc_info:
+            validate_num_images(11)
+        assert "Number of images must be between 1 and 10" in str(exc_info.value)
+
+    def test_custom_max_images(self):
+        """Custom max_images parameter should be respected."""
+        # Valid with custom max
+        assert validate_num_images(4, max_images=4) == 4
+        # Invalid exceeding custom max
+        with pytest.raises(ValueError) as exc_info:
+            validate_num_images(5, max_images=4)
+        assert "Number of images must be between 1 and 4" in str(exc_info.value)
 
 
 if __name__ == "__main__":
