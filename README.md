@@ -54,10 +54,10 @@ A comprehensive AI content generation package with multiple providers and servic
 ### Text-to-Video Models
 | Model Name | Provider | Cost per Video | Resolution | Special Features |
 |------------|----------|----------------|------------|------------------|
-| `hailuo_pro` | FAL AI | $0.40-0.80 | 720p | MiniMax Hailuo-02 Pro, 5-10s |
-| `kling_2_6_pro` | FAL AI | $0.35-1.40 | 720p | Kling v2.6 Pro, audio generation |
 | `sora_2` | FAL AI | $0.40-1.20 | 720p | OpenAI Sora 2, 4-12s duration |
 | `sora_2_pro` | FAL AI | $1.20-6.00 | 720p/1080p | OpenAI Sora 2 Pro, professional |
+| `kling_2_6_pro` | FAL AI | $0.35-1.40 | 720p | Kling v2.6 Pro, audio generation |
+| `hailuo_pro` | FAL AI | $0.40-0.80 | 720p | MiniMax Hailuo-02 Pro, 5-10s |
 
 > **💡 Cost-Saving Tips:** Start with `kling_2_6_pro` (5s, no audio) for cheapest testing at ~$0.35. Use `--mock` flag for FREE parameter validation: `python -m fal_text_to_video.cli generate --prompt "test" --mock`. Premium models like `sora_2_pro` can cost up to $6.00/video.
 
