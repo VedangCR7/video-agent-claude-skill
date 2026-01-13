@@ -229,7 +229,7 @@ class FALAvatarGenerator:
         Args:
             use_case: One of "quality", "speed", "text_to_avatar",
                      "character_consistency", "style_transfer",
-                     "video_editing", "budget"
+                     "video_editing", "cost_effective"
 
         Returns:
             Recommended model identifier

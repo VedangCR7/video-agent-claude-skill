@@ -148,5 +148,5 @@ MODEL_RECOMMENDATIONS = {
     "character_consistency": "kling_ref_to_video",
     "style_transfer": "kling_v2v_reference",
     "video_editing": "kling_v2v_edit",
-    "budget": "fabric_1_0",
+    "cost_effective": "fabric_1_0",
 }
