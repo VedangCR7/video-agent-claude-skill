@@ -87,8 +87,6 @@ class AddAudioExecutor(BaseStepExecutor):
     ) -> Dict[str, Any]:
         """Execute add-audio step."""
         try:
-            print(f"Debug: video_path received = {input_data}")
-
             if input_data is None:
                 return self._create_error_result(
                     "Video path is None - video from previous step not available",
@@ -116,12 +114,17 @@ class AddAudioExecutor(BaseStepExecutor):
                 **params
             )
 
+            # ThinksSound pricing: ~$0.001/second of audio generated
+            cost = result.get("cost", 0)
+            if cost == 0 and result.get("duration"):
+                cost = result.get("duration", 0) * 0.001
+
             return {
                 "success": result.get("success", False),
                 "output_path": result.get("local_path"),
                 "output_url": result.get("video_url"),
                 "processing_time": result.get("processing_time", 0),
-                "cost": 0.05,  # Approximate ThinksSound cost
+                "cost": cost,
                 "model": "thinksound",
                 "metadata": result.get("response", {}),
                 "error": result.get("error")
