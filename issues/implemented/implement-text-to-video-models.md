@@ -4,7 +4,7 @@
 
 **Created:** 2026-01-13
 **Implemented:** 2026-01-13
-**Branch:** `feat/nano-banana-pro-edit`
+**Branch:** `feat/add-text-to-video-models`
 **Tests:** 30 passing (19 text-to-video + 11 Wan image-to-video)
 **Priority:** Long-term maintainability over short-term gains
 
