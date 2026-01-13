@@ -75,6 +75,13 @@ class KlingRefToVideoModel(BaseAvatarModel):
         duration = duration or self.defaults["duration"]
         aspect_ratio = aspect_ratio or self.defaults["aspect_ratio"]
 
+        # Validate duration (must be "5" or "10", and within max_duration)
+        valid_durations = ["5", "10"]
+        if duration not in valid_durations:
+            raise ValueError(f"duration must be one of {valid_durations}, got '{duration}'")
+        if int(duration) > self.max_duration:
+            raise ValueError(f"duration {duration}s exceeds max {self.max_duration}s")
+
         # Validate aspect ratio
         self._validate_aspect_ratio(aspect_ratio)
 
@@ -238,6 +245,13 @@ class KlingV2VReferenceModel(BaseAvatarModel):
 
         duration = duration or self.defaults["duration"]
         aspect_ratio = aspect_ratio or self.defaults["aspect_ratio"]
+
+        # Validate duration (must be "5" or "10", and within max_duration)
+        valid_durations = ["5", "10"]
+        if duration not in valid_durations:
+            raise ValueError(f"duration must be one of {valid_durations}, got '{duration}'")
+        if int(duration) > self.max_duration:
+            raise ValueError(f"duration {duration}s exceeds max {self.max_duration}s")
 
         self._validate_aspect_ratio(aspect_ratio)
 
