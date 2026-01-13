@@ -114,11 +114,13 @@ class Wan26Model(BaseVideoModel):
 
     def get_model_info(self) -> Dict[str, Any]:
         """Get Wan v2.6 model information."""
-        return {
-            **MODEL_INFO.get("wan_2_6", {}),
-            "endpoint": self.endpoint,
-            "price_per_second": self.price_per_second
+        info = MODEL_INFO.get("wan_2_6", {}).copy()
+        info["endpoint"] = self.endpoint
+        info["pricing_per_second"] = {
+            "720p": 0.10,
+            "1080p": 0.15
         }
+        return info
 
     def estimate_cost(
         self,

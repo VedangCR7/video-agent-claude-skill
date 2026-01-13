@@ -115,6 +115,7 @@ class TestWan26Model:
         assert info["max_duration"] == 15
         assert "prompt_expansion" in info["features"]
         assert "multi_shots" in info["features"]
+        assert info["pricing_per_second"] == {"720p": 0.10, "1080p": 0.15}
 
 
 if __name__ == "__main__":
