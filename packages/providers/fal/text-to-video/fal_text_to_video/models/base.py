@@ -191,7 +191,7 @@ class BaseTextToVideoModel(ABC):
         if verbose:
             print(f"Downloading video: {local_path.name}")
 
-        response = requests.get(url, stream=True)
+        response = requests.get(url, stream=True, timeout=300)
         response.raise_for_status()
 
         total_size = int(response.headers.get('content-length', 0))
