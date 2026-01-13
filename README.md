@@ -44,12 +44,14 @@ A comprehensive AI content generation package with multiple providers and servic
 ### Image-to-Video Models
 | Model Name | Provider | Cost per Video | Resolution | Special Features |
 |------------|----------|----------------|------------|------------------|
-| `veo3` | FAL AI | $3.00 | Up to 1080p | Google Veo 3.0, latest model |
-| `veo3_fast` | FAL AI | $2.00 | Up to 1080p | Google Veo 3.0 Fast |
-| `veo2` | FAL AI | $2.50 | Up to 1080p | Google Veo 2.0 |
-| `hailuo` | FAL AI | $0.08 | 720p | MiniMax Hailuo-02, budget-friendly |
-| `kling` | FAL AI | $0.10 | 720p | Kling Video 2.1 |
-| `wan_2_6` | FAL AI | $0.50-2.25 | 720p/1080p | Wan v2.6, multi-shot, audio input |
+| `veo_3_1_fast` | FAL AI | $0.40-0.80 | 720p/1080p | **Google Veo 3.1 Fast, audio generation** |
+| `sora_2` | FAL AI | $0.40-1.20 | 720p | OpenAI Sora 2, 4-12s duration |
+| `sora_2_pro` | FAL AI | $1.20-3.60 | 720p/1080p | OpenAI Sora 2 Pro, professional |
+| `kling_2_6_pro` | FAL AI | $0.50-1.00 | 720p/1080p | Kling v2.6 Pro, professional quality |
+| `kling_2_1` | FAL AI | $0.25-0.50 | 720p/1080p | Kling Video v2.1, budget option |
+| `seedance_1_5_pro` | FAL AI | $0.40-0.80 | 720p/1080p | ByteDance Seedance v1.5 Pro |
+| `hailuo` | FAL AI | $0.30-0.50 | 768p | MiniMax Hailuo-02, budget-friendly |
+| `wan_2_6` | FAL AI | $0.50-1.50 | 720p/1080p | Wan v2.6, multi-shot, audio input |
 
 ### Text-to-Video Models
 | Model Name | Provider | Cost per Video | Resolution | Special Features |
