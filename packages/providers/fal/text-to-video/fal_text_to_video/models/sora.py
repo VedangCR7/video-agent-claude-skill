@@ -78,7 +78,8 @@ class Sora2Model(BaseTextToVideoModel):
 
     def estimate_cost(self, duration: int = 4, **kwargs) -> float:
         """Estimate cost based on duration."""
-        return 0.10 * duration
+        cost_per_second = self.pricing.get("cost", 0.10)
+        return cost_per_second * duration
 
 
 class Sora2ProModel(BaseTextToVideoModel):
