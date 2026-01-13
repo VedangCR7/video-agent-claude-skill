@@ -150,5 +150,7 @@ class Sora2ProModel(BaseTextToVideoModel):
     def estimate_cost(self, duration: int = 4, resolution: str = "1080p", **kwargs) -> float:
         """Estimate cost based on duration and resolution."""
         if resolution == "1080p":
-            return 0.50 * duration
-        return 0.30 * duration
+            cost_per_second = self.pricing.get("cost_1080p", 0.50)
+        else:
+            cost_per_second = self.pricing.get("cost_720p", 0.30)
+        return cost_per_second * duration
