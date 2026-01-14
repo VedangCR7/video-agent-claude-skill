@@ -35,18 +35,18 @@ class FalVideoAnalyzer(MediaAnalyzerProtocol):
     """
 
     SUPPORTED_MODELS = [
-        "google/gemini-3",
-        "google/gemini-3-flash",
+        "google/gemini-3-pro-preview",
+        "google/gemini-3-flash-preview",
         "google/gemini-2.5-pro",
         "google/gemini-2.5-flash",
-        "anthropic/claude-3.5-sonnet",
-        "openai/gpt-4o",
+        "google/gemini-2.5-flash-lite",
+        "google/gemini-2.0-flash-001",
     ]
 
     def __init__(
         self,
         api_key: Optional[str] = None,
-        model: str = "google/gemini-3-flash"
+        model: str = "google/gemini-2.5-flash"
     ):
         """Initialize FAL analyzer.
 
@@ -121,6 +121,9 @@ class FalVideoAnalyzer(MediaAnalyzerProtocol):
 
         Returns:
             Dict with output, usage, and model info
+
+        Raises:
+            RuntimeError: If FAL API call fails
         """
         input_params = {
             "video_url": video_url,
@@ -131,10 +134,15 @@ class FalVideoAnalyzer(MediaAnalyzerProtocol):
         if system_prompt:
             input_params["system_prompt"] = system_prompt
 
-        result = fal_client.subscribe(
-            "openrouter/router/video/enterprise",
-            arguments=input_params
-        )
+        try:
+            result = fal_client.subscribe(
+                "openrouter/router/video/enterprise",
+                arguments=input_params
+            )
+        except Exception as e:
+            raise RuntimeError(
+                f"FAL API call failed for model '{self.model}': {e}"
+            ) from e
 
         return {
             "output": result.get("output", ""),

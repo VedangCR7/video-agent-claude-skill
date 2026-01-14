@@ -28,7 +28,7 @@ from .analyzer_protocol import MediaAnalyzerProtocol
 DEFAULT_PROVIDER = os.getenv('MEDIA_ANALYZER_PROVIDER', 'gemini')
 
 # Default model for FAL provider
-DEFAULT_FAL_MODEL = os.getenv('FAL_DEFAULT_MODEL', 'google/gemini-3-flash')
+DEFAULT_FAL_MODEL = os.getenv('FAL_DEFAULT_MODEL', 'google/gemini-2.5-flash')
 
 
 class AnalyzerFactory:

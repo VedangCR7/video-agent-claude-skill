@@ -51,12 +51,14 @@ This document describes the multi-provider media analyzer architecture that supp
 
 | Model | Provider | Model ID | Best For |
 |-------|----------|----------|----------|
-| **Gemini 3** | Google | `google/gemini-3` | Latest flagship model |
-| **Gemini 3 Flash** | Google | `google/gemini-3-flash` | Fast, cost-effective |
+| **Gemini 3 Flash Preview** | Google | `google/gemini-3-flash-preview` | Latest fast model |
+| **Gemini 3 Pro Preview** | Google | `google/gemini-3-pro-preview` | Latest flagship model |
 | Gemini 2.5 Pro | Google | `google/gemini-2.5-pro` | High-quality detailed analysis |
 | Gemini 2.5 Flash | Google | `google/gemini-2.5-flash` | Balanced speed/quality |
-| Claude 3.5 Sonnet | Anthropic | `anthropic/claude-3.5-sonnet` | Nuanced understanding |
-| GPT-4o | OpenAI | `openai/gpt-4o` | General-purpose analysis |
+| Gemini 2.5 Flash Lite | Google | `google/gemini-2.5-flash-lite` | Fastest, cost-effective |
+| Gemini 2.0 Flash | Google | `google/gemini-2.0-flash-001` | Previous generation fast |
+
+> **Note:** Model availability may change. Check [FAL OpenRouter API](https://fal.ai/models/openrouter/router/video/enterprise/api) for current models.
 
 ---
 
@@ -79,12 +81,12 @@ from video_utils import analyze_video_file
 # Use Gemini (default)
 result = analyze_video_file(Path("video.mp4"), "description", provider='gemini')
 
-# Use FAL with Gemini 3 Flash (requires URL)
+# Use FAL with Gemini 2.5 Flash (requires URL)
 result = analyze_video_file(
     "https://example.com/video.mp4",
     "description",
     provider='fal',
-    model='google/gemini-3-flash'
+    model='google/gemini-2.5-flash'
 )
 ```
 
@@ -98,7 +100,7 @@ analyzer = get_analyzer()
 
 # Get specific provider
 gemini = get_analyzer(provider='gemini')
-fal = get_analyzer(provider='fal', model='google/gemini-3')
+fal = get_analyzer(provider='fal', model='google/gemini-2.5-flash')
 
 # Analyze video
 result = fal.describe_video("https://example.com/video.mp4", detailed=True)
@@ -111,7 +113,7 @@ print(f"Tokens: {result['usage']['total_tokens']}")
 ```bash
 # Switch entire application to FAL
 export MEDIA_ANALYZER_PROVIDER=fal
-export FAL_DEFAULT_MODEL=google/gemini-3-flash
+export FAL_DEFAULT_MODEL=google/gemini-2.5-flash
 
 # Run application - all analysis uses FAL now
 python your_script.py
@@ -149,7 +151,7 @@ GEMINI_API_KEY=your_gemini_api_key
 
 # FAL configuration (only needed if using FAL)
 FAL_KEY=your_fal_api_key
-FAL_DEFAULT_MODEL=google/gemini-3-flash
+FAL_DEFAULT_MODEL=google/gemini-2.5-flash
 ```
 
 ---
@@ -187,7 +189,7 @@ Get an analyzer instance.
 
 **Parameters:**
 - `provider`: `'gemini'` or `'fal'` (default: `MEDIA_ANALYZER_PROVIDER` env var or `'gemini'`)
-- `model`: Model ID for FAL (default: `FAL_DEFAULT_MODEL` env var or `'google/gemini-3-flash'`)
+- `model`: Model ID for FAL (default: `FAL_DEFAULT_MODEL` env var or `'google/gemini-2.5-flash'`)
 - `**kwargs`: Additional arguments passed to provider constructor
 
 **Returns:** `MediaAnalyzerProtocol` implementation
