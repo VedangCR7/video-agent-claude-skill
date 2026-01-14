@@ -106,6 +106,8 @@ def cmd_analyze_videos() -> None:
         return
 
     config = get_analysis_options(analysis_type)
+    if not config:
+        return
 
     print(f"\n🚀 Starting {analysis_type} analysis...")
 
@@ -145,6 +147,8 @@ def cmd_transcribe_videos() -> None:
     print(f"📹 Found {len(paths.files)} video file(s)")
 
     config = get_analysis_options('transcription')
+    if not config:
+        return
 
     def analyzer(file_path: Path):
         from ..gemini_analyzer import GeminiVideoAnalyzer
@@ -179,6 +183,8 @@ def cmd_describe_videos() -> None:
     print(f"📹 Found {len(paths.files)} video file(s)")
 
     config = get_analysis_options('description')
+    if not config:
+        return
 
     def analyzer(file_path: Path):
         from ..gemini_analyzer import GeminiVideoAnalyzer
@@ -227,6 +233,8 @@ def cmd_describe_videos_with_params(
     # Determine detailed based on format_type
     if format_type == 'describe-video':
         config = get_analysis_options('description')
+        if not config:
+            return
     else:
         # Default to detailed for specific formats (json, txt)
         from ..command_utils import AnalysisConfig
@@ -283,6 +291,8 @@ def cmd_transcribe_videos_with_params(
     # Determine options based on format_type
     if format_type == 'describe-video':
         config = get_analysis_options('transcription')
+        if not config:
+            return
     else:
         # Default options for specific formats
         from ..command_utils import AnalysisConfig

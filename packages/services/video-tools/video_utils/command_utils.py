@@ -188,7 +188,7 @@ def select_analysis_type(
         return None
 
 
-def get_analysis_options(analysis_type: str) -> AnalysisConfig:
+def get_analysis_options(analysis_type: str) -> Optional[AnalysisConfig]:
     """
     Get additional options for the selected analysis type.
 
@@ -196,7 +196,7 @@ def get_analysis_options(analysis_type: str) -> AnalysisConfig:
         analysis_type: The selected analysis type
 
     Returns:
-        AnalysisConfig with user-selected options
+        AnalysisConfig with user-selected options, or None if cancelled
     """
     config = AnalysisConfig(analysis_type=analysis_type)
 
@@ -221,8 +221,11 @@ def get_analysis_options(analysis_type: str) -> AnalysisConfig:
                 questions.append(q)
             config.questions = questions if questions else None
 
-    except (EOFError, KeyboardInterrupt):
-        pass  # Use defaults
+    except EOFError:
+        pass  # Non-interactive mode - use defaults
+    except KeyboardInterrupt:
+        print("\n👋 Operation cancelled.")
+        return None
 
     return config
 

@@ -107,6 +107,8 @@ def cmd_analyze_audio() -> None:
         return
 
     config = get_analysis_options(analysis_type)
+    if not config:
+        return
 
     def analyzer(file_path: Path):
         return analyze_audio_file(
@@ -145,6 +147,8 @@ def cmd_transcribe_audio() -> None:
     print(f"🎵 Found {len(paths.files)} audio file(s)")
 
     config = get_analysis_options('transcription')
+    if not config:
+        return
 
     def analyzer(file_path: Path):
         from ..gemini_analyzer import GeminiVideoAnalyzer
@@ -183,6 +187,8 @@ def cmd_describe_audio() -> None:
     print(f"🎵 Found {len(paths.files)} audio file(s)")
 
     config = get_analysis_options('description')
+    if not config:
+        return
 
     def analyzer(file_path: Path):
         from ..gemini_analyzer import GeminiVideoAnalyzer
@@ -233,6 +239,8 @@ def cmd_analyze_audio_with_params(
         return
 
     config = get_analysis_options(analysis_type)
+    if not config:
+        return
 
     def analyzer(file_path: Path):
         return analyze_audio_file(

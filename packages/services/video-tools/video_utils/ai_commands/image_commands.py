@@ -108,6 +108,8 @@ def cmd_analyze_images() -> None:
         return
 
     config = get_analysis_options(analysis_type)
+    if not config:
+        return
 
     def analyzer(file_path: Path):
         return analyze_image_file(
@@ -145,6 +147,8 @@ def cmd_describe_images() -> None:
     print(f"🖼️ Found {len(paths.files)} image file(s)")
 
     config = get_analysis_options('description')
+    if not config:
+        return
 
     def analyzer(file_path: Path):
         from ..gemini_analyzer import GeminiVideoAnalyzer
@@ -227,6 +231,8 @@ def cmd_analyze_images_with_params(
         return
 
     config = get_analysis_options(analysis_type)
+    if not config:
+        return
 
     def analyzer(file_path: Path):
         return analyze_image_file(
