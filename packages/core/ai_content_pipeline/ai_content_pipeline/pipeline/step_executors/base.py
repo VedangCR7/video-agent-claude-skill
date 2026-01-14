@@ -97,15 +97,15 @@ class BaseStepExecutor(ABC):
         }
         return params
 
-    def _create_error_result(self, error: str, model: str = None) -> Dict[str, Any]:
+    def _create_error_result(self, error: str, model: Optional[str] = None) -> Dict[str, Any]:
         """Create a standardized error result."""
         return {
             "success": False,
             "output_path": None,
             "output_url": None,
             "output_text": None,
-            "processing_time": 0,
-            "cost": 0,
+            "processing_time": 0.0,
+            "cost": 0.0,
             "model": model,
             "metadata": {},
             "error": error

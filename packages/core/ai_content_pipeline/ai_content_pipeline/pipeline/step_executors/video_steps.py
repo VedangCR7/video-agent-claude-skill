@@ -13,6 +13,93 @@ from typing import Any, Dict, Optional
 from .base import BaseStepExecutor
 
 
+class TextToVideoExecutor(BaseStepExecutor):
+    """Executor for text-to-video generation steps."""
+
+    def execute(
+        self,
+        step,
+        input_data: Any,
+        chain_config: Dict[str, Any],
+        step_context: Optional[Dict[str, Any]] = None,
+        **kwargs
+    ) -> Dict[str, Any]:
+        """Execute text-to-video generation."""
+        try:
+            from fal_text_to_video import FALTextToVideoGenerator
+        except ImportError as e:
+            return self._create_error_result(
+                f"fal_text_to_video module not available. "
+                f"Install: pip install -e packages/providers/fal/text-to-video. Error: {e}",
+                step.model
+            )
+
+        try:
+            generator = FALTextToVideoGenerator()
+
+            # Get prompt from input_data (text input) or step params
+            prompt = input_data if isinstance(input_data, str) else step.params.get("prompt", "")
+
+            # Use generated prompt from previous step if available
+            if step_context and "generated_prompt" in step_context:
+                prompt = step_context["generated_prompt"]
+                print(f"Using generated prompt: {prompt[:100]}...")
+
+            if not prompt:
+                return self._create_error_result(
+                    "No prompt provided for text-to-video generation",
+                    step.model
+                )
+
+            params = self._merge_params(
+                step.params, chain_config, kwargs,
+                exclude_keys=["prompt"]
+            )
+
+            # Extract output_dir from params (it's added by _merge_params)
+            output_dir = params.pop("output_dir", "output")
+
+            print(f"Generating video with {step.model}...")
+            print(f"Prompt: {prompt[:100]}...")
+
+            result = generator.generate_video(
+                prompt=prompt,
+                model=step.model,
+                output_dir=output_dir,
+                **params
+            )
+
+            if result.get("success"):
+                return {
+                    "success": True,
+                    "output_path": result.get("local_path"),
+                    "output_url": result.get("video", {}).get("url"),
+                    "processing_time": result.get("processing_time", 0),
+                    "cost": result.get("cost_estimate", 0),
+                    "model": result.get("model", step.model),
+                    "metadata": {
+                        "prompt": prompt,
+                        "video_info": result.get("video", {}),
+                        "model_key": result.get("model_key"),
+                        **{k: v for k, v in result.items()
+                           if k not in ["success", "local_path", "video", "processing_time",
+                                       "cost_estimate", "model", "model_key", "prompt"]}
+                    },
+                    "error": None
+                }
+            else:
+                return self._create_error_result(
+                    result.get("error", "Text-to-video generation failed"),
+                    step.model
+                )
+
+        except Exception as e:
+            return self._create_error_result(
+                f"Text-to-video generation failed: {str(e)}",
+                step.model
+            )
+
+
 class ImageToVideoExecutor(BaseStepExecutor):
     """Executor for image-to-video generation steps."""
 
@@ -167,7 +254,7 @@ class UpscaleVideoExecutor(BaseStepExecutor):
             upscale_factor = step.params.get("upscale_factor", 2)
             target_fps = step.params.get("target_fps", None)
 
-            print(f"Starting video upscaling...")
+            print("Starting video upscaling...")
             print(f"Input video: {input_data}")
             print(f"Upscale factor: {upscale_factor}x")
 
@@ -212,11 +299,6 @@ class UpscaleVideoExecutor(BaseStepExecutor):
                     step.model
                 )
 
-        except ImportError as e:
-            return self._create_error_result(
-                f"Could not import video upscaling module: {e}",
-                step.model
-            )
         except Exception as e:
             return self._create_error_result(
                 f"Video upscaling failed: {str(e)}",
@@ -266,7 +348,7 @@ class GenerateSubtitlesExecutor(BaseStepExecutor):
                     step.model
                 )
 
-            print(f"Starting subtitle generation...")
+            print("Starting subtitle generation...")
             print(f"Input video: {input_data}")
             print(f"Format: {format_type.upper()}")
 

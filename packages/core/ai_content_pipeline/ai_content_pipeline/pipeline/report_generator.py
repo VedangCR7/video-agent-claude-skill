@@ -178,7 +178,7 @@ class ReportGenerator:
             # Create reports directory
             output_dir = Path(chain_config.get("output_dir", "output"))
             reports_dir = output_dir / "reports"
-            reports_dir.mkdir(exist_ok=True)
+            reports_dir.mkdir(parents=True, exist_ok=True)
 
             # Generate report filename
             execution_id = report["execution_summary"]["execution_id"]
@@ -222,6 +222,7 @@ class ReportGenerator:
             Dictionary containing the intermediate report
         """
         execution_id = f"intermediate_{int(time.time())}"
+        enabled_steps = chain.get_enabled_steps()
 
         return {
             "report_type": "intermediate",
@@ -240,8 +241,8 @@ class ReportGenerator:
             "completed_steps": [
                 {
                     "step_number": i + 1,
-                    "step_type": chain.steps[i].step_type.value,
-                    "model": chain.steps[i].model,
+                    "step_type": enabled_steps[i].step_type.value,
+                    "model": enabled_steps[i].model,
                     "status": "completed" if result.get("success") else "failed",
                     "cost": result.get("cost", 0),
                     "output": {
@@ -251,7 +252,7 @@ class ReportGenerator:
                         # Add prompt generation specific fields
                         **({"optimized_prompt": result.get("extracted_prompt"),
                             "full_analysis": result.get("output_text")}
-                           if chain.steps[i].step_type == StepType.PROMPT_GENERATION else {})
+                           if enabled_steps[i].step_type == StepType.PROMPT_GENERATION else {})
                     }
                 }
                 for i, result in enumerate(step_results)
@@ -284,7 +285,7 @@ class ReportGenerator:
             # Create reports directory
             output_dir = Path(config.get("output_dir", "output"))
             reports_dir = output_dir / "reports"
-            reports_dir.mkdir(exist_ok=True)
+            reports_dir.mkdir(parents=True, exist_ok=True)
 
             # Generate filename with step number
             chain_name = report["execution_summary"]["chain_name"]
@@ -305,8 +306,7 @@ class ReportGenerator:
         self,
         image_url: str,
         step_name: str,
-        config: Dict[str, Any],
-        step_number: int
+        config: Dict[str, Any]
     ) -> Optional[str]:
         """
         Download intermediate image for save_intermediates functionality.
@@ -315,7 +315,6 @@ class ReportGenerator:
             image_url: URL of the image to download
             step_name: Name of the step (e.g., "step_1_text_to_image")
             config: Chain configuration containing output_dir
-            step_number: Step number for filename generation
 
         Returns:
             Local file path if successful, None if failed
@@ -324,11 +323,16 @@ class ReportGenerator:
             # Create intermediates directory
             output_dir = Path(config.get("output_dir", "output"))
             intermediates_dir = output_dir / "intermediates"
-            intermediates_dir.mkdir(exist_ok=True)
+            intermediates_dir.mkdir(parents=True, exist_ok=True)
 
-            # Generate filename
+            # Generate filename - extract extension from URL path (strip query params)
             timestamp = int(time.time())
-            file_extension = Path(image_url).suffix or ".png"
+            url_path = image_url.split("?")[0]  # Remove query parameters
+            file_extension = Path(url_path).suffix or ".png"
+            # Sanitize extension to only allow known image types
+            allowed_extensions = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp"}
+            if file_extension.lower() not in allowed_extensions:
+                file_extension = ".png"
             filename = f"{step_name}_{timestamp}{file_extension}"
             filepath = intermediates_dir / filename
 

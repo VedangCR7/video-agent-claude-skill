@@ -12,6 +12,7 @@ from .chain import ContentCreationChain, ChainResult, PipelineStep, StepType
 from .report_generator import ReportGenerator
 from .step_executors import (
     TextToImageExecutor,
+    TextToVideoExecutor,
     ImageUnderstandingExecutor,
     PromptGenerationExecutor,
     ImageToImageExecutor,
@@ -62,6 +63,7 @@ class ChainExecutor:
         # Initialize step executors
         self._executors = {
             StepType.TEXT_TO_IMAGE: TextToImageExecutor(text_to_image),
+            StepType.TEXT_TO_VIDEO: TextToVideoExecutor(),
             StepType.IMAGE_UNDERSTANDING: ImageUnderstandingExecutor(image_understanding),
             StepType.PROMPT_GENERATION: PromptGenerationExecutor(prompt_generation),
             StepType.IMAGE_TO_IMAGE: ImageToImageExecutor(image_to_image),
@@ -269,6 +271,7 @@ class ChainExecutor:
         """Get the output type for a step."""
         output_types = {
             StepType.TEXT_TO_IMAGE: "image",
+            StepType.TEXT_TO_VIDEO: "video",
             StepType.IMAGE_UNDERSTANDING: "text",
             StepType.PROMPT_GENERATION: "text",
             StepType.IMAGE_TO_IMAGE: "image",
@@ -319,8 +322,7 @@ class ChainExecutor:
             local_path = self.report_generator.download_intermediate_image(
                 image_url=step_result["output_url"],
                 step_name=step_name,
-                config=chain.config,
-                step_number=step_index+1
+                config=chain.config
             )
             if local_path:
                 step_result["output_path"] = local_path

@@ -313,8 +313,7 @@ class TestDownloadIntermediateImage:
                 result = report_generator.download_intermediate_image(
                     image_url="https://example.com/image.png",
                     step_name="step_1_text_to_image",
-                    config=config,
-                    step_number=1
+                    config=config
                 )
 
             assert intermediates_dir.exists()
@@ -331,8 +330,7 @@ class TestDownloadIntermediateImage:
                 result = report_generator.download_intermediate_image(
                     image_url="https://example.com/image.png",
                     step_name="step_1_text_to_image",
-                    config=config,
-                    step_number=1
+                    config=config
                 )
 
             assert result is None
