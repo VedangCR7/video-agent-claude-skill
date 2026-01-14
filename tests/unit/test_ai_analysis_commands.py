@@ -97,12 +97,12 @@ class TestCommandUtils:
         assert result is not None
         assert len(result.files) == 2
 
-    def test_setup_paths_nonexistent_input(self, capsys):
+    def test_setup_paths_nonexistent_input(self, tmp_path, capsys):
         """Test path setup with non-existent input path."""
         from video_utils.command_utils import setup_paths
 
         result = setup_paths(
-            input_path="/nonexistent/path",
+            input_path=str(tmp_path / "nonexistent" / "path"),
             output_path=None,
             file_finder=lambda p: [],
             media_type="video",
