@@ -201,16 +201,17 @@ class TestCommandUtils:
         captured = capsys.readouterr()
         assert captured.out == ''
 
-    def test_print_results_summary(self, capsys):
+    def test_print_results_summary(self, capsys, tmp_path):
         """Test results summary printing."""
         from video_utils.command_utils import print_results_summary
 
-        print_results_summary(5, 2, Path('/output'))
+        output_dir = tmp_path / "output"
+        print_results_summary(5, 2, output_dir)
 
         captured = capsys.readouterr()
         assert '5 successful' in captured.out
         assert '2 failed' in captured.out
-        assert '/output' in captured.out
+        assert 'output' in captured.out
 
     def test_print_results_summary_no_output_dir(self, capsys):
         """Test results summary without output directory."""
