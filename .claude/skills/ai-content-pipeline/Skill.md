@@ -323,7 +323,36 @@ from video_utils.ai_commands import (
 )
 ```
 
-### Interactive CLI
+### Video Analysis CLI Command
+
+```bash
+# Analyze video (default: gemini-3-pro, timeline)
+aicp analyze-video -i video.mp4
+
+# With all options
+aicp analyze-video -i video.mp4 -m gemini-3-pro -t timeline -o output/
+
+# Different analysis types
+aicp analyze-video -i video.mp4 -t describe      # Quick description
+aicp analyze-video -i video.mp4 -t transcribe    # Audio transcription
+
+# Different models
+aicp analyze-video -i video.mp4 -m gemini-2.5-flash  # Faster, cheaper
+aicp analyze-video -i video.mp4 -m gemini-direct     # Local, no upload
+
+# List available models
+aicp list-video-models
+```
+
+**CLI Options:**
+| Option | Short | Default | Description |
+|--------|-------|---------|-------------|
+| `--input` | `-i` | required | Video file or directory |
+| `--output` | `-o` | `output/` | Output directory |
+| `--model` | `-m` | `gemini-3-pro` | Model to use |
+| `--type` | `-t` | `timeline` | Analysis type |
+
+### Interactive CLI (Alternative)
 
 ```bash
 cd packages/services/video-tools

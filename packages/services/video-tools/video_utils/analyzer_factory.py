@@ -10,11 +10,11 @@ Usage:
 
     # Get specific provider
     gemini = get_analyzer(provider='gemini')
-    fal = get_analyzer(provider='fal', model='google/gemini-3-flash')
+    fal = get_analyzer(provider='fal', model='google/gemini-2.5-flash')
 
     # Switch provider via environment variable
     export MEDIA_ANALYZER_PROVIDER=fal
-    export FAL_DEFAULT_MODEL=google/gemini-3
+    export FAL_DEFAULT_MODEL=google/gemini-2.5-flash
 """
 
 import os
@@ -147,9 +147,15 @@ class AnalyzerFactory:
             Dict with 'available' bool and 'message' string
         """
         if provider == 'gemini':
-            from .gemini_analyzer import check_gemini_requirements
-            available, message = check_gemini_requirements()
-            return {'available': available, 'message': message}
+            try:
+                from .gemini_analyzer import check_gemini_requirements
+                available, message = check_gemini_requirements()
+                return {'available': available, 'message': message}
+            except ImportError:
+                return {
+                    'available': False,
+                    'message': 'Gemini SDK not installed. Run: pip install google-generativeai'
+                }
 
         elif provider == 'fal':
             try:
@@ -180,7 +186,7 @@ def get_analyzer(
 
     Args:
         provider: 'gemini' or 'fal'
-        model: Model for FAL (e.g., 'google/gemini-3-flash')
+        model: Model for FAL (e.g., 'google/gemini-2.5-flash')
         **kwargs: Additional provider-specific arguments
 
     Returns:
@@ -191,7 +197,7 @@ def get_analyzer(
         >>> analyzer = get_analyzer()
 
         >>> # Get FAL analyzer with specific model
-        >>> analyzer = get_analyzer(provider='fal', model='google/gemini-3')
+        >>> analyzer = get_analyzer(provider='fal', model='google/gemini-2.5-flash')
 
         >>> # Analyze video
         >>> result = analyzer.describe_video('https://example.com/video.mp4')

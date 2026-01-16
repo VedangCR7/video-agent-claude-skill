@@ -165,7 +165,7 @@ FAL_DEFAULT_MODEL=google/gemini-2.5-flash
 | **Model Selection** | Hardcoded | Runtime parameter |
 | **Authentication** | `GEMINI_API_KEY` | `FAL_KEY` |
 | **Cost Tracking** | Manual | Built-in `usage` in response |
-| **Multi-model** | Gemini only | Gemini, Claude, GPT-4o |
+| **Multi-model** | Gemini only | Gemini 2.5/3 variants |
 
 ---
 
