@@ -130,9 +130,18 @@ fi
 # Create state file for stop hook (markdown with YAML frontmatter)
 mkdir -p .claude
 
+# Escape special characters for YAML string
+yaml_escape() {
+  local s=$1
+  s=${s//\\/\\\\}
+  s=${s//\"/\\\"}
+  s=${s//$'\n'/\\n}
+  printf '%s' "$s"
+}
+
 # Quote completion promise for YAML if it contains special chars or is not null
 if [[ -n "$COMPLETION_PROMISE" ]] && [[ "$COMPLETION_PROMISE" != "null" ]]; then
-  COMPLETION_PROMISE_YAML="\"$COMPLETION_PROMISE\""
+  COMPLETION_PROMISE_YAML="\"$(yaml_escape "$COMPLETION_PROMISE")\""
 else
   COMPLETION_PROMISE_YAML="null"
 fi
