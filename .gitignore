@@ -116,6 +116,8 @@ test_env/
 
 # Claude Code local settings (contains machine-specific permissions)
 .claude/settings.local.json
+# Ralph Wiggum loop state (runtime-generated, contains local paths)
+.claude/ralph-loop.local.md
 *.swp
 *.swo
 *~
