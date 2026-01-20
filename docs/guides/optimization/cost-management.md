@@ -78,21 +78,24 @@ Total Estimated Cost:                  $0.553
 ### Python API Estimation
 
 ```python
-from packages.core.ai_content_pipeline.pipeline.manager import AIPipelineManager
+from ai_content_pipeline.pipeline.manager import AIPipelineManager
 
 manager = AIPipelineManager()
 
-# Estimate before running
-estimate = manager.estimate_cost("pipeline.yaml")
+# Load chain from config file
+chain = manager.create_chain_from_config("pipeline.yaml")
 
-print(f"Total estimated cost: ${estimate.total:.2f}")
+# Estimate before running
+cost_info = manager.estimate_chain_cost(chain)
+
+print(f"Total estimated cost: ${cost_info['total_cost']:.2f}")
 print(f"Breakdown:")
-for step, cost in estimate.breakdown.items():
-    print(f"  {step}: ${cost:.4f}")
+for step in cost_info['step_costs']:
+    print(f"  {step['step']} ({step['model']}): ${step['cost']:.4f}")
 
 # Decide whether to proceed
-if estimate.total < 1.00:
-    results = manager.run_pipeline("pipeline.yaml")
+if cost_info['total_cost'] < 1.00:
+    results = manager.execute_chain(chain, "Your input prompt here")
 else:
     print("Cost exceeds budget, aborting")
 ```
