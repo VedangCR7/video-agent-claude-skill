@@ -17,84 +17,29 @@ A comprehensive AI content generation package with multiple providers and servic
 
 ## 🎨 Available AI Models
 
-### Text-to-Image Models
-| Model Name | Provider | Cost per Image | Resolution | Special Features |
-|------------|----------|----------------|------------|------------------|
-| `nano_banana_pro` | FAL AI | $0.002 | 1024x1024 | **Fast & high-quality, recommended** |
-| `gpt_image_1_5` | FAL AI | $0.003 | Up to 1536px | GPT-powered image generation |
-| `flux_dev` | FAL AI | $0.003 | 1024x1024 | High quality, FLUX.1 Dev |
-| `flux_schnell` | FAL AI | $0.001 | 1024x1024 | Fast generation, FLUX.1 Schnell |
-| `imagen4` | FAL AI | $0.004 | 1024x1024 | Google Imagen 4, photorealistic |
-| `seedream_v3` | FAL AI | $0.002 | 1024x1024 | Seedream v3, bilingual support |
-| `seedream3` | Replicate | $0.003 | Up to 2048px | ByteDance Seedream-3, high-res |
-| `gen4` | Replicate | $0.08 | 720p/1080p | **Runway Gen-4, multi-reference guidance** |
+**40+ AI models across 8 categories** - showing top picks below. See [full models reference](docs/reference/models.md) for complete list.
 
-### Image-to-Image Models
-| Model Name | Provider | Cost per Image | Special Features |
-|------------|----------|----------------|------------------|
-| `nano_banana_pro_edit` | FAL AI | $0.015 | **Fast editing, recommended** |
-| `gpt_image_1_5_edit` | FAL AI | $0.02 | GPT-powered image editing |
-| `photon_flash` | FAL AI | $0.02 | Luma Photon Flash, creative & fast |
-| `photon_base` | FAL AI | $0.03 | Luma Photon Base, high quality |
-| `flux_kontext` | FAL AI | $0.025 | FLUX Kontext Dev, contextual editing |
-| `flux_kontext_multi` | FAL AI | $0.04 | FLUX Kontext Multi, multi-image |
-| `seededit_v3` | FAL AI | $0.02 | ByteDance SeedEdit v3, precise editing |
-| `clarity_upscaler` | FAL AI | $0.05 | Clarity AI upscaler |
+### Text-to-Image (Top Picks)
+| Model | Cost | Best For |
+|-------|------|----------|
+| `flux_dev` | $0.003 | High quality |
+| `flux_schnell` | $0.001 | Fast & budget |
 
-### Image-to-Video Models
-| Model Name | Provider | Cost per Video | Resolution | Special Features |
-|------------|----------|----------------|------------|------------------|
-| `veo_3_1_fast` | FAL AI | $0.40-0.80 | 720p/1080p | **Google Veo 3.1 Fast, audio generation** |
-| `sora_2` | FAL AI | $0.40-1.20 | 720p | OpenAI Sora 2, 4-12s duration |
-| `sora_2_pro` | FAL AI | $1.20-3.60 | 720p/1080p | OpenAI Sora 2 Pro, professional |
-| `kling_2_6_pro` | FAL AI | $0.50-1.00 | 720p/1080p | Kling v2.6 Pro, professional quality |
-| `kling_2_1` | FAL AI | $0.25-0.50 | 720p/1080p | Kling Video v2.1, budget option |
-| `seedance_1_5_pro` | FAL AI | $0.40-0.80 | 720p/1080p | ByteDance Seedance v1.5 Pro |
-| `hailuo` | FAL AI | $0.30-0.50 | 768p | MiniMax Hailuo-02, budget-friendly |
-| `wan_2_6` | FAL AI | $0.50-1.50 | 720p/1080p | Wan v2.6, multi-shot, audio input |
+### Image-to-Video (Top Picks)
+| Model | Cost | Best For |
+|-------|------|----------|
+| `kling_2_6_pro` | $0.50-1.00 | Professional quality |
+| `hailuo` | $0.30 | Budget-friendly |
 
-### Text-to-Video Models
-| Model Name | Provider | Cost per Video | Resolution | Special Features |
-|------------|----------|----------------|------------|------------------|
-| `sora_2` | FAL AI | $0.40-1.20 | 720p | OpenAI Sora 2, 4-12s duration |
-| `sora_2_pro` | FAL AI | $1.20-6.00 | 720p/1080p | OpenAI Sora 2 Pro, professional |
-| `kling_2_6_pro` | FAL AI | $0.35-1.40 | 720p | Kling v2.6 Pro, audio generation |
-| `hailuo_pro` | FAL AI | $0.08 | 1080p | MiniMax Hailuo-02 Pro, 6s fixed |
+### Text-to-Video (Top Picks)
+| Model | Cost | Best For |
+|-------|------|----------|
+| `kling_2_6_pro` | $0.35-1.40 | Quality + audio |
+| `hailuo_pro` | $0.08 | Cheapest option |
 
-> **💡 Cost-Saving Tips:** Start with `kling_2_6_pro` (5s, no audio) for cheapest testing at ~$0.35. Use `--mock` flag for FREE parameter validation: `python -m fal_text_to_video.cli generate --prompt "test" --mock`. Premium models like `sora_2_pro` can cost up to $6.00/video.
+> **💡 Cost-Saving Tip:** Use `--mock` flag for FREE validation: `ai-content-pipeline generate-image --text "test" --mock`
 
-### Image Understanding Models
-| Model Name | Provider | Cost per Analysis | Special Features |
-|------------|----------|-------------------|------------------|
-| `gemini_describe` | Google | $0.001 | Basic image description |
-| `gemini_detailed` | Google | $0.002 | Detailed image analysis |
-| `gemini_classify` | Google | $0.001 | Image classification |
-| `gemini_objects` | Google | $0.002 | Object detection |
-| `gemini_ocr` | Google | $0.001 | Text extraction (OCR) |
-| `gemini_composition` | Google | $0.002 | Artistic & technical analysis |
-| `gemini_qa` | Google | $0.001 | Question & answer system |
-
-### Text-to-Speech Models
-| Model Name | Provider | Cost per Request | Special Features |
-|------------|----------|------------------|------------------|
-| `elevenlabs` | ElevenLabs | $0.05 | High quality TTS |
-| `elevenlabs_turbo` | ElevenLabs | $0.03 | Fast generation |
-| `elevenlabs_v3` | ElevenLabs | $0.08 | Latest v3 model |
-
-### Audio & Video Processing
-| Model Name | Provider | Cost per Request | Special Features |
-|------------|----------|------------------|------------------|
-| `thinksound` | FAL AI | $0.05 | AI audio generation |
-| `topaz` | FAL AI | $1.50 | Video upscaling |
-
-### 🌟 **Featured Model: Runway Gen-4**
-The **`gen4`** model is our most advanced text-to-image model, offering unique capabilities:
-- **Multi-Reference Guidance**: Use up to 3 reference images with tagging
-- **Cinematic Quality**: Premium model for high-end generation  
-- **@ Syntax**: Reference tagged elements in prompts (`@woman`, `@park`)
-- **Variable Pricing**: $0.05 (720p) / $0.08 (1080p)
-
-**Total Models: 40+ AI models across 8 categories**
+📚 **[View all 40+ models →](docs/reference/models.md)**
 
 ## 🏷️ Latest Release
 
@@ -387,10 +332,11 @@ See [CLAUDE.md](CLAUDE.md) for detailed commands for each package.
 
 ## 📚 Documentation
 
-- **[Project Instructions](CLAUDE.md)** - Comprehensive development guide
-- **[Cursor AI Rules](.cursor/.cursorrules)** - Detailed project architecture and implementation patterns for AI assistants
-- **[Documentation](docs/)** - Additional documentation and guides
-- **Package READMEs** - Each package has its own README with specific instructions
+- **[Quick Start Guide](docs/guides/getting-started/quick-start.md)** - Get running in 5 minutes
+- **[Full Documentation](docs/index.md)** - Complete documentation index
+- **[Models Reference](docs/reference/models.md)** - All 40+ AI models with pricing
+- **[YAML Pipeline Guide](docs/guides/pipelines/yaml-pipelines.md)** - Create custom workflows
+- **[Project Instructions](CLAUDE.md)** - Development guide
 
 ## 🏗️ Architecture
 
