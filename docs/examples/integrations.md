@@ -407,6 +407,7 @@ def generate_content(request):
 ### Incoming Webhook Handler
 
 ```python
+import os
 from flask import Flask, request
 import hmac
 import hashlib
@@ -414,7 +415,10 @@ import hashlib
 app = Flask(__name__)
 manager = AIPipelineManager()
 
-WEBHOOK_SECRET = "your-webhook-secret"
+# Load secret from environment variable (never hardcode secrets)
+WEBHOOK_SECRET = os.environ.get("WEBHOOK_SECRET")
+if not WEBHOOK_SECRET:
+    raise ValueError("WEBHOOK_SECRET environment variable must be set")
 
 
 def verify_signature(payload: bytes, signature: str) -> bool:
