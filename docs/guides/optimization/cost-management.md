@@ -314,13 +314,28 @@ steps:
 
 ### Cost Reports
 
-Generate cost reports:
+Track costs manually after pipeline execution:
 
 ```python
-# After running operations
-report = manager.get_cost_report()
-report.save("monthly_costs.json")
-report.save("monthly_costs.csv")
+import json
+
+# After running pipeline
+results = manager.run_pipeline("pipeline.yaml", input_text="prompt")
+
+# Calculate total cost from results
+total_cost = sum(r.cost for r in results if hasattr(r, 'cost'))
+
+# Save cost report manually
+report = {
+    "total_cost": total_cost,
+    "steps": [
+        {"step": r.step_name, "cost": r.cost}
+        for r in results if hasattr(r, 'cost')
+    ]
+}
+
+with open("cost_report.json", "w") as f:
+    json.dump(report, f, indent=2)
 ```
 
 ### Alerts
