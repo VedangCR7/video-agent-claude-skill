@@ -361,18 +361,34 @@ except PipelineError as e:
 
 ## Advanced Usage
 
-### Custom Pipeline Builder
+### Building Pipelines Programmatically
 
 ```python
-from packages.core.ai_content_pipeline.pipeline.builder import PipelineBuilder
+from packages.core.ai_content_pipeline.pipeline.manager import AIPipelineManager
 
-# Build pipeline programmatically
-pipeline = PipelineBuilder() \
-    .add_step("generate", "text_to_image", model="flux_dev") \
-    .add_step("animate", "image_to_video", model="kling_2_6_pro", input_from="generate") \
-    .build()
+manager = AIPipelineManager()
 
-results = manager.run_pipeline(pipeline, input_text="sunset beach")
+# Build pipeline using dict configuration
+config = {
+    "name": "Custom Pipeline",
+    "steps": [
+        {
+            "name": "generate",
+            "type": "text_to_image",
+            "model": "flux_dev",
+            "params": {"prompt": "{{input}}"}
+        },
+        {
+            "name": "animate",
+            "type": "image_to_video",
+            "model": "kling_2_6_pro",
+            "input_from": "generate",
+            "params": {"duration": 5}
+        }
+    ]
+}
+
+results = manager.run_pipeline(config, input_text="sunset beach")
 ```
 
 ### Parallel Processing
@@ -440,28 +456,28 @@ def generate_image():
     })
 ```
 
-### Async Usage
+### Concurrent Usage with Threading
 
 ```python
-import asyncio
-from packages.core.ai_content_pipeline.pipeline.manager import AsyncAIPipelineManager
+from concurrent.futures import ThreadPoolExecutor
+from packages.core.ai_content_pipeline.pipeline.manager import AIPipelineManager
 
-async def main():
-    manager = AsyncAIPipelineManager()
+manager = AIPipelineManager()
 
-    # Parallel generation
-    tasks = [
-        manager.generate_image(prompt="cat"),
-        manager.generate_image(prompt="dog"),
-        manager.generate_image(prompt="bird")
-    ]
+def generate(prompt):
+    return manager.generate_image(prompt=prompt)
 
-    results = await asyncio.gather(*tasks)
-    for result in results:
-        print(result.output_path)
+# Parallel generation using threads
+prompts = ["cat", "dog", "bird"]
 
-asyncio.run(main())
+with ThreadPoolExecutor(max_workers=3) as executor:
+    results = list(executor.map(generate, prompts))
+
+for result in results:
+    print(result.output_path)
 ```
+
+> **Note:** For built-in parallel execution, use YAML pipelines with `parallel_group` or enable `PIPELINE_PARALLEL_ENABLED=true`.
 
 ---
 
