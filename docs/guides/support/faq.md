@@ -52,10 +52,10 @@ pip install -e .
 
 ### Where do I get API keys?
 
-- **FAL AI**: https://fal.ai/dashboard
-- **Google Gemini**: https://makersuite.google.com
-- **ElevenLabs**: https://elevenlabs.io/app/settings
-- **OpenRouter**: https://openrouter.ai/keys
+- **FAL AI**: [fal.ai/dashboard](https://fal.ai/dashboard)
+- **Google Gemini**: [makersuite.google.com](https://makersuite.google.com)
+- **ElevenLabs**: [elevenlabs.io/app/settings](https://elevenlabs.io/app/settings)
+- **OpenRouter**: [openrouter.ai/keys](https://openrouter.ai/keys)
 
 ### How do I configure API keys?
 

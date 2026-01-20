@@ -338,37 +338,51 @@ PROJECT_ID=your-gcp-project-id
 ### Using Core Pipeline
 
 ```python
-# Import main manager
-from packages.core.ai_content_pipeline.pipeline.manager import AIPipelineManager
+# Import main manager (note: double ai_content_pipeline in path)
+from packages.core.ai_content_pipeline.ai_content_pipeline.pipeline.manager import AIPipelineManager
 
 # Import configuration models
-from packages.core.ai_content_pipeline.config.models import PipelineConfig, StepConfig
+from packages.core.ai_content_pipeline.ai_content_pipeline.config.models import PipelineConfig, StepConfig
 
 # Import utilities
-from packages.core.ai_content_pipeline.utils.logging import setup_logging
+from packages.core.ai_content_pipeline.ai_content_pipeline.utils.logging import setup_logging
 ```
 
-### Using Providers Directly
+### Using FAL Providers Directly
+
+FAL packages use top-level underscore names (configured in setup.py):
 
 ```python
-# FAL text-to-image
-from packages.providers.fal.text_to_image import FALTextToImageClient
+# FAL image-to-video
+from fal_image_to_video import ImageToVideoClient
+from fal_image_to_video.cli import main as i2v_cli
 
-# Google Veo
-from packages.providers.google.veo import VeoClient
+# FAL text-to-video
+from fal_text_to_video import TextToVideoClient
+from fal_text_to_video.cli import main as t2v_cli
 
-# ElevenLabs TTS
-from packages.services.text_to_speech import ElevenLabsClient
+# FAL video-to-video
+from fal_video_to_video import VideoToVideoClient
+
+# FAL avatar generation
+from fal_avatar import AvatarClient
+```
+
+### Using Google Veo
+
+```python
+# Google Veo video generation
+from packages.providers.google.veo.google_veo import VeoClient
 ```
 
 ### Using Services
 
 ```python
-# Video tools
-from packages.services.video_tools import VideoAnalyzer, VideoProcessor
+# Text-to-speech (ElevenLabs)
+from packages.services.text_to_speech.text_to_speech import TextToSpeechClient
 
-# Text-to-speech
-from packages.services.text_to_speech import TextToSpeechClient
+# Video tools
+from packages.services.video_tools.video_tools import VideoAnalyzer, VideoProcessor
 ```
 
 ---
