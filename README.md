@@ -22,8 +22,8 @@ A comprehensive AI content generation package with multiple providers and servic
 ### Text-to-Image (Top Picks)
 | Model | Cost | Best For |
 |-------|------|----------|
-| `flux_dev` | $0.003 | High quality |
-| `flux_schnell` | $0.001 | Fast & budget |
+| `nano_banana_pro` | $0.002 | Fast & high-quality |
+| `gpt_image_1_5` | $0.003 | GPT-powered generation |
 
 ### Image-to-Video (Top Picks)
 | Model | Cost | Best For |
