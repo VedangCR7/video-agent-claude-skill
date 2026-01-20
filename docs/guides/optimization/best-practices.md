@@ -76,7 +76,7 @@ params:
   prompt: "{{input}}, professional photography, 4k resolution, sharp focus, natural lighting"
 ```
 
-**Common style descriptors:**
+#### Common Style Descriptors
 - Quality: "4k", "8k", "high resolution", "detailed"
 - Lighting: "natural lighting", "studio lighting", "golden hour", "dramatic shadows"
 - Style: "photorealistic", "cinematic", "artistic", "minimalist"
@@ -86,12 +86,12 @@ params:
 
 For complex scenes, structure your prompt:
 
-```
+```text
 [Subject], [Action], [Environment], [Lighting], [Style], [Quality]
 ```
 
 Example:
-```
+```text
 "A young woman reading a book, sitting in a cozy cafe, warm afternoon sunlight through windows, film photography style, 35mm, sharp focus"
 ```
 

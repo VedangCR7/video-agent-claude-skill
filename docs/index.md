@@ -118,4 +118,4 @@ Looking for something specific? See the complete [Documentation Sitemap](SITEMAP
 
 ---
 
-*Last updated: January 2026*
+**Last updated:** January 2026
