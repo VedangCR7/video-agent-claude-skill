@@ -8,6 +8,7 @@ Welcome to the AI Content Generation Suite documentation. This comprehensive gui
 - [Quick Start Guide](guides/quick-start.md) - Get up and running in 5 minutes
 - [Installation Guide](guides/installation.md) - Detailed installation instructions
 - [Configuration Guide](guides/configuration.md) - Environment setup and API keys
+- [Learning Path](guides/learning-path.md) - Structured learning journey
 
 ### Core Guides
 - [YAML Pipeline Configuration](guides/yaml-pipelines.md) - Create custom workflows
@@ -24,6 +25,8 @@ Welcome to the AI Content Generation Suite documentation. This comprehensive gui
 - [CLI Commands](reference/cli-commands.md) - Command-line interface reference
 - [API Reference](api/python-api.md) - Python API documentation
 - [Provider Comparison](reference/provider-comparison.md) - Compare AI providers
+- [Error Codes](reference/error-codes.md) - Error codes and troubleshooting
+- [Cheat Sheet](reference/cheat-sheet.md) - Quick reference card
 - [Glossary](reference/glossary.md) - Terms and definitions
 
 ### Examples
@@ -39,6 +42,7 @@ Welcome to the AI Content Generation Suite documentation. This comprehensive gui
 ### Support
 - [Troubleshooting](guides/troubleshooting.md) - Common issues and solutions
 - [FAQ](guides/faq.md) - Frequently asked questions
+- [Testing Guide](guides/testing.md) - How to test your pipelines
 - [Contributing](guides/contributing.md) - How to contribute
 - [Changelog](CHANGELOG.md) - Version history and updates
 - [Migration Guide](guides/migration.md) - Upgrading between versions
