@@ -9,15 +9,18 @@ Welcome to the AI Content Generation Suite documentation. This comprehensive gui
 - [Installation Guide](guides/installation.md) - Detailed installation instructions
 - [Configuration Guide](guides/configuration.md) - Environment setup and API keys
 
+### Core Guides
+- [YAML Pipeline Configuration](guides/yaml-pipelines.md) - Create custom workflows
+- [Parallel Execution](guides/parallel-execution.md) - Speed up your pipelines
+- [Cost Management](guides/cost-management.md) - Estimate and track costs
+- [Security Best Practices](guides/security.md) - Keep your setup secure
+
 ### Reference
 - [Models Reference](reference/models.md) - Complete list of all 40+ AI models
 - [CLI Commands](reference/cli-commands.md) - Command-line interface reference
 - [API Reference](api/python-api.md) - Python API documentation
-
-### Guides
-- [YAML Pipeline Configuration](guides/yaml-pipelines.md) - Create custom workflows
-- [Parallel Execution](guides/parallel-execution.md) - Speed up your pipelines
-- [Cost Management](guides/cost-management.md) - Estimate and track costs
+- [Provider Comparison](reference/provider-comparison.md) - Compare AI providers
+- [Glossary](reference/glossary.md) - Terms and definitions
 
 ### Examples
 - [Basic Examples](examples/basic-examples.md) - Simple use cases
@@ -32,6 +35,8 @@ Welcome to the AI Content Generation Suite documentation. This comprehensive gui
 - [Troubleshooting](guides/troubleshooting.md) - Common issues and solutions
 - [FAQ](guides/faq.md) - Frequently asked questions
 - [Contributing](guides/contributing.md) - How to contribute
+- [Changelog](CHANGELOG.md) - Version history and updates
+- [Migration Guide](guides/migration.md) - Upgrading between versions
 
 ## Feature Highlights
 
