@@ -49,8 +49,8 @@ A specific URL or API path that handles a particular type of request. Each AI op
 A cloud AI platform providing access to multiple image and video generation models. Primary provider for this package.
 
 ### FLUX
-A family of text-to-image models known for high quality output:
-- **FLUX.1 Dev** - High quality, 12B parameters
+A family of text-to-image models known for high-quality output:
+- **FLUX.1 Dev** - High-quality, 12B parameters
 - **FLUX.1 Schnell** - Fast generation
 
 ## G
