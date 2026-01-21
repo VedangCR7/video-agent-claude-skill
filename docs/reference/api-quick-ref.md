@@ -3,7 +3,6 @@
 > **This is a condensed reference.** For complete documentation with all parameters, see:
 > - **[Python API Reference](../api/python-api.md)** - Full API documentation
 > - **[CLI Commands Reference](cli-commands.md)** - Full CLI documentation
-> - **[Cheat Sheet](cheat-sheet.md)** - Quick patterns and tips
 
 ---
 

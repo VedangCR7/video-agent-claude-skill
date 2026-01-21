@@ -57,53 +57,13 @@ steps:
 
 ## Prompting Best Practices
 
-### Be Specific
+> **For comprehensive prompting guidance, see the [Prompting Guide](../content-creation/prompting.md).**
 
-```bash
-# Vague (poor results)
-ai-content-pipeline generate-image --text "a dog"
-
-# Specific (better results)
-ai-content-pipeline generate-image --text "golden retriever puppy playing in autumn leaves, natural lighting, shallow depth of field, professional photography"
-```
-
-### Use Style Descriptors
-
-Include style and quality keywords:
-
-```yaml
-params:
-  prompt: "{{input}}, professional photography, 4k resolution, sharp focus, natural lighting"
-```
-
-#### Common Style Descriptors
-- Quality: "4k", "8k", "high resolution", "detailed"
-- Lighting: "natural lighting", "studio lighting", "golden hour", "dramatic shadows"
-- Style: "photorealistic", "cinematic", "artistic", "minimalist"
-- Composition: "rule of thirds", "centered", "wide angle", "close-up"
-
-### Structure Complex Prompts
-
-For complex scenes, structure your prompt:
-
-```text
-[Subject], [Action], [Environment], [Lighting], [Style], [Quality]
-```
-
-Example:
-```text
-"A young woman reading a book, sitting in a cozy cafe, warm afternoon sunlight through windows, film photography style, 35mm, sharp focus"
-```
-
-### Negative Prompts (When Supported)
-
-Some models support negative prompts:
-
-```yaml
-params:
-  prompt: "beautiful landscape, mountains, clear sky"
-  negative_prompt: "blurry, low quality, distorted"
-```
+**Quick tips:**
+- Be specific: "golden retriever puppy in autumn leaves" > "a dog"
+- Add quality keywords: "4k", "sharp focus", "professional photography"
+- Structure prompts: `[Subject] + [Action] + [Environment] + [Style] + [Quality]`
+- Use negative prompts when supported to exclude unwanted elements
 
 ---
 

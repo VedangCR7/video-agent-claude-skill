@@ -6,7 +6,7 @@ Complete map of all documentation files with descriptions.
 
 ## Overview
 
-**Total Documents:** 35 files
+**Total Documents:** 33 files
 **Total Lines:** ~15,000+
 **Last Updated:** January 2026
 
@@ -58,9 +58,7 @@ docs/
 │   ├── package-structure.md           # Code organization
 │   ├── provider-comparison.md         # Provider features
 │   ├── error-codes.md                 # Error reference
-│   ├── cheat-sheet.md                 # Quick reference
-│   ├── api-quick-ref.md               # API summary
-│   └── glossary.md                    # Definitions
+│   └── api-quick-ref.md               # API summary
 │
 ├── api/                               # API documentation
 │   └── python-api.md                  # Python API reference
@@ -132,9 +130,7 @@ docs/
 | [Models Reference](reference/models.md) | All 40+ AI models | Model selection |
 | [CLI Commands](reference/cli-commands.md) | Command line reference | CLI usage |
 | [Error Codes](reference/error-codes.md) | Troubleshooting errors | Debugging |
-| [Cheat Sheet](reference/cheat-sheet.md) | Quick reference card | Daily use |
 | [API Quick Ref](reference/api-quick-ref.md) | API summary | Development |
-| [Glossary](reference/glossary.md) | Terms and definitions | Learning |
 
 ### API & Architecture
 
@@ -163,7 +159,7 @@ docs/
 2. [Prompting Guide](guides/content-creation/prompting.md) - Write better prompts
 3. [Video Tips](guides/content-creation/video-tips.md) - Create quality videos
 4. [Basic Examples](examples/basic-examples.md) - Simple workflows
-5. [Cheat Sheet](reference/cheat-sheet.md) - Quick reference
+5. [API Quick Ref](reference/api-quick-ref.md) - Quick reference
 
 ### Developers
 
@@ -197,7 +193,7 @@ docs/
 
 - [Quick Start](guides/getting-started/quick-start.md) - Get started
 - [Models Reference](reference/models.md) - Available models
-- [Cheat Sheet](reference/cheat-sheet.md) - Quick reference
+- [API Quick Ref](reference/api-quick-ref.md) - Quick reference
 - [Troubleshooting](guides/support/troubleshooting.md) - Fix problems
 
 ### Essential Reading
@@ -224,10 +220,10 @@ docs/
 | `guides/optimization/` | 3 | Performance & cost |
 | `guides/support/` | 4 | Help & troubleshooting |
 | `guides/contributing/` | 2 | For contributors |
-| `reference/` | 9 | Technical reference |
+| `reference/` | 7 | Technical reference |
 | `api/` | 1 | API documentation |
 | `examples/` | 4 | Code examples |
-| **Total** | **35** | |
+| **Total** | **33** | |
 
 ---
 

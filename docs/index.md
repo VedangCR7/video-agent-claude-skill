@@ -31,8 +31,6 @@ Welcome to the AI Content Generation Suite documentation. This comprehensive gui
 - [API Quick Reference](reference/api-quick-ref.md) - Condensed API reference
 - [Provider Comparison](reference/provider-comparison.md) - Compare AI providers
 - [Error Codes](reference/error-codes.md) - Error codes and troubleshooting
-- [Cheat Sheet](reference/cheat-sheet.md) - Quick reference card
-- [Glossary](reference/glossary.md) - Terms and definitions
 
 ### Examples
 - [Basic Examples](examples/basic-examples.md) - Simple use cases
@@ -114,7 +112,7 @@ ai-content-pipeline create-video --text "serene mountain lake"
 
 ## Documentation Map
 
-Looking for something specific? See the complete [Documentation Sitemap](SITEMAP.md) for a full listing of all 35 documentation files organized by category and user type.
+Looking for something specific? See the complete [Documentation Sitemap](SITEMAP.md) for a full listing of all 33 documentation files organized by category and user type.
 
 ---
 
