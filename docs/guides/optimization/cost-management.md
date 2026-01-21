@@ -18,6 +18,8 @@ Understand, estimate, and control costs when using AI Content Generation Suite.
 
 ### Model-Specific Pricing
 
+> For complete model details and capabilities, see **[Models Reference](../../reference/models.md)**.
+
 #### Text-to-Image
 
 | Model | Cost/Image | Best For |
@@ -62,7 +64,7 @@ ai-content-pipeline estimate-cost --config pipeline.yaml
 ```
 
 Output:
-```
+```text
 Pipeline Cost Estimate
 ═══════════════════════════════════════════
 Step                    Model           Cost
@@ -318,19 +320,23 @@ Track costs manually after pipeline execution:
 
 ```python
 import json
+from ai_content_pipeline import AIPipelineManager
 
-# After running pipeline
-results = manager.run_pipeline("pipeline.yaml", input_text="prompt")
+manager = AIPipelineManager()
 
-# Calculate total cost from results
-total_cost = sum(r.cost for r in results if hasattr(r, 'cost'))
+# Create chain from config and execute
+chain = manager.create_chain_from_config("pipeline.yaml")
+result = manager.execute_chain(chain, input_data="your prompt here")
 
-# Save cost report manually
+# Total cost is available directly on the result
+total_cost = result.total_cost
+
+# Save cost report with per-step breakdown
 report = {
     "total_cost": total_cost,
     "steps": [
-        {"step": r.step_name, "cost": r.cost}
-        for r in results if hasattr(r, 'cost')
+        {"step": i, "cost": step.get("cost", 0.0)}
+        for i, step in enumerate(result.step_results or [])
     ]
 }
 

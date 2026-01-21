@@ -6,12 +6,12 @@ Master the art of writing effective prompts for AI content generation.
 
 ### The Basic Formula
 
-```
+```text
 [Subject] + [Action/State] + [Environment] + [Style] + [Quality]
 ```
 
 **Example:**
-```
+```text
 "A golden retriever puppy, playing in autumn leaves, park setting, natural photography, sharp focus"
 ```
 
@@ -31,7 +31,7 @@ Master the art of writing effective prompts for AI content generation.
 
 ### Photorealistic Images
 
-```
+```text
 "Professional headshot of a business executive, studio lighting,
 neutral gray background, sharp focus, 85mm portrait lens, 4k quality"
 ```
@@ -44,7 +44,7 @@ neutral gray background, sharp focus, 85mm portrait lens, 4k quality"
 
 ### Artistic Images
 
-```
+```text
 "Impressionist painting of a Parisian cafe at dusk,
 soft brushstrokes, warm golden light, Monet style,
 oil on canvas texture"
@@ -58,7 +58,7 @@ oil on canvas texture"
 
 ### Product Photography
 
-```
+```text
 "Minimalist product photo of a luxury watch,
 white background, soft studio lighting,
 reflection on surface, commercial photography, 8k detail"
@@ -72,7 +72,7 @@ reflection on surface, commercial photography, 8k detail"
 
 ### Landscape Photography
 
-```
+```text
 "Panoramic view of mountain range at golden hour,
 dramatic clouds, snow-capped peaks,
 foreground wildflowers, National Geographic style, HDR"
@@ -86,7 +86,7 @@ foreground wildflowers, National Geographic style, HDR"
 
 For image-to-video, describe the motion:
 
-```
+```text
 "Slow cinematic camera pan from left to right,
 gentle breeze moving leaves,
 soft focus transition, atmospheric"
@@ -99,7 +99,7 @@ soft focus transition, atmospheric"
 
 ### Scene Animation
 
-```
+```text
 "Ocean waves gently rolling onto shore,
 foam dissipating on sand,
 seagulls flying in background,
@@ -108,7 +108,7 @@ peaceful morning atmosphere"
 
 ### Character Animation
 
-```
+```text
 "Person walking through city street,
 confident stride, looking around,
 bustling crowd in background,
@@ -142,7 +142,7 @@ natural movement"
 
 ### Quality Keywords
 
-```
+```text
 High Quality: "4k", "8k", "high resolution", "detailed", "sharp focus"
 Professional: "professional", "commercial", "editorial", "studio"
 Artistic: "masterpiece", "award-winning", "museum quality"
@@ -154,7 +154,7 @@ Artistic: "masterpiece", "award-winning", "museum quality"
 
 ### Pattern 1: Subject-First
 
-```
+```text
 "[Subject], [details], [environment], [style], [quality]"
 
 Example:
@@ -164,7 +164,7 @@ cinematic photography, dramatic lighting, 4k"
 
 ### Pattern 2: Scene-First
 
-```
+```text
 "[Environment/Scene], [subject within], [style], [mood]"
 
 Example:
@@ -174,7 +174,7 @@ warm afternoon light streaming in, lifestyle photography, peaceful mood"
 
 ### Pattern 3: Style-First
 
-```
+```text
 "[Style] of [subject], [details], [quality]"
 
 Example:
@@ -184,7 +184,7 @@ weathered face, wise eyes, Rembrandt lighting, museum quality"
 
 ### Pattern 4: Cinematic
 
-```
+```text
 "Cinematic shot of [subject], [camera angle], [lighting], [mood]"
 
 Example:
@@ -198,14 +198,14 @@ low angle, dramatic sunset lighting, epic scale, IMAX quality"
 
 ### Too Vague
 
-```
+```text
 ❌ "a dog"
 ✅ "Golden retriever puppy playing fetch in park, sunny day, action shot"
 ```
 
 ### Too Long
 
-```
+```text
 ❌ "A very beautiful extremely detailed highly realistic photograph of a
     magnificent majestic powerful strong muscular..."
 ✅ "Majestic lion portrait, golden savanna, National Geographic style"
@@ -213,14 +213,14 @@ low angle, dramatic sunset lighting, epic scale, IMAX quality"
 
 ### Contradictory
 
-```
+```text
 ❌ "Photorealistic anime style" (contradictory styles)
 ✅ "Anime-inspired character design with realistic lighting"
 ```
 
 ### Missing Context
 
-```
+```text
 ❌ "Person sitting"
 ✅ "Young professional sitting at modern desk, laptop open,
     office environment, natural window light"
@@ -236,7 +236,7 @@ low angle, dramatic sunset lighting, epic scale, IMAX quality"
 - Good with artistic styles
 - Use specific art references
 
-```
+```text
 "Baroque-style digital painting of royal court scene,
 rich velvet textures, gold accents, dramatic chiaroscuro lighting"
 ```
@@ -247,7 +247,7 @@ rich velvet textures, gold accents, dramatic chiaroscuro lighting"
 - Best with clear, descriptive prompts
 - Handles text in images well
 
-```
+```text
 "Product packaging design for organic tea brand,
 clean typography, natural elements, professional commercial photo"
 ```
@@ -258,7 +258,7 @@ clean typography, natural elements, professional commercial photo"
 - Keep prompts concise for video
 - Describe camera movement
 
-```
+```text
 "Drone shot slowly rising above misty forest at dawn,
 revealing mountain peaks, cinematic, smooth motion"
 ```
@@ -319,7 +319,7 @@ prompt: |
 
 Some models support emphasis syntax:
 
-```
+```text
 "(beautiful sunset:1.2), ocean, (palm trees:0.8)"
 ```
 
@@ -334,7 +334,7 @@ negative_prompt: "blurry, low quality, distorted, ugly"
 
 ### Multi-Subject Composition
 
-```
+```text
 "Split composition: left side shows modern city skyline,
 right side shows ancient ruins,
 dramatic contrast, surreal atmosphere"
@@ -361,7 +361,7 @@ prompt: "Centered portrait composition..."
 
 ### Exercise 1: Improve This Prompt
 
-```
+```text
 Original: "cat on couch"
 
 Improved: "Fluffy orange tabby cat curled up on vintage velvet couch,
@@ -373,7 +373,7 @@ shallow depth of field, lifestyle photography"
 
 Convert to different styles:
 
-```
+```text
 Base subject: "mountain landscape"
 
 Photorealistic: "Rocky mountain peaks at golden hour,

@@ -20,7 +20,7 @@ Compare AI providers available in the AI Content Generation Suite.
 
 FAL AI is the primary provider offering the widest range of models for image and video generation.
 
-**Website:** https://fal.ai
+**Website:** <https://fal.ai>
 
 ### Strengths
 
@@ -51,7 +51,7 @@ FAL AI is the primary provider offering the widest range of models for image and
 FAL_KEY=your_fal_api_key
 ```
 
-Get key: https://fal.ai/dashboard
+Get key: <https://fal.ai/dashboard>
 
 ### Best For
 
@@ -68,7 +68,7 @@ Get key: https://fal.ai/dashboard
 
 Google provides AI services through Gemini (understanding) and Veo (video generation) via Vertex AI.
 
-**Website:** https://cloud.google.com/vertex-ai
+**Website:** <https://cloud.google.com/vertex-ai>
 
 ### Strengths
 
@@ -120,7 +120,7 @@ gcloud config set project your-project-id
 
 ElevenLabs specializes in text-to-speech with natural-sounding voices.
 
-**Website:** https://elevenlabs.io
+**Website:** <https://elevenlabs.io>
 
 ### Strengths
 
@@ -160,7 +160,7 @@ ElevenLabs specializes in text-to-speech with natural-sounding voices.
 ELEVENLABS_API_KEY=your_elevenlabs_api_key
 ```
 
-Get key: https://elevenlabs.io/app/settings
+Get key: <https://elevenlabs.io/app/settings>
 
 ### Best For
 
@@ -177,7 +177,7 @@ Get key: https://elevenlabs.io/app/settings
 
 OpenRouter provides access to multiple AI models through a unified API.
 
-**Website:** https://openrouter.ai
+**Website:** <https://openrouter.ai>
 
 ### Strengths
 
@@ -198,7 +198,7 @@ OpenRouter provides access to multiple AI models through a unified API.
 OPENROUTER_API_KEY=your_openrouter_api_key
 ```
 
-Get key: https://openrouter.ai/keys
+Get key: <https://openrouter.ai/keys>
 
 ### Best For
 
@@ -214,7 +214,7 @@ Get key: https://openrouter.ai/keys
 
 Replicate hosts open-source and specialized AI models.
 
-**Website:** https://replicate.com
+**Website:** <https://replicate.com>
 
 ### Strengths
 

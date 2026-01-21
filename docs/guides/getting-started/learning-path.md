@@ -21,6 +21,8 @@ For developers building integrations or extending the system.
 
 **Goal:** Generate your first AI image.
 
+> Need help with installation? See **[Installation Guide](installation.md)** for detailed setup options.
+
 1. **Install the package:**
    ```bash
    pip install video-ai-studio

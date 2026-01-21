@@ -2,6 +2,8 @@
 
 Solutions for common issues with the AI Content Generation Suite.
 
+> **Looking for answers to general questions?** See the **[FAQ](faq.md)** for conceptual questions and how-to guides.
+
 ## Quick Diagnostics
 
 Run these commands to diagnose issues:
@@ -302,7 +304,9 @@ export HTTPS_PROXY=http://proxy:port
 # Update certifi
 pip install --upgrade certifi
 
-# For development only (not recommended for production):
+# For local development only. Do NOT use in production; this disables TLS verification.
+# Prefer updating certificates instead:
+# pip install --upgrade certifi
 export SSL_CERT_FILE=""
 ```
 
@@ -425,7 +429,8 @@ PIPELINE_LOG_LEVEL=DEBUG ai-content-pipeline run-chain --config config.yaml
 # System info
 python --version
 pip list | grep video-ai-studio
-echo $FAL_KEY | head -c 10
+# Check if API key is set (without printing the key)
+echo "${FAL_KEY:+FAL_KEY is set}"
 
 # Test basic functionality
 ai-content-pipeline list-models

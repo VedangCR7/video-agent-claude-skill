@@ -1,6 +1,11 @@
 # API Quick Reference
 
-Condensed reference for Python API methods and CLI commands.
+> **This is a condensed reference.** For complete documentation with all parameters, see:
+> - **[Python API Reference](../api/python-api.md)** - Full API documentation
+> - **[CLI Commands Reference](cli-commands.md)** - Full CLI documentation
+> - **[Cheat Sheet](cheat-sheet.md)** - Quick patterns and tips
+
+---
 
 ## Python API
 
@@ -144,192 +149,50 @@ info = manager.get_model_info("flux_dev")
 
 ## CLI Commands
 
-### Image Commands
+For complete CLI reference, see **[CLI Commands Reference](cli-commands.md)**.
 
+Quick examples:
 ```bash
-# Generate image
-ai-content-pipeline generate-image \
-  --text "prompt" \
-  --model flux_dev \
-  --aspect-ratio 16:9 \
-  --output image.png
-
-# Transform image
-ai-content-pipeline transform-image \
-  --input source.png \
-  --text "changes" \
-  --model photon_flash
-
-# Aliases
-aicp generate-image --text "prompt"
-```
-
-### Video Commands
-
-```bash
-# Text to video
-ai-content-pipeline text-to-video \
-  --text "prompt" \
-  --model hailuo_pro \
-  --duration 6
-
-# Image to video
-ai-content-pipeline image-to-video \
-  --image input.png \
-  --model kling_2_6_pro \
-  --duration 5
-
-# Full pipeline
-ai-content-pipeline create-video \
-  --text "prompt"
-```
-
-### Video Analysis
-
-```bash
-# Analyze video
-ai-content-pipeline analyze-video \
-  -i video.mp4 \
-  -m gemini-3-pro \
-  -t timeline
-
-# List analysis models
-ai-content-pipeline list-video-models
-```
-
-### Pipeline Commands
-
-```bash
-# Run pipeline
-ai-content-pipeline run-chain \
-  --config pipeline.yaml \
-  --input "prompt"
-
-# Dry run (validate only)
-ai-content-pipeline run-chain \
-  --config pipeline.yaml \
-  --dry-run
-
-# Parallel execution
-PIPELINE_PARALLEL_ENABLED=true \
-  ai-content-pipeline run-chain \
-  --config pipeline.yaml
-```
-
-### Utility Commands
-
-```bash
-# List models
-ai-content-pipeline list-models
-ai-content-pipeline list-models --type text_to_image
-
-# Estimate cost
-ai-content-pipeline estimate-cost --config pipeline.yaml
-
-# Create examples
-ai-content-pipeline create-examples
-
-# Help
-ai-content-pipeline --help
-aicp --help
+aicp generate-image --text "prompt" --model flux_dev
+aicp create-video --text "prompt"
+aicp run-chain --config pipeline.yaml
+aicp list-models
 ```
 
 ---
 
 ## YAML Configuration
 
-### Minimal Pipeline
+For complete YAML reference, see **[YAML Pipelines Guide](../guides/pipelines/yaml-pipelines.md)**.
 
+Quick template:
 ```yaml
 name: "Pipeline Name"
 steps:
-  - type: "text_to_image"
-    model: "flux_dev"
-    params:
-      prompt: "{{input}}"
-```
-
-### Full Pipeline Structure
-
-```yaml
-name: "Pipeline Name"
-description: "Optional description"
-
-settings:
-  parallel: true
-  max_workers: 4
-  max_budget: 10.00
-  output_naming: "timestamp"
-
-output:
-  directory: "output/project"
-
-steps:
-  - name: "step_name"
+  - name: "image"
     type: "text_to_image"
     model: "flux_dev"
     params:
       prompt: "{{input}}"
-      aspect_ratio: "16:9"
-
-  - name: "next_step"
+  - name: "video"
     type: "image_to_video"
     model: "kling_2_6_pro"
-    input_from: "step_name"
-    params:
-      duration: 5
+    input_from: "image"
 ```
 
-### Step Types
-
-| Type | Purpose | Required Params |
-|------|---------|-----------------|
-| `text_to_image` | Generate image | `prompt` |
-| `image_to_image` | Transform image | `prompt`, `input`/`input_from` |
-| `text_to_video` | Generate video | `prompt` |
-| `image_to_video` | Animate image | `input`/`input_from` |
-| `video_analysis` | Analyze video | `input`/`input_from`, `analysis_type` |
-| `text_to_speech` | Generate audio | `text` |
-| `video_upscale` | Enhance video | `input`/`input_from` |
-| `parallel_group` | Run in parallel | `steps` |
-
-### Variables
-
-```yaml
-params:
-  prompt: "{{input}}"              # User input
-  prompt: "{{step_name.output}}"   # Previous step output
-  prompt: "Static text"            # Literal value
-```
+**Step types:** `text_to_image`, `image_to_image`, `text_to_video`, `image_to_video`, `video_analysis`, `text_to_speech`, `video_upscale`, `parallel_group`
 
 ---
 
 ## Models Quick Reference
 
-### Text-to-Image
+For complete model reference, see **[Models Reference](models.md)**.
 
-| Model | Speed | Quality | Cost |
-|-------|-------|---------|------|
-| `flux_schnell` | ★★★★★ | ★★★ | $0.001 |
-| `flux_dev` | ★★★ | ★★★★★ | $0.003 |
-| `imagen4` | ★★ | ★★★★★ | $0.004 |
-
-### Image-to-Video
-
-| Model | Duration | Quality | Cost |
-|-------|----------|---------|------|
-| `hailuo` | 6s | ★★★ | $0.30 |
-| `kling_2_1` | 5s | ★★★★ | $0.25-0.50 |
-| `kling_2_6_pro` | 5-10s | ★★★★★ | $0.50-1.00 |
-| `sora_2_pro` | 4-20s | ★★★★★ | $1.20-3.60 |
-
-### Text-to-Video
-
-| Model | Duration | Cost |
-|-------|----------|------|
-| `hailuo_pro` | 6s | $0.08 |
-| `kling_2_6_pro` | 5-10s | $0.35-1.40 |
-| `sora_2` | 4-12s | $0.40-1.20 |
+| Category | Budget | Standard | Premium |
+|----------|--------|----------|---------|
+| Text-to-Image | `flux_schnell` $0.001 | `flux_dev` $0.003 | `imagen4` $0.004 |
+| Image-to-Video | `hailuo` $0.30 | `kling_2_6_pro` $0.50 | `sora_2_pro` $1.20 |
+| Text-to-Video | `hailuo_pro` $0.08 | `kling_2_6_pro` $0.35 | `sora_2` $0.40 |
 
 ---
 

@@ -14,6 +14,8 @@ Performance depends on:
 
 ## Model Speed Comparison
 
+> For complete model details and capabilities, see **[Models Reference](../../reference/models.md)**.
+
 ### Text-to-Image Speed
 
 | Model | Typical Time | Speed Rating |
@@ -36,7 +38,7 @@ Performance depends on:
 
 ### Speed vs Quality Trade-off
 
-```
+```text
 Speed ←──────────────────────────────→ Quality
 
 flux_schnell ──── nano_banana ──── flux_dev ──── imagen4

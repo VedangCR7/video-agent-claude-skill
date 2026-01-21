@@ -10,15 +10,10 @@ Get started with AI Content Generation Suite in under 5 minutes.
 
 ## Step 1: Install the Package
 
+> For detailed installation options (virtual environments, conda, etc.), see **[Installation Guide](installation.md)**.
+
 ```bash
 pip install video-ai-studio
-```
-
-Or install from source:
-```bash
-git clone https://github.com/donghaozhang/video-agent-skill.git
-cd video-agent-skill
-pip install -e .
 ```
 
 ## Step 2: Configure API Keys
@@ -30,7 +25,7 @@ Create a `.env` file in your working directory:
 FAL_KEY=your_fal_api_key_here
 ```
 
-Get your FAL API key at: https://fal.ai/dashboard
+Get your FAL API key at: <https://fal.ai/dashboard>
 
 ## Step 3: Verify Installation
 

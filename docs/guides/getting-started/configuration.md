@@ -56,13 +56,6 @@ Variables are loaded in this order (later overrides earlier):
 # Pipeline metadata
 name: "My Pipeline"
 description: "Description of what this pipeline does"
-version: "1.0"
-
-# Global settings (optional)
-settings:
-  output_dir: "output"
-  parallel: false
-  log_level: "INFO"
 
 # Pipeline steps
 steps:
@@ -76,6 +69,12 @@ steps:
     type: "image_to_video"
     model: "kling_2_6_pro"
     input_from: "step_1"
+
+# Output configuration (optional)
+output_dir: "output"
+temp_dir: "temp"
+cleanup_temp: true
+save_intermediates: false
 ```
 
 ### Step Types
@@ -161,8 +160,7 @@ PIPELINE_PARALLEL_ENABLED=true ai-content-pipeline run-chain --config config.yam
 
 **Method 2: YAML Configuration**
 ```yaml
-settings:
-  parallel: true
+name: "Parallel Generation"
 
 steps:
   - type: "parallel_group"
@@ -248,14 +246,20 @@ steps:
 ### Directory Structure
 
 ```yaml
-settings:
-  output_dir: "output"
-  create_subdirs: true
-  timestamp_dirs: true
+name: "My Pipeline"
+
+steps:
+  # ... your steps here
+
+# Output settings (top-level, not nested under settings)
+output_dir: "output"
+temp_dir: "temp"
+cleanup_temp: true
+save_intermediates: true
 ```
 
 Result structure:
-```
+```text
 output/
 ├── 2026-01-21_143052/
 │   ├── step_1_image.png
@@ -263,14 +267,14 @@ output/
 │   └── pipeline_log.json
 ```
 
-### File Naming
+### Output Options
 
-```yaml
-settings:
-  output_naming:
-    pattern: "{step_name}_{timestamp}"
-    include_model: true
-```
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `output_dir` | string | `"output"` | Directory for final outputs |
+| `temp_dir` | string | `"temp"` | Directory for temporary files |
+| `cleanup_temp` | boolean | `true` | Delete temp files after completion |
+| `save_intermediates` | boolean | `false` | Save intermediate step outputs |
 
 ---
 
@@ -287,41 +291,29 @@ settings:
 
 ### Configuration
 
-```yaml
-settings:
-  log_level: "INFO"
-  log_file: "pipeline.log"
-  log_format: "%(asctime)s [%(levelname)s] %(message)s"
-```
+Logging is configured via environment variables:
 
-Or via environment:
 ```bash
 PIPELINE_LOG_LEVEL=DEBUG ai-content-pipeline run-chain --config config.yaml
+```
+
+Or set in your `.env` file:
+```bash
+PIPELINE_LOG_LEVEL=INFO
 ```
 
 ---
 
 ## Cost Management Configuration
 
-### Cost Limits
+Cost management is handled through the CLI and API. Estimate costs before running:
 
-```yaml
-settings:
-  cost_management:
-    max_cost_per_run: 10.00  # USD
-    warn_threshold: 5.00
-    require_confirmation: true  # Prompt before expensive operations
+```bash
+# Estimate cost for a pipeline
+ai-content-pipeline estimate-cost --config config.yaml
 ```
 
-### Cost Tracking
-
-```yaml
-settings:
-  cost_tracking:
-    enabled: true
-    output_file: "costs.json"
-    include_timestamps: true
-```
+See [Cost Management Guide](../optimization/cost-management.md) for detailed cost tracking options.
 
 ---
 
@@ -354,9 +346,6 @@ steps:
 ```yaml
 name: "Batch Images"
 description: "Generate multiple images in parallel"
-
-settings:
-  parallel: true
 
 steps:
   - type: "parallel_group"

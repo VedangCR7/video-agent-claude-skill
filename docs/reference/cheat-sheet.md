@@ -2,110 +2,50 @@
 
 Fast reference for common commands, models, and patterns.
 
+> **See also:** [API Quick Reference](api-quick-ref.md) for Python API methods and result objects.
+
 ## CLI Commands
 
-### Image Generation
+> Full reference: **[CLI Commands Reference](cli-commands.md)**
+
+### Essential Commands
 ```bash
-# Basic
-ai-content-pipeline generate-image --text "prompt" --model flux_dev
+# Image generation
+aicp generate-image --text "prompt" --model flux_dev
+aicp generate-image --text "test" --mock          # Free testing
 
-# With options
-ai-content-pipeline generate-image \
-  --text "sunset over mountains" \
-  --model flux_dev \
-  --aspect-ratio 16:9 \
-  --output sunset.png
+# Video generation
+aicp create-video --text "ocean waves"            # Text → Image → Video
+aicp image-to-video --image photo.png             # Image → Video
+aicp text-to-video --text "prompt"                # Direct text → video
 
-# Fast/cheap testing
-ai-content-pipeline generate-image --text "test" --model flux_schnell
+# Pipelines
+aicp run-chain --config pipeline.yaml --input "prompt"
+aicp estimate-cost --config pipeline.yaml         # Check cost first
 
-# Mock mode (free)
-ai-content-pipeline generate-image --text "test" --mock
-```
-
-### Video Generation
-```bash
-# Text to video (full pipeline)
-ai-content-pipeline create-video --text "ocean waves"
-
-# Image to video
-ai-content-pipeline image-to-video --image photo.png --model kling_2_6_pro
-
-# Direct text to video
-ai-content-pipeline text-to-video --text "flying drone" --model hailuo_pro
-```
-
-### Pipeline Operations
-```bash
-# Run pipeline
-ai-content-pipeline run-chain --config pipeline.yaml --input "prompt"
-
-# Dry run (validate)
-ai-content-pipeline run-chain --config pipeline.yaml --dry-run
-
-# Estimate cost
-ai-content-pipeline estimate-cost --config pipeline.yaml
-
-# Parallel execution
-PIPELINE_PARALLEL_ENABLED=true ai-content-pipeline run-chain --config config.yaml
-```
-
-### Utility Commands
-```bash
-# List models
-ai-content-pipeline list-models
-
-# Create examples
-ai-content-pipeline create-examples
-
-# Help
-ai-content-pipeline --help
-aicp --help  # Short alias
+# Utilities
+aicp list-models                                  # See available models
+aicp --help                                       # Full help
 ```
 
 ---
 
 ## Model Quick Reference
 
-### Text-to-Image (by speed)
-| Model | Speed | Cost | Quality |
-|-------|-------|------|---------|
-| `flux_schnell` | ★★★★★ | $0.001 | Good |
-| `nano_banana_pro` | ★★★★ | $0.002 | Good |
-| `flux_dev` | ★★★ | $0.003 | Great |
-| `imagen4` | ★★ | $0.004 | Excellent |
+> Full reference: **[Models Reference](models.md)**
 
-### Image-to-Video (by cost)
-| Model | Cost | Duration | Quality |
-|-------|------|----------|---------|
-| `hailuo` | $0.30 | 6s | Good |
-| `kling_2_1` | $0.25-0.50 | 5s | Good |
-| `kling_2_6_pro` | $0.50-1.00 | 5-10s | Great |
-| `sora_2_pro` | $1.20-3.60 | 4-20s | Excellent |
-
-### Text-to-Video (by cost)
-| Model | Cost | Duration |
-|-------|------|----------|
-| `hailuo_pro` | $0.08 | 6s fixed |
-| `kling_2_6_pro` | $0.35-1.40 | 5-10s |
-| `sora_2` | $0.40-1.20 | 4-12s |
+| Category | Budget | Standard | Premium |
+|----------|--------|----------|---------|
+| Text-to-Image | `flux_schnell` $0.001 | `flux_dev` $0.003 | `imagen4` $0.004 |
+| Image-to-Video | `hailuo` $0.30 | `kling_2_6_pro` $0.50 | `sora_2_pro` $1.20 |
+| Text-to-Video | `hailuo_pro` $0.08 | `kling_2_6_pro` $0.35 | `sora_2` $0.40 |
 
 ---
 
 ## YAML Pipeline Templates
 
-### Basic Image
-```yaml
-name: "Image Generation"
-steps:
-  - name: "generate"
-    type: "text_to_image"
-    model: "flux_dev"
-    params:
-      prompt: "{{input}}"
-```
+> Full reference: **[YAML Pipelines Guide](../guides/pipelines/yaml-pipelines.md)**
 
-### Image to Video
 ```yaml
 name: "Image to Video"
 steps:
@@ -114,37 +54,18 @@ steps:
     model: "flux_dev"
     params:
       prompt: "{{input}}"
-      aspect_ratio: "16:9"
-
   - name: "video"
     type: "image_to_video"
     model: "kling_2_6_pro"
     input_from: "image"
-    params:
-      duration: 5
-```
-
-### Parallel Batch
-```yaml
-name: "Batch Generation"
-settings:
-  parallel: true
-steps:
-  - type: "parallel_group"
-    steps:
-      - type: "text_to_image"
-        params: { prompt: "image 1" }
-      - type: "text_to_image"
-        params: { prompt: "image 2" }
-      - type: "text_to_image"
-        params: { prompt: "image 3" }
 ```
 
 ---
 
 ## Python API
 
-### Basic Usage
+> Full reference: **[Python API Reference](../api/python-api.md)**
+
 ```python
 from packages.core.ai_content_pipeline.pipeline.manager import AIPipelineManager
 
@@ -152,23 +73,15 @@ manager = AIPipelineManager()
 
 # Generate image
 result = manager.generate_image(prompt="sunset", model="flux_dev")
-print(result.output_path)
 
 # Create video
 result = manager.create_video(prompt="ocean waves")
-print(result.output_path)
 
 # Run pipeline
 results = manager.run_pipeline("config.yaml", input_text="my prompt")
-```
 
-### With Cost Tracking
-```python
-# Estimate first
+# Estimate cost first
 estimate = manager.estimate_cost("pipeline.yaml")
-print(f"Cost: ${estimate.total:.2f}")
-
-# Then run
 if estimate.total < 1.00:
     results = manager.run_pipeline("pipeline.yaml")
 ```
