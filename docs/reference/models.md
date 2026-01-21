@@ -1,6 +1,6 @@
 # AI Models Reference
 
-Complete reference for all 40+ AI models available in the AI Content Generation Suite.
+Complete reference for all 49 AI models available in the AI Content Generation Suite.
 
 ## Overview
 
@@ -8,13 +8,12 @@ Complete reference for all 40+ AI models available in the AI Content Generation 
 |----------|-------------|-----------|
 | Text-to-Image | 8 | FAL AI, Replicate |
 | Image-to-Image | 8 | FAL AI |
-| Image-to-Video | 8 | FAL AI |
-| Text-to-Video | 4 | FAL AI |
+| Image-to-Video | 11 | FAL AI, Google |
 | Image Understanding | 7 | Google Gemini |
-| Text-to-Speech | 3 | ElevenLabs |
+| Prompt Generation | 5 | OpenRouter |
 | Audio/Video Processing | 2 | FAL AI |
 | Avatar Generation | 8 | FAL AI |
-| **Total** | **48** | **Multiple** |
+| **Total** | **49** | **Multiple** |
 
 ---
 
