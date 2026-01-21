@@ -291,7 +291,7 @@ python tests/run_all_tests.py --quick
   - **Text-to-Image**: $0.001-0.004 per image
   - **Image-to-Image**: $0.01-0.05 per modification
   - **Image-to-Video**: $0.08-6.00 per video (model dependent)
-  - **Avatar Generation**: $0.08-0.20 per video (resolution dependent)
+  - **Avatar Generation**: $0.08-0.25 per video (resolution dependent)
   - **Audio Generation**: Varies by usage and model
 - Always check costs before running large pipelines
 

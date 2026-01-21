@@ -24,6 +24,7 @@ class MultiTalkModel(BaseAvatarModel):
         self.pricing = MODEL_PRICING["multitalk"]
         self.defaults = MODEL_DEFAULTS["multitalk"]
         self.supported_resolutions = ["480p", "720p"]
+        self.supported_accelerations = ["none", "regular", "high"]
 
     def validate_parameters(
         self,
@@ -72,10 +73,10 @@ class MultiTalkModel(BaseAvatarModel):
         # Validate ranges
         if not (81 <= num_frames <= 129):
             raise ValueError(f"num_frames must be 81-129, got {num_frames}")
-        if resolution not in ["480p", "720p"]:
-            raise ValueError(f"resolution must be '480p' or '720p', got {resolution}")
-        if acceleration not in ["none", "regular", "high"]:
-            raise ValueError(f"acceleration must be 'none', 'regular', or 'high', got {acceleration}")
+        if resolution not in self.supported_resolutions:
+            raise ValueError(f"resolution must be one of {self.supported_resolutions}, got {resolution}")
+        if acceleration not in self.supported_accelerations:
+            raise ValueError(f"acceleration must be one of {self.supported_accelerations}, got {acceleration}")
 
         # Build arguments
         arguments = {
@@ -215,7 +216,7 @@ class MultiTalkModel(BaseAvatarModel):
             "pricing": self.pricing,
             "supported_resolutions": self.supported_resolutions,
             "frame_range": {"min": 81, "max": 129},
-            "acceleration_modes": ["none", "regular", "high"],
+            "acceleration_modes": self.supported_accelerations,
             "input_types": ["image", "audio", "audio_second"],
             "description": "Multi-person conversational video with lip-sync",
             "best_for": ["conversations", "podcasts", "interviews", "dual speakers"],

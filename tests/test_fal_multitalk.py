@@ -373,19 +373,20 @@ class TestReplicateDeprecation:
 
             try:
                 from ai_content_pipeline.models.avatar import ReplicateMultiTalkGenerator
-                # Instantiation will trigger the warning
-                # But it will also try to import replicate which may fail
-            except (ImportError, ValueError):
+                # Instantiation triggers the deprecation warning
+                _generator = ReplicateMultiTalkGenerator()
+            except (ImportError, ValueError, Exception):
                 # Expected if replicate not installed or no API token
-                pass
+                # Skip test if we can't instantiate
+                pytest.skip("ReplicateMultiTalkGenerator could not be instantiated (replicate not installed)")
 
-            # Check if any deprecation warning was recorded
+            # Check that deprecation warning was recorded
             deprecation_warnings = [
                 warning for warning in w
                 if issubclass(warning.category, DeprecationWarning)
             ]
-            # May or may not trigger depending on import success
-            assert len(deprecation_warnings) >= 0
+            assert len(deprecation_warnings) >= 1, "Expected DeprecationWarning when using ReplicateMultiTalkGenerator"
+            assert "deprecated" in str(deprecation_warnings[0].message).lower()
 
 
 class TestPipelineMultiTalkGenerator:

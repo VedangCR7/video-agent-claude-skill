@@ -127,19 +127,20 @@ class MultiTalkGenerator(BaseContentModel):
         except Exception as e:
             return self._create_error_result(model, f"FAL MultiTalk generation failed: {str(e)}")
 
-    def _download_file(self, url: str, output_path: str):
+    def _download_file(self, url: str, output_path: str, timeout: int = 300):
         """Download file from URL.
 
         Args:
             url: URL to download from.
             output_path: Local path to save the file.
+            timeout: Request timeout in seconds (default 300s for large video files).
 
         Raises:
             requests.RequestException: If download fails.
             IOError: If file cannot be written.
         """
         import requests
-        response = requests.get(url)
+        response = requests.get(url, timeout=timeout)
         response.raise_for_status()
 
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
@@ -318,19 +319,20 @@ class ReplicateMultiTalkGenerator(BaseContentModel):
         except Exception as e:
             return self._create_error_result(model, f"MultiTalk generation failed: {str(e)}")
 
-    def _download_file(self, url: str, output_path: str):
+    def _download_file(self, url: str, output_path: str, timeout: int = 300):
         """Download file from URL.
 
         Args:
             url: URL to download from.
             output_path: Local path to save the file.
+            timeout: Request timeout in seconds (default 300s for large video files).
 
         Raises:
             requests.RequestException: If download fails.
             IOError: If file cannot be written.
         """
         import requests
-        response = requests.get(url)
+        response = requests.get(url, timeout=timeout)
         response.raise_for_status()
 
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
