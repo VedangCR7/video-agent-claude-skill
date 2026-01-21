@@ -1,18 +1,8 @@
 """Avatar generation models for AI Content Pipeline."""
 
 import os
-import sys
 import warnings
 from typing import Dict, Any, Optional
-from pathlib import Path
-
-# Add avatar packages to path
-avatar_path = Path(__file__).parent.parent.parent.parent.parent / "providers" / "fal" / "avatar"
-avatar_gen_path = Path(__file__).parent.parent.parent.parent.parent / "providers" / "fal" / "avatar-generation"
-if str(avatar_path) not in sys.path:
-    sys.path.append(str(avatar_path))
-if str(avatar_gen_path) not in sys.path:
-    sys.path.append(str(avatar_gen_path))
 
 from ..utils.file_manager import FileManager
 from .base import BaseContentModel, ModelResult
