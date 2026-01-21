@@ -36,6 +36,14 @@ print(result.text)
 |-------|-------------|------|
 | `scribe_v2` | ElevenLabs Scribe v2 | $0.008/min |
 
+## Cost Warning
+
+**This API incurs costs per minute of audio transcribed:**
+- Base cost: $0.008/minute
+- With keyterms: +30% ($0.0104/minute)
+
+Always check `result.cost` after transcription to track spending.
+
 ## Features
 
 - **99 Languages**: Auto-detect or specify language

@@ -560,6 +560,8 @@ class KlingMotionControlModel(BaseAvatarModel):
         character_orientation = character_orientation or self.defaults["character_orientation"]
         if keep_original_sound is None:
             keep_original_sound = self.defaults["keep_original_sound"]
+        elif not isinstance(keep_original_sound, bool):
+            raise TypeError(f"keep_original_sound must be a boolean, got: {type(keep_original_sound).__name__}")
 
         # Validate character_orientation
         valid_orientations = ["video", "image"]
@@ -638,7 +640,7 @@ class KlingMotionControlModel(BaseAvatarModel):
                 video_url=result["video"]["url"],
                 duration=video_duration,
                 cost=self.estimate_cost(video_duration, character_orientation=orientation),
-                processing_time=response["processing_time"],
+                processing_time=response.get("processing_time"),
                 model_used=self.model_name,
                 metadata={
                     "character_orientation": orientation,
