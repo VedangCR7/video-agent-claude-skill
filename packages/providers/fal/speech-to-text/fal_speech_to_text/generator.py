@@ -73,6 +73,8 @@ class FALSpeechToTextGenerator:
         Returns:
             TranscriptionResult with speaker annotations
         """
+        # Remove diarize from kwargs if present to avoid duplicate argument error
+        kwargs.pop("diarize", None)
         return self.transcribe(
             audio_url=audio_url,
             model=model,

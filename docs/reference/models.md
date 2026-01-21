@@ -530,7 +530,7 @@ Targeted video modifications and editing.
 
 Motion transfer from reference video to reference image. **Recommended for dance videos and action sequences.**
 
-```bash
+```python
 # Python API
 from fal_avatar import FALAvatarGenerator
 

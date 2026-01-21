@@ -584,8 +584,8 @@ class KlingMotionControlModel(BaseAvatarModel):
 
     def generate(
         self,
-        image_url: str = None,
-        video_url: str = None,
+        image_url: str,
+        video_url: str,
         character_orientation: Optional[str] = None,
         keep_original_sound: Optional[bool] = None,
         prompt: Optional[str] = None,

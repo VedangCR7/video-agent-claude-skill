@@ -98,22 +98,22 @@ class TestKlingMotionControlModel:
     def test_estimate_cost_video_orientation(self):
         """Test cost estimation for video orientation."""
         cost = self.model.estimate_cost(10, character_orientation="video")
-        assert cost == 0.60  # 10 sec * $0.06
+        assert cost == pytest.approx(0.60)  # 10 sec * $0.06
 
     def test_estimate_cost_image_orientation(self):
         """Test cost estimation for image orientation."""
         cost = self.model.estimate_cost(10, character_orientation="image")
-        assert cost == 0.60  # 10 sec * $0.06
+        assert cost == pytest.approx(0.60)  # 10 sec * $0.06
 
     def test_estimate_cost_capped_at_max(self):
         """Test cost estimation caps at max duration."""
         # Video orientation max is 30s
         cost_video = self.model.estimate_cost(60, character_orientation="video")
-        assert abs(cost_video - 1.80) < 0.001  # Capped at 30 sec * $0.06
+        assert cost_video == pytest.approx(1.80)  # Capped at 30 sec * $0.06
 
         # Image orientation max is 10s
         cost_image = self.model.estimate_cost(60, character_orientation="image")
-        assert abs(cost_image - 0.60) < 0.001  # Capped at 10 sec * $0.06
+        assert cost_image == pytest.approx(0.60)  # Capped at 10 sec * $0.06
 
 
 class TestKlingMotionControlConstants:

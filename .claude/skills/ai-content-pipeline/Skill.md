@@ -1,6 +1,6 @@
 ---
 name: AI Content Pipeline
-description: Generate AI content (images, videos, audio, avatars) and analyze videos with detailed timelines using YAML pipelines with 46 models across 8 categories. Includes video analysis with Gemini 3 Pro.
+description: Generate AI content (images, videos, audio, avatars) and analyze videos with detailed timelines using YAML pipelines with 51 models across 8 categories. Includes video analysis with Gemini 3 Pro.
 dependencies: python>=3.10
 ---
 
@@ -103,6 +103,7 @@ Transfer motion from a reference video to a reference image.
 ```
 
 **Options:**
+
 | Option | Short | Default | Description |
 |--------|-------|---------|-------------|
 | `--image` | `-i` | required | Image path/URL (character source) |
@@ -115,7 +116,7 @@ Transfer motion from a reference video to a reference image.
 
 **Pricing:** $0.06/second
 
-## Available AI Models (46 Total)
+## Available AI Models (51 Total)
 
 ### Text-to-Image (8 models)
 | Model | Key | Provider | Cost |
@@ -164,6 +165,7 @@ Transfer motion from a reference video to a reference image.
 | Topaz | `topaz` | Video upscaling |
 
 ### Avatar Generation (9 models)
+
 | Model | Key | Description |
 |-------|-----|-------------|
 | Kling Ref-to-Video | `kling_ref_to_video` | Character consistency |
@@ -173,6 +175,7 @@ Transfer motion from a reference video to a reference image.
 | ... | `omnihuman_v1_5`, `fabric_1_0`, `fabric_1_0_fast`, `fabric_1_0_text`, `multitalk` | Other avatar/lipsync models |
 
 ### Speech-to-Text (1 model)
+
 | Model | Key | Description |
 |-------|-----|-------------|
 | ElevenLabs Scribe v2 | `scribe_v2` | Fast transcription with diarization |

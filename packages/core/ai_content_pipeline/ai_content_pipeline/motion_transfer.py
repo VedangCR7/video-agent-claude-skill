@@ -107,13 +107,14 @@ def upload_if_local(file_path: str, file_type: str = "file") -> str:
         raise ValueError(f"Failed to upload {file_type}: {e}")
 
 
-def download_video(url: str, output_path: Path) -> Path:
+def download_video(url: str, output_path: Path, timeout: tuple = (10, 60)) -> Path:
     """
     Download video from URL to local path.
 
     Args:
         url: Video URL
         output_path: Destination path
+        timeout: Request timeout as (connect_timeout, read_timeout) in seconds
 
     Returns:
         Path to downloaded file
@@ -122,7 +123,7 @@ def download_video(url: str, output_path: Path) -> Path:
         requests.RequestException: If download fails
     """
     print(f"📥 Downloading video...")
-    response = requests.get(url, stream=True)
+    response = requests.get(url, stream=True, timeout=timeout)
     response.raise_for_status()
 
     with open(output_path, 'wb') as f:
@@ -195,6 +196,13 @@ def transfer_motion(
     ok, error = check_dependencies()
     if not ok:
         return MotionTransferResult(success=False, error=error)
+
+    # Validate orientation
+    if orientation not in ORIENTATION_OPTIONS:
+        return MotionTransferResult(
+            success=False,
+            error=f"Invalid orientation: '{orientation}'. Valid options: {', '.join(ORIENTATION_OPTIONS.keys())}"
+        )
 
     try:
         # Upload files if local
@@ -308,6 +316,7 @@ def transfer_motion_command(args) -> None:
         if args.save_json:
             import json
             json_path = Path(args.output) / args.save_json
+            json_path.parent.mkdir(parents=True, exist_ok=True)
             with open(json_path, 'w') as f:
                 json.dump({
                     "success": True,

@@ -70,6 +70,6 @@ result.cost         # float - Estimated cost in USD
 
 ## Environment Variables
 
-```
+```bash
 FAL_KEY=your_fal_api_key
 ```

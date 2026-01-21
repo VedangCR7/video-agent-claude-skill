@@ -153,8 +153,8 @@ INPUT_REQUIREMENTS = {
         "optional": ["mask_url"],
     },
     "kling_motion_control": {
-        "required": ["image_url", "video_url", "character_orientation"],
-        "optional": ["keep_original_sound", "prompt"],
+        "required": ["image_url", "video_url"],
+        "optional": ["character_orientation", "keep_original_sound", "prompt"],
     },
     "multitalk": {
         "required": ["image_url", "first_audio_url", "prompt"],
