@@ -189,7 +189,7 @@ class TestPipelineThreadSafety(unittest.TestCase):
         test_data = {
             "large_list": list(range(1000)),
             "nested_dict": {"level1": {"level2": {"level3": "deep_value"}}},
-            "metadata": {"info": "test"} * 100
+            "metadata": {"info": ["test"] * 100}
         }
 
         start_time = time.time()
