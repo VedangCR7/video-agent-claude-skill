@@ -3,7 +3,12 @@
 from .base import BaseAvatarModel, AvatarGenerationResult
 from .omnihuman import OmniHumanModel
 from .fabric import FabricModel, FabricTextModel
-from .kling import KlingRefToVideoModel, KlingV2VReferenceModel, KlingV2VEditModel, KlingMotionControlModel
+from .kling import (
+    KlingRefToVideoModel,
+    KlingV2VReferenceModel,
+    KlingV2VEditModel,
+    KlingMotionControlModel,
+)
 from .multitalk import MultiTalkModel
 
 __all__ = [

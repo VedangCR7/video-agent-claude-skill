@@ -4,9 +4,4 @@ from .base import BaseTextToVideoModel
 from .kling import Kling26ProModel
 from .sora import Sora2Model, Sora2ProModel
 
-__all__ = [
-    "BaseTextToVideoModel",
-    "Kling26ProModel",
-    "Sora2Model",
-    "Sora2ProModel"
-]
+__all__ = ["BaseTextToVideoModel", "Kling26ProModel", "Sora2Model", "Sora2ProModel"]

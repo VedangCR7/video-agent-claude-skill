@@ -2,7 +2,7 @@
 Constants and configuration for FAL Video to Video models
 """
 
-from typing import Dict, List, Literal
+from typing import Literal
 
 # Model type definitions
 ModelType = Literal["thinksound", "topaz"]
@@ -13,14 +13,11 @@ SUPPORTED_MODELS = ["thinksound", "topaz"]
 # Model endpoints mapping
 MODEL_ENDPOINTS = {
     "thinksound": "fal-ai/thinksound",
-    "topaz": "fal-ai/topaz/upscale/video"
+    "topaz": "fal-ai/topaz/upscale/video",
 }
 
 # Model display names
-MODEL_DISPLAY_NAMES = {
-    "thinksound": "ThinkSound",
-    "topaz": "Topaz Video Upscale"
-}
+MODEL_DISPLAY_NAMES = {"thinksound": "ThinkSound", "topaz": "Topaz Video Upscale"}
 
 # Model information
 MODEL_INFO = {
@@ -32,12 +29,12 @@ MODEL_INFO = {
             "Text prompt guidance",
             "Video context understanding",
             "High-quality audio synthesis",
-            "Commercial use license"
+            "Commercial use license",
         ],
         "pricing": "$0.001 per second",
         "supported_formats": ["mp4", "mov", "avi", "webm"],
         "max_duration": 300,  # 5 minutes
-        "output_format": "mp4"
+        "output_format": "mp4",
     },
     "topaz": {
         "model_name": "Topaz Video Upscale",
@@ -48,26 +45,20 @@ MODEL_INFO = {
             "Proteus v4 upscaling engine",
             "Apollo v8 frame interpolation",
             "Professional quality enhancement",
-            "Commercial use license"
+            "Commercial use license",
         ],
         "pricing": "Commercial use pricing",
         "supported_formats": ["mp4", "mov", "avi", "webm"],
         "max_upscale": 4,
         "max_fps": 120,
-        "output_format": "mp4"
-    }
+        "output_format": "mp4",
+    },
 }
 
 # Default values
 DEFAULT_VALUES = {
-    "thinksound": {
-        "seed": None,
-        "prompt": None
-    },
-    "topaz": {
-        "upscale_factor": 2,
-        "target_fps": None
-    }
+    "thinksound": {"seed": None, "prompt": None},
+    "topaz": {"upscale_factor": 2, "target_fps": None},
 }
 
 # File size limits
@@ -76,8 +67,4 @@ MAX_VIDEO_DURATION_SECONDS = 300
 
 # Output settings
 DEFAULT_OUTPUT_FORMAT = "mp4"
-VIDEO_CODECS = {
-    "mp4": "libx264",
-    "webm": "libvpx",
-    "mov": "libx264"
-}
+VIDEO_CODECS = {"mp4": "libx264", "webm": "libvpx", "mov": "libx264"}

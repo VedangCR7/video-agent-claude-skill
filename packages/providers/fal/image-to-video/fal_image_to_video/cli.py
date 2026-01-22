@@ -10,8 +10,6 @@ Usage:
 
 import argparse
 import sys
-from pathlib import Path
-from typing import Optional
 
 from .generator import FALImageToVideoGenerator
 
@@ -27,7 +25,7 @@ def cmd_generate(args):
     # If it's a local file path, pass it via start_frame parameter.
     # The generator will upload the local file and use it as the image source.
     # image_url is ignored when start_frame is provided (see generator.py:141-153).
-    if not image_url.startswith(('http://', 'https://')):
+    if not image_url.startswith(("http://", "https://")):
         start_frame = image_url
         image_url = None
 
@@ -46,12 +44,12 @@ def cmd_generate(args):
         duration=args.duration,
         output_dir=args.output,
         negative_prompt=args.negative_prompt,
-        cfg_scale=args.cfg_scale if hasattr(args, 'cfg_scale') else None,
-        generate_audio=args.audio if hasattr(args, 'audio') else None,
+        cfg_scale=args.cfg_scale if hasattr(args, "cfg_scale") else None,
+        generate_audio=args.audio if hasattr(args, "audio") else None,
     )
 
     if result.get("success"):
-        print(f"\n✅ Success!")
+        print("\n✅ Success!")
         print(f"   📁 Output: {result.get('local_path')}")
         print(f"   💰 Cost: ${result.get('cost_estimate', 0):.2f}")
         print(f"   ⏱️ Time: {result.get('processing_time', 0):.1f}s")
@@ -65,7 +63,7 @@ def cmd_interpolate(args):
     """Generate video interpolating between two frames."""
     generator = FALImageToVideoGenerator()
 
-    print(f"🎬 Generating interpolation video...")
+    print("🎬 Generating interpolation video...")
     print(f"   Start frame: {args.start_frame}")
     print(f"   End frame: {args.end_frame}")
     print(f"   Model: {args.model}")
@@ -79,7 +77,7 @@ def cmd_interpolate(args):
     )
 
     if result.get("success"):
-        print(f"\n✅ Success!")
+        print("\n✅ Success!")
         print(f"   📁 Output: {result.get('local_path')}")
         print(f"   💰 Cost: ${result.get('cost_estimate', 0):.2f}")
         return 0
@@ -122,11 +120,11 @@ def cmd_model_info(args):
         print(f"Price: ${info.get('price_per_second', 0):.2f}/second")
         print(f"Max duration: {info.get('max_duration', 'N/A')}s")
 
-        print(f"\nFeatures:")
-        for feature in info.get('features', []):
+        print("\nFeatures:")
+        for feature in info.get("features", []):
             print(f"   • {feature}")
 
-        print(f"\nExtended Parameters:")
+        print("\nExtended Parameters:")
         for param, supported in features.items():
             status = "✅" if supported else "❌"
             print(f"   {status} {param}")
@@ -163,35 +161,71 @@ Examples:
 
   # Show model info
   python -m fal_image_to_video.cli model-info kling_2_6_pro
-        """
+        """,
     )
 
     subparsers = parser.add_subparsers(dest="command", help="Commands")
 
     # Generate command
     gen_parser = subparsers.add_parser("generate", help="Generate video from image")
-    gen_parser.add_argument("--image", "-i", required=True, help="Input image path or URL")
-    gen_parser.add_argument("--model", "-m", default="kling_2_6_pro",
-                           choices=["hailuo", "kling_2_1", "kling_2_6_pro",
-                                   "seedance_1_5_pro", "sora_2", "sora_2_pro", "veo_3_1_fast"],
-                           help="Model to use (default: kling_2_6_pro)")
-    gen_parser.add_argument("--prompt", "-p", required=True, help="Text prompt for video generation")
-    gen_parser.add_argument("--duration", "-d", default="5", help="Video duration (default: 5)")
+    gen_parser.add_argument(
+        "--image", "-i", required=True, help="Input image path or URL"
+    )
+    gen_parser.add_argument(
+        "--model",
+        "-m",
+        default="kling_2_6_pro",
+        choices=[
+            "hailuo",
+            "kling_2_1",
+            "kling_2_6_pro",
+            "seedance_1_5_pro",
+            "sora_2",
+            "sora_2_pro",
+            "veo_3_1_fast",
+        ],
+        help="Model to use (default: kling_2_6_pro)",
+    )
+    gen_parser.add_argument(
+        "--prompt", "-p", required=True, help="Text prompt for video generation"
+    )
+    gen_parser.add_argument(
+        "--duration", "-d", default="5", help="Video duration (default: 5)"
+    )
     gen_parser.add_argument("--output", "-o", default="output", help="Output directory")
-    gen_parser.add_argument("--end-frame", help="End frame for interpolation (Kling only)")
-    gen_parser.add_argument("--negative-prompt", default="blur, distortion, low quality",
-                           help="Negative prompt")
-    gen_parser.add_argument("--cfg-scale", type=float, default=0.5, help="CFG scale (0-1)")
-    gen_parser.add_argument("--audio", action="store_true", help="Generate audio (Veo only)")
+    gen_parser.add_argument(
+        "--end-frame", help="End frame for interpolation (Kling only)"
+    )
+    gen_parser.add_argument(
+        "--negative-prompt",
+        default="blur, distortion, low quality",
+        help="Negative prompt",
+    )
+    gen_parser.add_argument(
+        "--cfg-scale", type=float, default=0.5, help="CFG scale (0-1)"
+    )
+    gen_parser.add_argument(
+        "--audio", action="store_true", help="Generate audio (Veo only)"
+    )
     gen_parser.set_defaults(func=cmd_generate)
 
     # Interpolate command
-    interp_parser = subparsers.add_parser("interpolate", help="Generate video interpolating between frames")
-    interp_parser.add_argument("--start-frame", "-s", required=True, help="Start frame image")
-    interp_parser.add_argument("--end-frame", "-e", required=True, help="End frame image")
-    interp_parser.add_argument("--model", "-m", default="kling_2_6_pro",
-                              choices=["kling_2_1", "kling_2_6_pro"],
-                              help="Model (Kling only)")
+    interp_parser = subparsers.add_parser(
+        "interpolate", help="Generate video interpolating between frames"
+    )
+    interp_parser.add_argument(
+        "--start-frame", "-s", required=True, help="Start frame image"
+    )
+    interp_parser.add_argument(
+        "--end-frame", "-e", required=True, help="End frame image"
+    )
+    interp_parser.add_argument(
+        "--model",
+        "-m",
+        default="kling_2_6_pro",
+        choices=["kling_2_1", "kling_2_6_pro"],
+        help="Model (Kling only)",
+    )
     interp_parser.add_argument("--prompt", "-p", required=True, help="Text prompt")
     interp_parser.add_argument("--duration", "-d", default="5", help="Duration")
     interp_parser.set_defaults(func=cmd_interpolate)

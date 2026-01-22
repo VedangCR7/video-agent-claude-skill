@@ -5,7 +5,6 @@ This module provides a unified interface for text-to-video generation
 using various FAL AI models (Kling v2.6 Pro, Sora 2, Sora 2 Pro).
 """
 
-import os
 from typing import Dict, Any, Optional, Type, Union
 from pathlib import Path
 from dotenv import load_dotenv
@@ -13,20 +12,15 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-from .models import (
-    BaseTextToVideoModel,
-    Kling26ProModel,
-    Sora2Model,
-    Sora2ProModel
-)
-from .config import SUPPORTED_MODELS, MODEL_INFO
+from .models import BaseTextToVideoModel, Kling26ProModel, Sora2Model, Sora2ProModel
+from .config import MODEL_INFO
 
 
 # Model class registry
 MODEL_CLASSES: Dict[str, Type[BaseTextToVideoModel]] = {
     "kling_2_6_pro": Kling26ProModel,
     "sora_2": Sora2Model,
-    "sora_2_pro": Sora2ProModel
+    "sora_2_pro": Sora2ProModel,
 }
 
 
@@ -56,8 +50,7 @@ class FALTextToVideoGenerator:
         """Get model instance by key."""
         if model_key not in MODEL_CLASSES:
             raise ValueError(
-                f"Unknown model: {model_key}. "
-                f"Available: {list(MODEL_CLASSES.keys())}"
+                f"Unknown model: {model_key}. Available: {list(MODEL_CLASSES.keys())}"
             )
         return MODEL_CLASSES[model_key]()
 
@@ -68,7 +61,7 @@ class FALTextToVideoGenerator:
         output_dir: Optional[Union[str, Path]] = None,
         timeout: int = 600,
         verbose: bool = True,
-        **kwargs
+        **kwargs,
     ) -> Dict[str, Any]:
         """
         Generate video from text prompt.
@@ -96,14 +89,10 @@ class FALTextToVideoGenerator:
             output_dir=output_dir,
             timeout=timeout,
             verbose=verbose,
-            **kwargs
+            **kwargs,
         )
 
-    def estimate_cost(
-        self,
-        model: Optional[str] = None,
-        **kwargs
-    ) -> float:
+    def estimate_cost(self, model: Optional[str] = None, **kwargs) -> float:
         """
         Estimate cost for video generation.
 
@@ -163,7 +152,7 @@ class FALTextToVideoGenerator:
                 "max_duration": info.get("max_duration", "N/A"),
                 "features": info.get("features", []),
                 "endpoint": model_instance.endpoint,
-                "pricing": model_instance.pricing
+                "pricing": model_instance.pricing,
             }
 
         return comparison

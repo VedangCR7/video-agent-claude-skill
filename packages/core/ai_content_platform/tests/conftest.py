@@ -3,11 +3,9 @@
 import asyncio
 import tempfile
 from pathlib import Path
-from typing import Dict, Any
 from unittest.mock import Mock, AsyncMock
 
 import pytest
-from pydantic import BaseModel
 
 from ai_content_platform.core.models import (
     StepType,
@@ -15,7 +13,7 @@ from ai_content_platform.core.models import (
     ParallelStepConfig,
     PipelineConfig,
     StepResult,
-    PipelineResult
+    PipelineResult,
 )
 from ai_content_platform.utils import (
     get_logger,
@@ -23,7 +21,7 @@ from ai_content_platform.utils import (
     FileManager,
     ConfigLoader,
     CostCalculator,
-    ConfigValidator
+    ConfigValidator,
 )
 
 
@@ -85,8 +83,8 @@ def sample_step_config():
             "prompt": "A test image",
             "model": "flux-1-dev",
             "width": 512,
-            "height": 512
-        }
+            "height": 512,
+        },
     )
 
 
@@ -99,15 +97,15 @@ def sample_parallel_step_config():
             StepConfig(
                 name="step1",
                 step_type=StepType.TEXT_TO_IMAGE,
-                parameters={"prompt": "Image 1"}
+                parameters={"prompt": "Image 1"},
             ),
             StepConfig(
-                name="step2", 
+                name="step2",
                 step_type=StepType.TEXT_TO_SPEECH,
-                parameters={"text": "Hello world"}
-            )
+                parameters={"text": "Hello world"},
+            ),
         ],
-        merge_strategy="merge_outputs"
+        merge_strategy="merge_outputs",
     )
 
 
@@ -122,24 +120,15 @@ def sample_pipeline_config(temp_dir):
             StepConfig(
                 name="generate_image",
                 step_type=StepType.TEXT_TO_IMAGE,
-                parameters={
-                    "prompt": "A beautiful landscape",
-                    "model": "flux-1-dev"
-                }
+                parameters={"prompt": "A beautiful landscape", "model": "flux-1-dev"},
             ),
             StepConfig(
                 name="generate_speech",
                 step_type=StepType.TEXT_TO_SPEECH,
-                parameters={
-                    "text": "This is a test.",
-                    "voice_id": "test_voice"
-                }
-            )
+                parameters={"text": "This is a test.", "voice_id": "test_voice"},
+            ),
         ],
-        global_config={
-            "max_cost": 5.0,
-            "timeout": 300
-        }
+        global_config={"max_cost": 5.0, "timeout": 300},
     )
 
 
@@ -155,10 +144,10 @@ def sample_step_result():
             "model": "flux-1-dev",
             "prompt": "A test image",
             "width": 512,
-            "height": 512
+            "height": 512,
         },
         execution_time=2.5,
-        cost=0.002
+        cost=0.002,
     )
 
 
@@ -172,11 +161,7 @@ def sample_pipeline_result(sample_step_result, temp_dir):
         total_cost=0.002,
         execution_time=3.0,
         output_directory=str(temp_dir / "output"),
-        metadata={
-            "steps_executed": 1,
-            "successful_steps": 1,
-            "failed_steps": 0
-        }
+        metadata={"steps_executed": 1, "successful_steps": 1, "failed_steps": 0},
     )
 
 
@@ -185,11 +170,13 @@ def sample_pipeline_result(sample_step_result, temp_dir):
 def mock_fal_client():
     """Mock FAL client for testing."""
     mock = Mock()
-    mock.subscribe = AsyncMock(return_value={
-        "images": [{"url": "https://example.com/test_image.png"}],
-        "width": 512,
-        "height": 512
-    })
+    mock.subscribe = AsyncMock(
+        return_value={
+            "images": [{"url": "https://example.com/test_image.png"}],
+            "width": 512,
+            "height": 512,
+        }
+    )
     return mock
 
 
@@ -205,10 +192,12 @@ def mock_elevenlabs_client():
 def mock_google_client():
     """Mock Google client for testing."""
     mock = Mock()
-    mock.generate_content = AsyncMock(return_value=Mock(
-        text="Generated content",
-        candidates=[Mock(content=Mock(parts=[Mock(text="Generated content")]))]
-    ))
+    mock.generate_content = AsyncMock(
+        return_value=Mock(
+            text="Generated content",
+            candidates=[Mock(content=Mock(parts=[Mock(text="Generated content")]))],
+        )
+    )
     return mock
 
 
@@ -240,11 +229,11 @@ steps:
       text: "This is a test from YAML configuration."
       voice_id: "test_voice"
 """
-    
+
     config_path = temp_dir / "test_config.yaml"
-    with open(config_path, 'w') as f:
+    with open(config_path, "w") as f:
         f.write(config_content)
-    
+
     return config_path
 
 
@@ -255,10 +244,7 @@ def test_config_json(temp_dir):
         "pipeline_name": "json_test_pipeline",
         "description": "Test pipeline from JSON",
         "output_directory": "output",
-        "global_config": {
-            "max_cost": 10.0,
-            "timeout": 600
-        },
+        "global_config": {"max_cost": 10.0, "timeout": 600},
         "steps": [
             {
                 "name": "test_image",
@@ -267,17 +253,18 @@ def test_config_json(temp_dir):
                     "prompt": "A test image from JSON",
                     "model": "flux-1-dev",
                     "width": 1024,
-                    "height": 1024
-                }
+                    "height": 1024,
+                },
             }
-        ]
+        ],
     }
-    
+
     config_path = temp_dir / "test_config.json"
     import json
-    with open(config_path, 'w') as f:
+
+    with open(config_path, "w") as f:
         json.dump(config_content, f, indent=2)
-    
+
     return config_path
 
 
@@ -291,11 +278,11 @@ output_directory: "output"
 
 steps: []  # Invalid: no steps
 """
-    
+
     config_path = temp_dir / "invalid_config.yaml"
-    with open(config_path, 'w') as f:
+    with open(config_path, "w") as f:
         f.write(config_content)
-    
+
     return config_path
 
 
@@ -307,12 +294,12 @@ def mock_env_vars(monkeypatch):
         "FAL_KEY": "test_fal_key",
         "ELEVENLABS_API_KEY": "test_elevenlabs_key",
         "GOOGLE_API_KEY": "test_google_key",
-        "OPENROUTER_API_KEY": "test_openrouter_key"
+        "OPENROUTER_API_KEY": "test_openrouter_key",
     }
-    
+
     for key, value in env_vars.items():
         monkeypatch.setenv(key, value)
-    
+
     return env_vars
 
 
@@ -320,12 +307,16 @@ def mock_env_vars(monkeypatch):
 def mock_no_env_vars(monkeypatch):
     """Remove environment variables for testing error cases."""
     env_vars = [
-        "FAL_KEY", "FAL_API_KEY",
-        "ELEVENLABS_API_KEY", "ELEVEN_API_KEY",
-        "GOOGLE_API_KEY", "GEMINI_API_KEY",
-        "OPENROUTER_API_KEY", "OPENAI_API_KEY"
+        "FAL_KEY",
+        "FAL_API_KEY",
+        "ELEVENLABS_API_KEY",
+        "ELEVEN_API_KEY",
+        "GOOGLE_API_KEY",
+        "GEMINI_API_KEY",
+        "OPENROUTER_API_KEY",
+        "OPENAI_API_KEY",
     ]
-    
+
     for var in env_vars:
         monkeypatch.delenv(var, raising=False)
 
@@ -334,25 +325,27 @@ def mock_no_env_vars(monkeypatch):
 @pytest.fixture
 def create_test_file():
     """Helper function to create test files."""
+
     def _create_file(path: Path, content: str = "test content"):
         path.parent.mkdir(parents=True, exist_ok=True)
-        with open(path, 'w') as f:
+        with open(path, "w") as f:
             f.write(content)
         return path
-    
+
     return _create_file
 
 
 @pytest.fixture
 def assert_file_exists():
     """Helper function to assert file existence."""
+
     def _assert_exists(path: Path, should_exist: bool = True):
         if should_exist:
             assert path.exists(), f"File should exist: {path}"
             assert path.is_file(), f"Path should be a file: {path}"
         else:
             assert not path.exists(), f"File should not exist: {path}"
-    
+
     return _assert_exists
 
 
@@ -381,18 +374,8 @@ def integration_test_config():
 # Markers for different test types
 def pytest_configure(config):
     """Configure pytest with custom markers."""
-    config.addinivalue_line(
-        "markers", "unit: mark test as unit test"
-    )
-    config.addinivalue_line(
-        "markers", "integration: mark test as integration test"
-    )
-    config.addinivalue_line(
-        "markers", "slow: mark test as slow running"
-    )
-    config.addinivalue_line(
-        "markers", "api: mark test as requiring API access"
-    )
-    config.addinivalue_line(
-        "markers", "expensive: mark test as potentially expensive"
-    )
+    config.addinivalue_line("markers", "unit: mark test as unit test")
+    config.addinivalue_line("markers", "integration: mark test as integration test")
+    config.addinivalue_line("markers", "slow: mark test as slow running")
+    config.addinivalue_line("markers", "api: mark test as requiring API access")
+    config.addinivalue_line("markers", "expensive: mark test as potentially expensive")

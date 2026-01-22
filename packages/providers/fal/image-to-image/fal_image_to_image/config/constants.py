@@ -2,14 +2,32 @@
 Constants and configuration for FAL Image-to-Image models
 """
 
-from typing import Dict, List, Literal
+from typing import Literal
 
 # Model type definitions
-ModelType = Literal["photon", "photon_base", "kontext", "kontext_multi", "seededit", "clarity", "nano_banana_pro_edit", "gpt_image_1_5_edit"]
+ModelType = Literal[
+    "photon",
+    "photon_base",
+    "kontext",
+    "kontext_multi",
+    "seededit",
+    "clarity",
+    "nano_banana_pro_edit",
+    "gpt_image_1_5_edit",
+]
 AspectRatio = Literal["1:1", "16:9", "9:16", "4:3", "3:4", "21:9", "9:21"]
 
 # Supported models
-SUPPORTED_MODELS = ["photon", "photon_base", "kontext", "kontext_multi", "seededit", "clarity", "nano_banana_pro_edit", "gpt_image_1_5_edit"]
+SUPPORTED_MODELS = [
+    "photon",
+    "photon_base",
+    "kontext",
+    "kontext_multi",
+    "seededit",
+    "clarity",
+    "nano_banana_pro_edit",
+    "gpt_image_1_5_edit",
+]
 
 # Model endpoints mapping
 MODEL_ENDPOINTS = {
@@ -20,23 +38,42 @@ MODEL_ENDPOINTS = {
     "seededit": "fal-ai/bytedance/seededit/v3/edit-image",
     "clarity": "fal-ai/clarity-upscaler",
     "nano_banana_pro_edit": "fal-ai/nano-banana-pro/edit",
-    "gpt_image_1_5_edit": "fal-ai/gpt-image-1.5/edit"
+    "gpt_image_1_5_edit": "fal-ai/gpt-image-1.5/edit",
 }
 
 # Reframe endpoints for aspect ratio changes
 REFRAME_ENDPOINTS = {
     "photon": "fal-ai/luma-photon/flash/reframe",
-    "photon_base": "fal-ai/luma-photon/reframe"
+    "photon_base": "fal-ai/luma-photon/reframe",
 }
 
 # Aspect ratios for different models
 ASPECT_RATIOS = ["1:1", "16:9", "9:16", "4:3", "3:4", "21:9", "9:21"]
-KONTEXT_MULTI_ASPECT_RATIOS = ["21:9", "16:9", "4:3", "3:2", "1:1", "2:3", "3:4", "9:16", "9:21"]
+KONTEXT_MULTI_ASPECT_RATIOS = [
+    "21:9",
+    "16:9",
+    "4:3",
+    "3:2",
+    "1:1",
+    "2:3",
+    "3:4",
+    "9:16",
+    "9:21",
+]
 
 # Nano Banana Pro Edit specific aspect ratios (11 options)
 NANO_BANANA_ASPECT_RATIOS = [
-    "auto", "21:9", "16:9", "3:2", "4:3", "5:4",
-    "1:1", "4:5", "3:4", "2:3", "9:16"
+    "auto",
+    "21:9",
+    "16:9",
+    "3:2",
+    "4:3",
+    "5:4",
+    "1:1",
+    "4:5",
+    "3:4",
+    "2:3",
+    "9:16",
 ]
 
 # Resolution options for models that support it
@@ -53,32 +90,22 @@ SEEDEDIT_GUIDANCE_SCALE_RANGE = (0.0, 1.0)
 
 # Default values
 DEFAULT_VALUES = {
-    "photon": {
-        "strength": 0.8,
-        "aspect_ratio": "1:1"
-    },
+    "photon": {"strength": 0.8, "aspect_ratio": "1:1"},
     "kontext": {
         "num_inference_steps": 28,
         "guidance_scale": 2.5,
-        "resolution_mode": "auto"
+        "resolution_mode": "auto",
     },
-    "seededit": {
-        "guidance_scale": 0.5
-    },
-    "clarity": {
-        "scale": 2,
-        "enable_enhancement": True
-    },
+    "seededit": {"guidance_scale": 0.5},
+    "clarity": {"scale": 2, "enable_enhancement": True},
     "nano_banana_pro_edit": {
         "aspect_ratio": "auto",
         "resolution": "1K",
         "output_format": "png",
         "num_images": 1,
-        "sync_mode": True
+        "sync_mode": True,
     },
-    "gpt_image_1_5_edit": {
-        "strength": 0.75
-    }
+    "gpt_image_1_5_edit": {"strength": 0.75},
 }
 
 # Model display names
@@ -90,7 +117,7 @@ MODEL_DISPLAY_NAMES = {
     "seededit": "ByteDance SeedEdit v3",
     "clarity": "Clarity Upscaler",
     "nano_banana_pro_edit": "Nano Banana Pro Edit",
-    "gpt_image_1_5_edit": "GPT Image 1.5 Edit"
+    "gpt_image_1_5_edit": "GPT Image 1.5 Edit",
 }
 
 # Model features and descriptions
@@ -102,11 +129,11 @@ MODEL_INFO = {
         "strength_range": "0.0 - 1.0",
         "features": [
             "Fast processing",
-            "High-quality results", 
+            "High-quality results",
             "Creative modifications",
             "Personalizable outputs",
-            "Aspect ratio control"
-        ]
+            "Aspect ratio control",
+        ],
     },
     "photon_base": {
         "model_name": "Luma Photon Base",
@@ -119,8 +146,8 @@ MODEL_INFO = {
             "High-quality image generation",
             "Creative image editing",
             "Prompt-based modifications",
-            "Commercial use ready"
-        ]
+            "Commercial use ready",
+        ],
     },
     "kontext": {
         "model_name": "FLUX Kontext Dev",
@@ -133,8 +160,8 @@ MODEL_INFO = {
             "Nuanced modifications",
             "Style preservation",
             "Iterative editing",
-            "Precise control"
-        ]
+            "Precise control",
+        ],
     },
     "kontext_multi": {
         "model_name": "FLUX Kontext [max] Multi",
@@ -148,8 +175,8 @@ MODEL_INFO = {
             "Experimental capabilities",
             "High-quality results",
             "Safety tolerance control",
-            "Multiple output formats"
-        ]
+            "Multiple output formats",
+        ],
     },
     "seededit": {
         "model_name": "ByteDance SeedEdit v3",
@@ -162,8 +189,8 @@ MODEL_INFO = {
             "Commercial use ready",
             "Simple parameter set",
             "High-quality results",
-            "ByteDance developed"
-        ]
+            "ByteDance developed",
+        ],
     },
     "clarity": {
         "model_name": "Clarity Upscaler",
@@ -176,8 +203,8 @@ MODEL_INFO = {
             "Maintains image quality",
             "Fast processing",
             "Commercial use ready",
-            "Prompt-based enhancement"
-        ]
+            "Prompt-based enhancement",
+        ],
     },
     "nano_banana_pro_edit": {
         "model_name": "Nano Banana Pro Edit",
@@ -193,8 +220,8 @@ MODEL_INFO = {
             "Up to 4K resolution",
             "Optional web search enhancement",
             "Fast processing",
-            "Commercial use ready"
-        ]
+            "Commercial use ready",
+        ],
     },
     "gpt_image_1_5_edit": {
         "model_name": "GPT Image 1.5 Edit",
@@ -205,7 +232,7 @@ MODEL_INFO = {
             "Natural language understanding",
             "High-quality results",
             "Creative modifications",
-            "Commercial use ready"
-        ]
-    }
+            "Commercial use ready",
+        ],
+    },
 }

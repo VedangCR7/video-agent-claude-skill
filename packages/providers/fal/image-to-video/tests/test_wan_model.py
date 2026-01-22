@@ -7,7 +7,7 @@ import sys
 import os
 
 # Add parent directory to path for imports
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from fal_image_to_video.models.wan import Wan26Model
 
@@ -35,10 +35,7 @@ class TestWan26Model:
         """Test parameter validation with custom values."""
         model = Wan26Model()
         params = model.validate_parameters(
-            duration="15",
-            resolution="720p",
-            multi_shots=True,
-            seed=42
+            duration="15", resolution="720p", multi_shots=True, seed=42
         )
 
         assert params["duration"] == "15"
@@ -63,8 +60,7 @@ class TestWan26Model:
         model = Wan26Model()
         with pytest.raises(ValueError, match="max 800 characters"):
             model.prepare_arguments(
-                prompt="x" * 801,
-                image_url="https://example.com/image.jpg"
+                prompt="x" * 801, image_url="https://example.com/image.jpg"
             )
 
     def test_estimate_cost_720p(self):
@@ -85,7 +81,7 @@ class TestWan26Model:
         args = model.prepare_arguments(
             prompt="Test prompt",
             image_url="https://example.com/image.jpg",
-            audio_url="https://example.com/audio.mp3"
+            audio_url="https://example.com/audio.mp3",
         )
 
         assert args["audio_url"] == "https://example.com/audio.mp3"
@@ -97,7 +93,7 @@ class TestWan26Model:
             prompt="A beautiful scene",
             image_url="https://example.com/image.jpg",
             duration="10",
-            resolution="720p"
+            resolution="720p",
         )
 
         assert args["prompt"] == "A beautiful scene"

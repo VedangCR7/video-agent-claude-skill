@@ -12,6 +12,7 @@ Components:
 try:
     from .interactive import main as interactive_main
     from .quick_start import main as quick_start_main
+
     __all__ = ["interactive_main", "quick_start_main"]
 except ImportError:
     # Graceful fallback if imports fail

@@ -2,7 +2,7 @@
 
 import os
 import warnings
-from typing import Dict, Any, Optional
+from typing import Any, Optional
 
 from ..utils.file_manager import FileManager
 from .base import BaseContentModel, ModelResult
@@ -26,6 +26,7 @@ class MultiTalkGenerator(BaseContentModel):
         """Initialize the FAL Avatar generator."""
         try:
             from fal_avatar import FALAvatarGenerator
+
             self.generator = FALAvatarGenerator()
             print("✅ FAL Avatar Multi generator initialized")
         except ImportError as e:
@@ -34,7 +35,9 @@ class MultiTalkGenerator(BaseContentModel):
         except Exception as e:
             print(f"❌ Error initializing FAL Avatar: {e}")
 
-    def generate(self, input_data: Any = None, model: str = "multitalk", **kwargs) -> ModelResult:
+    def generate(
+        self, input_data: Any = None, model: str = "multitalk", **kwargs
+    ) -> ModelResult:
         """Generate a multi-person conversational video using FAL.
 
         Args:
@@ -54,25 +57,28 @@ class MultiTalkGenerator(BaseContentModel):
         self._start_timing()
 
         if not self.generator:
-            return self._create_error_result(model, "FAL Avatar generator not initialized")
+            return self._create_error_result(
+                model, "FAL Avatar generator not initialized"
+            )
 
         try:
             # Map parameters to FAL format (support both old and new param names)
-            image_url = kwargs.get('image_url', kwargs.get('image'))
-            first_audio_url = kwargs.get('first_audio_url', kwargs.get('first_audio'))
-            second_audio_url = kwargs.get('second_audio_url', kwargs.get('second_audio'))
-            prompt = kwargs.get('prompt', 'A natural conversation')
+            image_url = kwargs.get("image_url", kwargs.get("image"))
+            first_audio_url = kwargs.get("first_audio_url", kwargs.get("first_audio"))
+            second_audio_url = kwargs.get(
+                "second_audio_url", kwargs.get("second_audio")
+            )
+            prompt = kwargs.get("prompt", "A natural conversation")
 
             if not image_url or not first_audio_url:
                 return self._create_error_result(
-                    model,
-                    "Missing required parameters: image_url and first_audio_url"
+                    model, "Missing required parameters: image_url and first_audio_url"
                 )
 
             # Map legacy 'turbo' param to 'acceleration'
-            acceleration = kwargs.get('acceleration', 'regular')
-            if kwargs.get('turbo'):
-                acceleration = 'high'
+            acceleration = kwargs.get("acceleration", "regular")
+            if kwargs.get("turbo"):
+                acceleration = "high"
 
             # Generate the video
             print("🔄 Calling FAL AI Avatar Multi API...")
@@ -86,9 +92,9 @@ class MultiTalkGenerator(BaseContentModel):
                 first_audio_url=first_audio_url,
                 prompt=prompt,
                 second_audio_url=second_audio_url,
-                num_frames=kwargs.get('num_frames', 81),
-                resolution=kwargs.get('resolution', '480p'),
-                seed=kwargs.get('seed'),
+                num_frames=kwargs.get("num_frames", 81),
+                resolution=kwargs.get("resolution", "480p"),
+                seed=kwargs.get("seed"),
                 acceleration=acceleration,
             )
 
@@ -101,6 +107,7 @@ class MultiTalkGenerator(BaseContentModel):
             output_path = None
             if self.file_manager and result.video_url:
                 import time
+
                 timestamp = int(time.time())
                 filename = f"multitalk_{timestamp}.mp4"
                 output_path = self.file_manager.create_output_path(filename)
@@ -115,17 +122,19 @@ class MultiTalkGenerator(BaseContentModel):
                 output_path=output_path,
                 output_url=result.video_url,
                 metadata={
-                    'model': 'fal-ai/ai-avatar/multi',
-                    'processing_time': result.processing_time,
-                    'cost': result.cost,
-                    'type': 'conversational_video',
-                    'has_second_person': second_audio_url is not None,
+                    "model": "fal-ai/ai-avatar/multi",
+                    "processing_time": result.processing_time,
+                    "cost": result.cost,
+                    "type": "conversational_video",
+                    "has_second_person": second_audio_url is not None,
                     **result.metadata,
-                }
+                },
             )
 
         except Exception as e:
-            return self._create_error_result(model, f"FAL MultiTalk generation failed: {str(e)}")
+            return self._create_error_result(
+                model, f"FAL MultiTalk generation failed: {str(e)}"
+            )
 
     def _download_file(self, url: str, output_path: str, timeout: int = 300):
         """Download file from URL.
@@ -140,11 +149,12 @@ class MultiTalkGenerator(BaseContentModel):
             IOError: If file cannot be written.
         """
         import requests
+
         response = requests.get(url, timeout=timeout)
         response.raise_for_status()
 
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
-        with open(output_path, 'wb') as f:
+        with open(output_path, "wb") as f:
             f.write(response.content)
 
     def estimate_cost(self, model: str, **kwargs) -> float:
@@ -165,8 +175,8 @@ class MultiTalkGenerator(BaseContentModel):
                 return self.generator.estimate_cost(
                     model="multitalk",
                     duration=0,  # Not used by multitalk model
-                    num_frames=kwargs.get('num_frames', 81),
-                    resolution=kwargs.get('resolution', '480p'),
+                    num_frames=kwargs.get("num_frames", 81),
+                    resolution=kwargs.get("resolution", "480p"),
                 )
             except Exception:
                 pass  # Fall back to default estimate
@@ -180,10 +190,11 @@ class MultiTalkGenerator(BaseContentModel):
 
     def validate_input(self, input_data: Any, model: str, **kwargs) -> bool:
         """Validate input parameters."""
-        image_url = kwargs.get('image_url', kwargs.get('image'))
-        has_audio = any(kwargs.get(key) for key in [
-            'first_audio_url', 'first_audio', 'audio_url', 'audio'
-        ])
+        image_url = kwargs.get("image_url", kwargs.get("image"))
+        has_audio = any(
+            kwargs.get(key)
+            for key in ["first_audio_url", "first_audio", "audio_url", "audio"]
+        )
 
         return bool(image_url and has_audio)
 
@@ -209,7 +220,7 @@ class ReplicateMultiTalkGenerator(BaseContentModel):
             "Use MultiTalkGenerator instead, which uses FAL AI Avatar Multi. "
             "See: issues/migrate-replicate-to-fal-avatar.md",
             DeprecationWarning,
-            stacklevel=2
+            stacklevel=2,
         )
         super().__init__("avatar")
         self.file_manager = file_manager
@@ -219,7 +230,10 @@ class ReplicateMultiTalkGenerator(BaseContentModel):
     def _initialize_generator(self):
         """Initialize the Replicate MultiTalk generator."""
         try:
-            from replicate_multitalk_generator import ReplicateMultiTalkGenerator as MultiTalkGen
+            from replicate_multitalk_generator import (
+                ReplicateMultiTalkGenerator as MultiTalkGen,
+            )
+
             self.generator = MultiTalkGen()
             print("✅ Replicate MultiTalk generator initialized")
         except ImportError as e:
@@ -228,7 +242,9 @@ class ReplicateMultiTalkGenerator(BaseContentModel):
         except Exception as e:
             print(f"❌ Error initializing MultiTalk: {e}")
 
-    def generate(self, input_data: Any = None, model: str = "multitalk", **kwargs) -> ModelResult:
+    def generate(
+        self, input_data: Any = None, model: str = "multitalk", **kwargs
+    ) -> ModelResult:
         """Generate a multi-person conversational video.
 
         Args:
@@ -246,47 +262,53 @@ class ReplicateMultiTalkGenerator(BaseContentModel):
         self._start_timing()
 
         if not self.generator:
-            return self._create_error_result(model, "MultiTalk generator not initialized")
+            return self._create_error_result(
+                model, "MultiTalk generator not initialized"
+            )
 
         try:
             # Map parameters to generator format
-            image_url = kwargs.get('image', kwargs.get('image_url'))
-            first_audio = kwargs.get('first_audio', kwargs.get('first_audio_url'))
-            second_audio = kwargs.get('second_audio', kwargs.get('second_audio_url'))
+            image_url = kwargs.get("image", kwargs.get("image_url"))
+            first_audio = kwargs.get("first_audio", kwargs.get("first_audio_url"))
+            second_audio = kwargs.get("second_audio", kwargs.get("second_audio_url"))
 
             if not image_url or not first_audio:
-                return self._create_error_result(model, "Missing required parameters: image and first_audio")
+                return self._create_error_result(
+                    model, "Missing required parameters: image and first_audio"
+                )
 
             # Generate the video
-            print("🔄 Calling Replicate MultiTalk API (this will take several minutes)...")
+            print(
+                "🔄 Calling Replicate MultiTalk API (this will take several minutes)..."
+            )
             if second_audio:
                 print("💬 Generating multi-person conversation video...")
                 result = self.generator.generate_conversation_video(
                     image_url=image_url,
                     first_audio_url=first_audio,
                     second_audio_url=second_audio,
-                    prompt=kwargs.get('prompt', 'A natural conversation'),
-                    num_frames=kwargs.get('num_frames', 81),
-                    turbo=kwargs.get('turbo', True),
-                    sampling_steps=kwargs.get('sampling_steps', 40),
-                    seed=kwargs.get('seed')
+                    prompt=kwargs.get("prompt", "A natural conversation"),
+                    num_frames=kwargs.get("num_frames", 81),
+                    turbo=kwargs.get("turbo", True),
+                    sampling_steps=kwargs.get("sampling_steps", 40),
+                    seed=kwargs.get("seed"),
                 )
             else:
                 print("👤 Generating single-person speaking video...")
                 result = self.generator.generate_single_person_video(
                     image_url=image_url,
                     audio_url=first_audio,
-                    prompt=kwargs.get('prompt', 'A person speaking naturally'),
-                    num_frames=kwargs.get('num_frames', 81),
-                    turbo=kwargs.get('turbo', True),
-                    sampling_steps=kwargs.get('sampling_steps', 40),
-                    seed=kwargs.get('seed')
+                    prompt=kwargs.get("prompt", "A person speaking naturally"),
+                    num_frames=kwargs.get("num_frames", 81),
+                    turbo=kwargs.get("turbo", True),
+                    sampling_steps=kwargs.get("sampling_steps", 40),
+                    seed=kwargs.get("seed"),
                 )
 
             print("🎥 Video generation completed, processing result...")
 
             # Extract video URL
-            video_url = result.get('video', {}).get('url')
+            video_url = result.get("video", {}).get("url")
             if not video_url:
                 return self._create_error_result(model, "No video URL in result")
 
@@ -294,6 +316,7 @@ class ReplicateMultiTalkGenerator(BaseContentModel):
             output_path = None
             if self.file_manager:
                 import time
+
                 timestamp = int(time.time())
                 filename = f"multitalk_conversation_{timestamp}.mp4"
                 output_path = self.file_manager.create_output_path(filename)
@@ -308,16 +331,18 @@ class ReplicateMultiTalkGenerator(BaseContentModel):
                 output_path=output_path,
                 output_url=video_url,
                 metadata={
-                    'model': 'replicate/multitalk',
-                    'generation_time': result.get('generation_time', 0),
-                    'parameters': result.get('parameters', {}),
-                    'type': 'conversational_video',
-                    'people_count': 2 if second_audio else 1
-                }
+                    "model": "replicate/multitalk",
+                    "generation_time": result.get("generation_time", 0),
+                    "parameters": result.get("parameters", {}),
+                    "type": "conversational_video",
+                    "people_count": 2 if second_audio else 1,
+                },
             )
 
         except Exception as e:
-            return self._create_error_result(model, f"MultiTalk generation failed: {str(e)}")
+            return self._create_error_result(
+                model, f"MultiTalk generation failed: {str(e)}"
+            )
 
     def _download_file(self, url: str, output_path: str, timeout: int = 300):
         """Download file from URL.
@@ -332,11 +357,12 @@ class ReplicateMultiTalkGenerator(BaseContentModel):
             IOError: If file cannot be written.
         """
         import requests
+
         response = requests.get(url, timeout=timeout)
         response.raise_for_status()
 
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
-        with open(output_path, 'wb') as f:
+        with open(output_path, "wb") as f:
             f.write(response.content)
 
     def estimate_cost(self, model: str, **kwargs) -> float:
@@ -349,8 +375,11 @@ class ReplicateMultiTalkGenerator(BaseContentModel):
 
     def validate_input(self, input_data: Any, model: str, **kwargs) -> bool:
         """Validate input parameters."""
-        required = ['image']
-        has_audio = any(kwargs.get(key) for key in ['first_audio', 'audio', 'first_audio_url', 'audio_url'])
+        required = ["image"]
+        has_audio = any(
+            kwargs.get(key)
+            for key in ["first_audio", "audio", "first_audio_url", "audio_url"]
+        )
 
         if not has_audio:
             return False

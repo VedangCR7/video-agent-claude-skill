@@ -64,7 +64,9 @@ class ChainExecutor:
         self._executors = {
             StepType.TEXT_TO_IMAGE: TextToImageExecutor(text_to_image),
             StepType.TEXT_TO_VIDEO: TextToVideoExecutor(),
-            StepType.IMAGE_UNDERSTANDING: ImageUnderstandingExecutor(image_understanding),
+            StepType.IMAGE_UNDERSTANDING: ImageUnderstandingExecutor(
+                image_understanding
+            ),
             StepType.PROMPT_GENERATION: PromptGenerationExecutor(prompt_generation),
             StepType.IMAGE_TO_IMAGE: ImageToImageExecutor(image_to_image),
             StepType.IMAGE_TO_VIDEO: ImageToVideoExecutor(image_to_video),
@@ -72,7 +74,9 @@ class ChainExecutor:
             StepType.ADD_AUDIO: AddAudioExecutor(),
             StepType.UPSCALE_VIDEO: UpscaleVideoExecutor(),
             StepType.GENERATE_SUBTITLES: GenerateSubtitlesExecutor(),
-            StepType.REPLICATE_MULTITALK: ReplicateMultiTalkExecutor(replicate_multitalk),
+            StepType.REPLICATE_MULTITALK: ReplicateMultiTalkExecutor(
+                replicate_multitalk
+            ),
         }
 
         # Optional parallel execution support
@@ -83,19 +87,19 @@ class ChainExecutor:
         """Try to load parallel extension if available."""
         try:
             from .parallel_extension import ParallelExtension
+
             self._parallel_extension = ParallelExtension(self)
             if self._parallel_extension.enabled:
                 print("Parallel execution extension loaded and enabled")
             else:
-                print("Parallel execution extension loaded but disabled (set PIPELINE_PARALLEL_ENABLED=true to enable)")
+                print(
+                    "Parallel execution extension loaded but disabled (set PIPELINE_PARALLEL_ENABLED=true to enable)"
+                )
         except ImportError:
             print("Parallel execution extension not available")
 
     def execute(
-        self,
-        chain: ContentCreationChain,
-        input_data: str,
-        **kwargs
+        self, chain: ContentCreationChain, input_data: str, **kwargs
     ) -> ChainResult:
         """
         Execute a complete content creation chain.
@@ -122,17 +126,21 @@ class ChainExecutor:
 
         try:
             for i, step in enumerate(enabled_steps):
-                print(f"\nStep {i+1}/{len(enabled_steps)}: {step.step_type.value} ({step.model})")
+                print(
+                    f"\nStep {i + 1}/{len(enabled_steps)}: {step.step_type.value} ({step.model})"
+                )
 
                 # Check if this is a parallel step and extension is available
-                if (self._parallel_extension and
-                    self._parallel_extension.can_execute_parallel(step)):
+                if (
+                    self._parallel_extension
+                    and self._parallel_extension.can_execute_parallel(step)
+                ):
                     step_result = self._parallel_extension.execute_parallel_group(
                         step=step,
                         input_data=current_data,
                         input_type=current_type,
                         chain_config=chain.config,
-                        step_context=step_context
+                        step_context=step_context,
                     )
                 else:
                     step_result = self._execute_step(
@@ -141,7 +149,7 @@ class ChainExecutor:
                         input_type=current_type,
                         chain_config=chain.config,
                         step_context=step_context,
-                        **kwargs
+                        **kwargs,
                     )
 
                 step_results.append(step_result)
@@ -149,8 +157,14 @@ class ChainExecutor:
 
                 if not step_result.get("success", False):
                     return self._handle_failure(
-                        chain, input_data, step_results, outputs,
-                        total_cost, start_time, i, step_result.get("error", "Unknown error")
+                        chain,
+                        input_data,
+                        step_results,
+                        outputs,
+                        total_cost,
+                        start_time,
+                        i,
+                        step_result.get("error", "Unknown error"),
                     )
 
                 # Update current data for next step
@@ -160,28 +174,37 @@ class ChainExecutor:
                 )
 
                 # Store intermediate output
-                step_name = f"step_{i+1}_{step.step_type.value}"
+                step_name = f"step_{i + 1}_{step.step_type.value}"
                 outputs[step_name] = self._create_step_output(step, step_result)
 
                 # Save intermediate results if enabled
                 if chain.save_intermediates:
                     self._save_intermediate_results(
-                        chain, input_data, step_results, outputs,
-                        total_cost, i, step_result
+                        chain,
+                        input_data,
+                        step_results,
+                        outputs,
+                        total_cost,
+                        i,
+                        step_result,
                     )
 
                 print(f"Step completed in {step_result.get('processing_time', 0):.1f}s")
 
             # Chain completed successfully
             return self._handle_success(
-                chain, input_data, step_results, outputs,
-                total_cost, start_time, enabled_steps
+                chain,
+                input_data,
+                step_results,
+                outputs,
+                total_cost,
+                start_time,
+                enabled_steps,
             )
 
         except Exception as e:
             return self._handle_exception(
-                chain, input_data, step_results, outputs,
-                total_cost, start_time, str(e)
+                chain, input_data, step_results, outputs, total_cost, start_time, str(e)
             )
 
     def _execute_step(
@@ -191,7 +214,7 @@ class ChainExecutor:
         input_type: str,
         chain_config: Dict[str, Any],
         step_context: Dict[str, Any] = None,
-        **kwargs
+        **kwargs,
     ) -> Dict[str, Any]:
         """
         Execute a single pipeline step.
@@ -218,32 +241,28 @@ class ChainExecutor:
                     input_data=input_data,
                     chain_config=chain_config,
                     step_context=step_context,
-                    **kwargs
+                    **kwargs,
                 )
             else:
                 return {
                     "success": False,
-                    "error": f"Unsupported step type: {step.step_type.value}"
+                    "error": f"Unsupported step type: {step.step_type.value}",
                 }
 
         except Exception as e:
-            return {
-                "success": False,
-                "error": f"Step execution failed: {str(e)}"
-            }
+            return {"success": False, "error": f"Step execution failed: {str(e)}"}
 
     def _update_step_context(
         self,
         step: PipelineStep,
         step_result: Dict[str, Any],
-        step_context: Dict[str, Any]
+        step_context: Dict[str, Any],
     ):
         """Update step context with results from executed step."""
         if step.step_type == StepType.PROMPT_GENERATION:
-            step_context["generated_prompt"] = (
-                step_result.get("extracted_prompt") or
-                step_result.get("output_text")
-            )
+            step_context["generated_prompt"] = step_result.get(
+                "extracted_prompt"
+            ) or step_result.get("output_text")
             print("Stored generated prompt, keeping image data for next step")
 
     def _get_next_step_input(
@@ -251,7 +270,7 @@ class ChainExecutor:
         step: PipelineStep,
         step_result: Dict[str, Any],
         current_data: Any,
-        current_type: str
+        current_type: str,
     ) -> tuple:
         """Get input data and type for the next step."""
         if step.step_type == StepType.PROMPT_GENERATION:
@@ -260,9 +279,9 @@ class ChainExecutor:
 
         # Normal data flow for other steps
         new_data = (
-            step_result.get("output_path") or
-            step_result.get("output_url") or
-            step_result.get("output_text")
+            step_result.get("output_path")
+            or step_result.get("output_url")
+            or step_result.get("output_text")
         )
         new_type = self._get_step_output_type(step.step_type)
         return new_data, new_type
@@ -285,9 +304,7 @@ class ChainExecutor:
         return output_types.get(step_type, "unknown")
 
     def _create_step_output(
-        self,
-        step: PipelineStep,
-        step_result: Dict[str, Any]
+        self, step: PipelineStep, step_result: Dict[str, Any]
     ) -> Dict[str, Any]:
         """Create output dictionary for a completed step."""
         output = {
@@ -295,7 +312,7 @@ class ChainExecutor:
             "url": step_result.get("output_url"),
             "text": step_result.get("output_text"),
             "model": step.model,
-            "metadata": step_result.get("metadata", {})
+            "metadata": step_result.get("metadata", {}),
         }
 
         if step.step_type == StepType.PROMPT_GENERATION:
@@ -312,17 +329,17 @@ class ChainExecutor:
         outputs: dict,
         total_cost: float,
         step_index: int,
-        step_result: Dict[str, Any]
+        step_result: Dict[str, Any],
     ):
         """Save intermediate results for the current step."""
-        step_name = f"step_{step_index+1}_{chain.get_enabled_steps()[step_index].step_type.value}"
+        step_name = f"step_{step_index + 1}_{chain.get_enabled_steps()[step_index].step_type.value}"
 
         # Download intermediate image if only URL is available
         if step_result.get("output_url") and not step_result.get("output_path"):
             local_path = self.report_generator.download_intermediate_image(
                 image_url=step_result["output_url"],
                 step_name=step_name,
-                config=chain.config
+                config=chain.config,
             )
             if local_path:
                 step_result["output_path"] = local_path
@@ -331,17 +348,15 @@ class ChainExecutor:
         intermediate_report = self.report_generator.create_intermediate_report(
             chain=chain,
             input_data=input_data,
-            step_results=step_results[:step_index+1],
+            step_results=step_results[: step_index + 1],
             outputs=outputs,
             total_cost=total_cost,
-            current_step=step_index+1,
-            total_steps=len(chain.get_enabled_steps())
+            current_step=step_index + 1,
+            total_steps=len(chain.get_enabled_steps()),
         )
 
         intermediate_path = self.report_generator.save_intermediate_report(
-            intermediate_report,
-            chain.config,
-            step_number=step_index+1
+            intermediate_report, chain.config, step_number=step_index + 1
         )
         if intermediate_path:
             print(f"Intermediate results saved: {intermediate_path}")
@@ -355,7 +370,7 @@ class ChainExecutor:
         total_cost: float,
         start_time: float,
         step_index: int,
-        error_msg: str
+        error_msg: str,
     ) -> ChainResult:
         """Handle step failure and return ChainResult."""
         print(f"Step failed: {error_msg}")
@@ -369,10 +384,12 @@ class ChainExecutor:
             total_cost=total_cost,
             total_time=total_time,
             success=False,
-            error=f"Step {step_index+1} failed: {error_msg}"
+            error=f"Step {step_index + 1} failed: {error_msg}",
         )
 
-        report_path = self.report_generator.save_execution_report(execution_report, chain.config)
+        report_path = self.report_generator.save_execution_report(
+            execution_report, chain.config
+        )
         if report_path:
             print(f"Failure report saved: {report_path}")
 
@@ -383,8 +400,8 @@ class ChainExecutor:
             total_cost=total_cost,
             total_time=total_time,
             outputs=outputs,
-            error=f"Step {step_index+1} failed: {error_msg}",
-            step_results=step_results
+            error=f"Step {step_index + 1} failed: {error_msg}",
+            step_results=step_results,
         )
 
     def _handle_success(
@@ -395,12 +412,12 @@ class ChainExecutor:
         outputs: dict,
         total_cost: float,
         start_time: float,
-        enabled_steps: list
+        enabled_steps: list,
     ) -> ChainResult:
         """Handle successful chain completion and return ChainResult."""
         total_time = time.time() - start_time
 
-        print(f"\nChain completed successfully!")
+        print("\nChain completed successfully!")
         print(f"Total time: {total_time:.1f}s")
         print(f"Total cost: ${total_cost:.3f}")
 
@@ -411,10 +428,12 @@ class ChainExecutor:
             outputs=outputs,
             total_cost=total_cost,
             total_time=total_time,
-            success=True
+            success=True,
         )
 
-        report_path = self.report_generator.save_execution_report(execution_report, chain.config)
+        report_path = self.report_generator.save_execution_report(
+            execution_report, chain.config
+        )
         if report_path:
             print(f"Execution report saved: {report_path}")
 
@@ -425,7 +444,7 @@ class ChainExecutor:
             total_cost=total_cost,
             total_time=total_time,
             outputs=outputs,
-            step_results=step_results
+            step_results=step_results,
         )
 
     def _handle_exception(
@@ -436,7 +455,7 @@ class ChainExecutor:
         outputs: dict,
         total_cost: float,
         start_time: float,
-        error_msg: str
+        error_msg: str,
     ) -> ChainResult:
         """Handle unexpected exception and return ChainResult."""
         print(f"Chain execution failed: {error_msg}")
@@ -450,10 +469,12 @@ class ChainExecutor:
             total_cost=total_cost,
             total_time=total_time,
             success=False,
-            error=f"Execution error: {error_msg}"
+            error=f"Execution error: {error_msg}",
         )
 
-        report_path = self.report_generator.save_execution_report(execution_report, chain.config)
+        report_path = self.report_generator.save_execution_report(
+            execution_report, chain.config
+        )
         if report_path:
             print(f"Error report saved: {report_path}")
 
@@ -465,5 +486,5 @@ class ChainExecutor:
             total_time=total_time,
             outputs=outputs,
             error=f"Execution error: {error_msg}",
-            step_results=step_results
+            step_results=step_results,
         )

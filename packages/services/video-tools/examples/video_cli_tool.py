@@ -39,16 +39,16 @@ from pathlib import Path
 # Load environment variables from .env file if available
 try:
     from dotenv import load_dotenv
+
     # Load .env from the script's directory
-    env_path = Path(__file__).parent / '.env'
+    env_path = Path(__file__).parent / ".env"
     if env_path.exists():
         load_dotenv(env_path)
 except ImportError:
     # python-dotenv not installed, environment variables can still be set manually
     pass
 
-import sys
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 from video_utils.core import check_ffmpeg, check_ffprobe
 from video_utils.commands import (
@@ -71,7 +71,7 @@ from video_utils.commands import (
     cmd_extract_text,
     cmd_whisper_transcribe,
     cmd_whisper_compare,
-    cmd_whisper_batch
+    cmd_whisper_batch,
 )
 
 
@@ -108,22 +108,50 @@ Requirements:
   - ffmpeg must be installed and available in PATH
   - Video files, audio files, and image files in current directory
   - For mix-audio and concat-audio: at least 2 audio files needed
-        """
+        """,
     )
-    
-    parser.add_argument('command', 
-                       choices=['cut', 'add-audio', 'replace-audio', 'extract-audio', 'mix-audio', 'concat-audio', 'generate-subtitles', 'burn-subtitles', 'analyze-videos', 'transcribe-videos', 'describe-videos', 'analyze-audio', 'transcribe-audio', 'describe-audio', 'analyze-images', 'describe-images', 'extract-text', 'whisper-transcribe', 'whisper-compare', 'whisper-batch'],
-                       help='Command to execute')
-    parser.add_argument('duration', type=int, nargs='?', default=5,
-                       help='Duration in seconds for cut command (default: 5)')
-    
+
+    parser.add_argument(
+        "command",
+        choices=[
+            "cut",
+            "add-audio",
+            "replace-audio",
+            "extract-audio",
+            "mix-audio",
+            "concat-audio",
+            "generate-subtitles",
+            "burn-subtitles",
+            "analyze-videos",
+            "transcribe-videos",
+            "describe-videos",
+            "analyze-audio",
+            "transcribe-audio",
+            "describe-audio",
+            "analyze-images",
+            "describe-images",
+            "extract-text",
+            "whisper-transcribe",
+            "whisper-compare",
+            "whisper-batch",
+        ],
+        help="Command to execute",
+    )
+    parser.add_argument(
+        "duration",
+        type=int,
+        nargs="?",
+        default=5,
+        help="Duration in seconds for cut command (default: 5)",
+    )
+
     # Parse arguments
     if len(sys.argv) == 1:
         parser.print_help()
         sys.exit(1)
-    
+
     args = parser.parse_args()
-    
+
     # Check ffmpeg availability
     print("🔧 Checking requirements...")
     if not check_ffmpeg():
@@ -133,56 +161,56 @@ Requirements:
         print("   - macOS: brew install ffmpeg")
         print("   - Linux: sudo apt install ffmpeg (Ubuntu/Debian)")
         sys.exit(1)
-    
+
     if not check_ffprobe():
         print("❌ Error: ffprobe is not installed or not in PATH")
         print("📥 ffprobe is usually included with ffmpeg installation")
         sys.exit(1)
-    
+
     print("✅ ffmpeg and ffprobe found")
     print()
-    
+
     # Execute command
     try:
-        if args.command == 'cut':
+        if args.command == "cut":
             cmd_cut_videos(args.duration)
-        elif args.command == 'add-audio':
+        elif args.command == "add-audio":
             cmd_add_audio()
-        elif args.command == 'replace-audio':
+        elif args.command == "replace-audio":
             cmd_replace_audio()
-        elif args.command == 'extract-audio':
+        elif args.command == "extract-audio":
             cmd_extract_audio()
-        elif args.command == 'mix-audio':
+        elif args.command == "mix-audio":
             cmd_mix_audio()
-        elif args.command == 'concat-audio':
+        elif args.command == "concat-audio":
             cmd_concat_audio()
-        elif args.command == 'generate-subtitles':
+        elif args.command == "generate-subtitles":
             cmd_generate_subtitles()
-        elif args.command == 'burn-subtitles':
+        elif args.command == "burn-subtitles":
             cmd_burn_subtitles()
-        elif args.command == 'analyze-videos':
+        elif args.command == "analyze-videos":
             cmd_analyze_videos()
-        elif args.command == 'transcribe-videos':
+        elif args.command == "transcribe-videos":
             cmd_transcribe_videos()
-        elif args.command == 'describe-videos':
+        elif args.command == "describe-videos":
             cmd_describe_videos()
-        elif args.command == 'analyze-audio':
+        elif args.command == "analyze-audio":
             cmd_analyze_audio()
-        elif args.command == 'transcribe-audio':
+        elif args.command == "transcribe-audio":
             cmd_transcribe_audio()
-        elif args.command == 'describe-audio':
+        elif args.command == "describe-audio":
             cmd_describe_audio()
-        elif args.command == 'analyze-images':
+        elif args.command == "analyze-images":
             cmd_analyze_images()
-        elif args.command == 'describe-images':
+        elif args.command == "describe-images":
             cmd_describe_images()
-        elif args.command == 'extract-text':
+        elif args.command == "extract-text":
             cmd_extract_text()
-        elif args.command == 'whisper-transcribe':
+        elif args.command == "whisper-transcribe":
             cmd_whisper_transcribe()
-        elif args.command == 'whisper-compare':
+        elif args.command == "whisper-compare":
             cmd_whisper_compare()
-        elif args.command == 'whisper-batch':
+        elif args.command == "whisper-batch":
             cmd_whisper_batch()
     except KeyboardInterrupt:
         print("\n👋 Operation cancelled by user")
