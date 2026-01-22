@@ -10,9 +10,9 @@ from pathlib import Path
 from typing import Optional, List
 
 # Supported file formats
-SUPPORTED_IMAGE_FORMATS = ['.jpg', '.jpeg', '.png', '.webp', '.gif']
-SUPPORTED_AUDIO_FORMATS = ['.mp3', '.wav', '.m4a', '.aac', '.ogg', '.flac']
-SUPPORTED_VIDEO_FORMATS = ['.mp4', '.mov', '.avi', '.webm', '.mkv']
+SUPPORTED_IMAGE_FORMATS = [".jpg", ".jpeg", ".png", ".webp", ".gif"]
+SUPPORTED_AUDIO_FORMATS = [".mp3", ".wav", ".m4a", ".aac", ".ogg", ".flac"]
+SUPPORTED_VIDEO_FORMATS = [".mp4", ".mov", ".avi", ".webm", ".mkv"]
 
 
 def ensure_output_directory(output_dir: Optional[str] = None) -> Path:
@@ -34,10 +34,7 @@ def ensure_output_directory(output_dir: Optional[str] = None) -> Path:
 
 
 def download_video(
-    video_url: str,
-    output_dir: Path,
-    model_key: str,
-    filename: Optional[str] = None
+    video_url: str, output_dir: Path, model_key: str, filename: Optional[str] = None
 ) -> Optional[str]:
     """
     Download video from URL to local folder.
@@ -61,7 +58,7 @@ def download_video(
         response.raise_for_status()
 
         local_path = output_dir / filename
-        with open(local_path, 'wb') as f:
+        with open(local_path, "wb") as f:
             for chunk in response.iter_content(chunk_size=8192):
                 f.write(chunk)
 
@@ -109,13 +106,11 @@ def is_url(path: str) -> bool:
     Returns:
         True if path is a URL
     """
-    return path.startswith(('http://', 'https://'))
+    return path.startswith(("http://", "https://"))
 
 
 def validate_file_format(
-    file_path: str,
-    supported_formats: List[str],
-    file_type: str
+    file_path: str, supported_formats: List[str], file_type: str
 ) -> None:
     """
     Validate file format against supported formats.

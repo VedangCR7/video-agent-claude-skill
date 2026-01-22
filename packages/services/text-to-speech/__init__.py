@@ -22,8 +22,8 @@ __author__ = "Text-to-Speech Team"
 # Main exports for backwards compatibility
 __all__ = [
     "ElevenLabsTTSController",
-    "ElevenLabsModel", 
+    "ElevenLabsModel",
     "AudioFormat",
     "VoiceSettings",
-    "VoiceInfo"
+    "VoiceInfo",
 ]

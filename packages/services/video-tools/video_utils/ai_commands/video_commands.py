@@ -53,10 +53,12 @@ For EVERY 2-5 second interval throughout the entire video, provide:
 Be extremely thorough - this should be a complete second-by-second record of everything in the video."""
 
 # Supported video extensions (keep in sync with file_utils.py)
-VIDEO_EXTENSIONS = {'.mp4', '.avi', '.mov', '.mkv', '.webm', '.flv', '.wmv'}
+VIDEO_EXTENSIONS = {".mp4", ".avi", ".mov", ".mkv", ".webm", ".flv", ".wmv"}
 
 
-def _save_result_with_format(result: dict, output_path: Path, format_type: str, content_key: str) -> bool:
+def _save_result_with_format(
+    result: dict, output_path: Path, format_type: str, content_key: str
+) -> bool:
     """Save analysis result based on format_type.
 
     Args:
@@ -71,19 +73,19 @@ def _save_result_with_format(result: dict, output_path: Path, format_type: str, 
     import json
 
     try:
-        json_file = output_path.with_suffix('.json')
-        txt_file = output_path.with_suffix('.txt')
+        json_file = output_path.with_suffix(".json")
+        txt_file = output_path.with_suffix(".txt")
 
         # Save JSON if format allows
-        if format_type in ['describe-video', 'json']:
-            with open(json_file, 'w', encoding='utf-8') as f:
+        if format_type in ["describe-video", "json"]:
+            with open(json_file, "w", encoding="utf-8") as f:
                 json.dump(result, f, indent=2, ensure_ascii=False)
             print(f"💾 Saved JSON: {json_file.name}")
 
         # Save TXT if format allows
-        if format_type in ['describe-video', 'txt']:
-            with open(txt_file, 'w', encoding='utf-8') as f:
-                f.write(f"Analysis Result\n")
+        if format_type in ["describe-video", "txt"]:
+            with open(txt_file, "w", encoding="utf-8") as f:
+                f.write("Analysis Result\n")
                 f.write("=" * 50 + "\n\n")
                 if content_key in result:
                     f.write(result[content_key])
@@ -98,13 +100,14 @@ def _save_result_with_format(result: dict, output_path: Path, format_type: str, 
         print(f"❌ Error saving results: {e}")
         return False
 
+
 # Analysis types for video
 VIDEO_ANALYSIS_TYPES = {
-    '1': ('description', 'Video Description (summary and overview)'),
-    '2': ('transcription', 'Audio Transcription (speech to text)'),
-    '3': ('scenes', 'Scene Analysis (timeline breakdown)'),
-    '4': ('extraction', 'Key Information Extraction'),
-    '5': ('qa', 'Custom Q&A (ask specific questions)'),
+    "1": ("description", "Video Description (summary and overview)"),
+    "2": ("transcription", "Audio Transcription (speech to text)"),
+    "3": ("scenes", "Scene Analysis (timeline breakdown)"),
+    "4": ("extraction", "Key Information Extraction"),
+    "5": ("qa", "Custom Q&A (ask specific questions)"),
 }
 
 
@@ -113,7 +116,7 @@ def _print_video_list(video_files: list) -> None:
     print(f"📹 Found {len(video_files)} video file(s):")
     for video in video_files:
         info = get_video_info(video)
-        duration_str = f"{info['duration']:.1f}s" if info['duration'] else "unknown"
+        duration_str = f"{info['duration']:.1f}s" if info["duration"] else "unknown"
         file_size = video.stat().st_size / (1024 * 1024)
         print(f"   - {video.name} ({duration_str}, {file_size:.1f}MB)")
 
@@ -148,7 +151,7 @@ def cmd_analyze_videos() -> None:
             file_path,
             config.analysis_type,
             questions=config.questions,
-            detailed=config.detailed
+            detailed=config.detailed,
         )
 
     successful, failed = process_files_with_progress(
@@ -158,7 +161,7 @@ def cmd_analyze_videos() -> None:
         output_dir=paths.output_dir,
         output_suffix=f"_{analysis_type}_analysis",
         media_emoji="📺",
-        analysis_type=analysis_type
+        analysis_type=analysis_type,
     )
 
     print_results_summary(successful, failed, paths.output_dir)
@@ -178,11 +181,12 @@ def cmd_transcribe_videos() -> None:
 
     print(f"📹 Found {len(paths.files)} video file(s)")
 
-    config = get_analysis_options('transcription')
+    config = get_analysis_options("transcription")
     if not config:
         return
 
     from ..gemini_analyzer import GeminiVideoAnalyzer
+
     gemini_analyzer = GeminiVideoAnalyzer()
 
     def analyzer(file_path: Path):
@@ -195,7 +199,7 @@ def cmd_transcribe_videos() -> None:
         output_dir=paths.output_dir,
         output_suffix="_transcription",
         media_emoji="📺",
-        analysis_type="transcription"
+        analysis_type="transcription",
     )
 
     print_results_summary(successful, failed, paths.output_dir)
@@ -215,11 +219,12 @@ def cmd_describe_videos() -> None:
 
     print(f"📹 Found {len(paths.files)} video file(s)")
 
-    config = get_analysis_options('description')
+    config = get_analysis_options("description")
     if not config:
         return
 
     from ..gemini_analyzer import GeminiVideoAnalyzer
+
     gemini_analyzer = GeminiVideoAnalyzer()
 
     def analyzer(file_path: Path):
@@ -232,7 +237,7 @@ def cmd_describe_videos() -> None:
         output_dir=paths.output_dir,
         output_suffix="_description",
         media_emoji="📺",
-        analysis_type="description"
+        analysis_type="description",
     )
 
     print_results_summary(successful, failed, paths.output_dir)
@@ -241,7 +246,7 @@ def cmd_describe_videos() -> None:
 def cmd_describe_videos_with_params(
     input_path: Optional[str] = None,
     output_path: Optional[str] = None,
-    format_type: str = 'describe-video'
+    format_type: str = "describe-video",
 ) -> None:
     """Enhanced describe-videos command with parameter support.
 
@@ -256,7 +261,9 @@ def cmd_describe_videos_with_params(
     if not check_and_report_gemini_status():
         return
 
-    paths = setup_paths(input_path, output_path, find_video_files, "video", VIDEO_EXTENSIONS)
+    paths = setup_paths(
+        input_path, output_path, find_video_files, "video", VIDEO_EXTENSIONS
+    )
     if not paths:
         return
 
@@ -265,16 +272,18 @@ def cmd_describe_videos_with_params(
     print(f"📋 Format: {format_type}")
 
     # Determine detailed based on format_type
-    if format_type == 'describe-video':
-        config = get_analysis_options('description')
+    if format_type == "describe-video":
+        config = get_analysis_options("description")
         if not config:
             return
     else:
         # Default to detailed for specific formats (json, txt)
         from ..command_utils import AnalysisConfig
-        config = AnalysisConfig(analysis_type='description', detailed=True)
+
+        config = AnalysisConfig(analysis_type="description", detailed=True)
 
     from ..gemini_analyzer import GeminiVideoAnalyzer
+
     gemini_analyzer = GeminiVideoAnalyzer()
 
     def analyzer(file_path: Path):
@@ -282,7 +291,7 @@ def cmd_describe_videos_with_params(
 
     # Custom save function based on format_type
     def save_with_format(result, output_path):
-        return _save_result_with_format(result, output_path, format_type, 'description')
+        return _save_result_with_format(result, output_path, format_type, "description")
 
     successful, failed = process_files_with_progress(
         files=paths.files,
@@ -291,7 +300,7 @@ def cmd_describe_videos_with_params(
         output_dir=paths.output_dir,
         output_suffix="_description",
         media_emoji="📺",
-        analysis_type="description"
+        analysis_type="description",
     )
 
     print_results_summary(successful, failed, paths.output_dir)
@@ -300,7 +309,7 @@ def cmd_describe_videos_with_params(
 def cmd_transcribe_videos_with_params(
     input_path: Optional[str] = None,
     output_path: Optional[str] = None,
-    format_type: str = 'describe-video'
+    format_type: str = "describe-video",
 ) -> None:
     """Enhanced transcribe-videos command with parameter support.
 
@@ -315,7 +324,9 @@ def cmd_transcribe_videos_with_params(
     if not check_and_report_gemini_status():
         return
 
-    paths = setup_paths(input_path, output_path, find_video_files, "video", VIDEO_EXTENSIONS)
+    paths = setup_paths(
+        input_path, output_path, find_video_files, "video", VIDEO_EXTENSIONS
+    )
     if not paths:
         return
 
@@ -324,16 +335,18 @@ def cmd_transcribe_videos_with_params(
     print(f"📋 Format: {format_type}")
 
     # Determine options based on format_type
-    if format_type == 'describe-video':
-        config = get_analysis_options('transcription')
+    if format_type == "describe-video":
+        config = get_analysis_options("transcription")
         if not config:
             return
     else:
         # Default options for specific formats
         from ..command_utils import AnalysisConfig
-        config = AnalysisConfig(analysis_type='transcription', include_timestamps=True)
+
+        config = AnalysisConfig(analysis_type="transcription", include_timestamps=True)
 
     from ..gemini_analyzer import GeminiVideoAnalyzer
+
     gemini_analyzer = GeminiVideoAnalyzer()
 
     def analyzer(file_path: Path):
@@ -341,7 +354,9 @@ def cmd_transcribe_videos_with_params(
 
     # Custom save function based on format_type
     def save_with_format(result, output_path):
-        return _save_result_with_format(result, output_path, format_type, 'transcription')
+        return _save_result_with_format(
+            result, output_path, format_type, "transcription"
+        )
 
     successful, failed = process_files_with_progress(
         files=paths.files,
@@ -350,7 +365,7 @@ def cmd_transcribe_videos_with_params(
         output_dir=paths.output_dir,
         output_suffix="_transcription",
         media_emoji="📺",
-        analysis_type="transcription"
+        analysis_type="transcription",
     )
 
     print_results_summary(successful, failed, paths.output_dir)
@@ -361,10 +376,14 @@ def cmd_transcribe_videos_with_params(
 # =============================================================================
 
 TIMELINE_PROVIDER_OPTIONS = {
-    '1': ('fal', 'google/gemini-3-pro-preview', 'FAL + Gemini 3 Pro Preview (Recommended)'),
-    '2': ('fal', 'google/gemini-2.5-pro', 'FAL + Gemini 2.5 Pro'),
-    '3': ('fal', 'google/gemini-2.5-flash', 'FAL + Gemini 2.5 Flash (Faster)'),
-    '4': ('gemini', 'gemini-2.0-flash-exp', 'Gemini Direct (Local files, no upload)'),
+    "1": (
+        "fal",
+        "google/gemini-3-pro-preview",
+        "FAL + Gemini 3 Pro Preview (Recommended)",
+    ),
+    "2": ("fal", "google/gemini-2.5-pro", "FAL + Gemini 2.5 Pro"),
+    "3": ("fal", "google/gemini-2.5-flash", "FAL + Gemini 2.5 Flash (Faster)"),
+    "4": ("gemini", "gemini-2.0-flash-exp", "Gemini Direct (Local files, no upload)"),
 }
 
 
@@ -379,9 +398,9 @@ def _select_timeline_provider() -> tuple:
         print(f"   {key}. {desc}")
     print("   0. Cancel")
 
-    choice = input("\nSelect option [1]: ").strip() or '1'
+    choice = input("\nSelect option [1]: ").strip() or "1"
 
-    if choice == '0':
+    if choice == "0":
         return None, None
 
     if choice in TIMELINE_PROVIDER_OPTIONS:
@@ -389,7 +408,7 @@ def _select_timeline_provider() -> tuple:
         return provider, model
 
     print("Invalid choice, using default (FAL + Gemini 3 Pro)")
-    return 'fal', 'google/gemini-3-pro-preview'
+    return "fal", "google/gemini-3-pro-preview"
 
 
 def _analyze_with_fal(video_path: Path, model: str) -> dict:
@@ -407,7 +426,7 @@ def _analyze_with_fal(video_path: Path, model: str) -> dict:
     except ImportError:
         raise ImportError("FAL client not installed. Run: pip install fal-client")
 
-    fal_key = os.getenv('FAL_KEY')
+    fal_key = os.getenv("FAL_KEY")
     if not fal_key:
         raise ValueError("FAL_KEY environment variable not set")
 
@@ -430,20 +449,19 @@ def _analyze_with_fal(video_path: Path, model: str) -> dict:
 
     print(f"   Analyzing with {model}...")
     result = fal_client.subscribe(
-        "openrouter/router/video/enterprise",
-        arguments=input_params
+        "openrouter/router/video/enterprise", arguments=input_params
     )
 
     return {
-        'timeline': result.get('output', ''),
-        'analysis_type': 'detailed_timeline',
-        'provider': 'fal',
-        'model': model,
-        'usage': result.get('usage', {}),
+        "timeline": result.get("output", ""),
+        "analysis_type": "detailed_timeline",
+        "provider": "fal",
+        "model": model,
+        "usage": result.get("usage", {}),
     }
 
 
-def _analyze_with_gemini(video_path: Path, model: str = 'gemini-2.0-flash-exp') -> dict:
+def _analyze_with_gemini(video_path: Path, model: str = "gemini-2.0-flash-exp") -> dict:
     """Analyze video using Gemini direct API.
 
     Args:
@@ -471,10 +489,10 @@ def _analyze_with_gemini(video_path: Path, model: str = 'gemini-2.0-flash-exp') 
     genai.delete_file(file_id)
 
     return {
-        'timeline': response.text,
-        'analysis_type': 'detailed_timeline',
-        'provider': 'gemini',
-        'model': model,
+        "timeline": response.text,
+        "analysis_type": "detailed_timeline",
+        "provider": "gemini",
+        "model": model,
     }
 
 
@@ -492,26 +510,26 @@ def _save_timeline_result(result: dict, output_path: Path) -> bool:
     from datetime import datetime
 
     try:
-        md_file = output_path.with_suffix('.md')
-        json_file = output_path.with_suffix('.json')
+        md_file = output_path.with_suffix(".md")
+        json_file = output_path.with_suffix(".json")
 
         # Save markdown
-        with open(md_file, 'w', encoding='utf-8') as f:
+        with open(md_file, "w", encoding="utf-8") as f:
             f.write("# Detailed Video Timeline Analysis\n\n")
             f.write(f"**Generated**: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
             f.write(f"**Provider**: {result.get('provider', 'unknown')}\n")
             f.write(f"**Model**: {result.get('model', 'unknown')}\n")
-            if result.get('usage'):
-                usage = result['usage']
+            if result.get("usage"):
+                usage = result["usage"]
                 f.write(f"**Tokens**: {usage.get('total_tokens', 'N/A')}\n")
                 f.write(f"**Cost**: ${usage.get('cost', 'N/A')}\n")
             f.write("\n---\n\n")
-            f.write(result.get('timeline', ''))
+            f.write(result.get("timeline", ""))
 
         print(f"   Saved: {md_file.name}")
 
         # Save JSON
-        with open(json_file, 'w', encoding='utf-8') as f:
+        with open(json_file, "w", encoding="utf-8") as f:
             json.dump(result, f, indent=2, ensure_ascii=False, default=str)
 
         print(f"   Saved: {json_file.name}")
@@ -545,8 +563,8 @@ def cmd_detailed_timeline() -> None:
         return
 
     # Check requirements based on provider
-    if provider == 'fal':
-        if not os.getenv('FAL_KEY'):
+    if provider == "fal":
+        if not os.getenv("FAL_KEY"):
             print("\n❌ FAL_KEY environment variable not set")
             print("   Set it in your .env file or export FAL_KEY=your_key")
             return
@@ -561,7 +579,7 @@ def cmd_detailed_timeline() -> None:
 
     _print_video_list(paths.files)
 
-    print(f"\n🚀 Starting detailed timeline analysis...")
+    print("\n🚀 Starting detailed timeline analysis...")
     print(f"   Provider: {provider}")
     print(f"   Model: {model}")
 
@@ -572,7 +590,7 @@ def cmd_detailed_timeline() -> None:
         print(f"\n[{i}/{len(paths.files)}] Processing: {video_file.name}")
 
         try:
-            if provider == 'fal':
+            if provider == "fal":
                 result = _analyze_with_fal(video_file, model)
             else:
                 result = _analyze_with_gemini(video_file, model)
@@ -583,7 +601,7 @@ def cmd_detailed_timeline() -> None:
 
             if _save_timeline_result(result, output_path):
                 successful += 1
-                print(f"   ✅ Complete")
+                print("   ✅ Complete")
             else:
                 failed += 1
 
@@ -597,8 +615,8 @@ def cmd_detailed_timeline() -> None:
 def cmd_detailed_timeline_with_params(
     input_path: Optional[str] = None,
     output_path: Optional[str] = None,
-    provider: str = 'fal',
-    model: str = 'google/gemini-3-pro-preview'
+    provider: str = "fal",
+    model: str = "google/gemini-3-pro-preview",
 ) -> Optional[dict]:
     """Generate detailed timeline with explicit parameters.
 
@@ -615,15 +633,17 @@ def cmd_detailed_timeline_with_params(
     print("=" * 60)
 
     # Validate provider requirements
-    if provider == 'fal':
-        if not os.getenv('FAL_KEY'):
+    if provider == "fal":
+        if not os.getenv("FAL_KEY"):
             print("❌ FAL_KEY not set")
             return None
     else:
         if not check_and_report_gemini_status():
             return None
 
-    paths = setup_paths(input_path, output_path, find_video_files, "video", VIDEO_EXTENSIONS)
+    paths = setup_paths(
+        input_path, output_path, find_video_files, "video", VIDEO_EXTENSIONS
+    )
     if not paths:
         return None
 
@@ -638,7 +658,7 @@ def cmd_detailed_timeline_with_params(
         print(f"\n[{i}/{len(paths.files)}] {video_file.name}")
 
         try:
-            if provider == 'fal':
+            if provider == "fal":
                 result = _analyze_with_fal(video_file, model)
             else:
                 result = _analyze_with_gemini(video_file, model)

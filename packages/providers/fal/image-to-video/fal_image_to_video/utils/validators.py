@@ -2,7 +2,6 @@
 Parameter validation utilities for FAL Image-to-Video.
 """
 
-from typing import List
 from ..config.constants import SUPPORTED_MODELS
 
 
@@ -21,8 +20,7 @@ def validate_model(model: str) -> str:
     """
     if model not in SUPPORTED_MODELS:
         raise ValueError(
-            f"Unsupported model: {model}. "
-            f"Supported models: {SUPPORTED_MODELS}"
+            f"Unsupported model: {model}. Supported models: {SUPPORTED_MODELS}"
         )
     return model
 

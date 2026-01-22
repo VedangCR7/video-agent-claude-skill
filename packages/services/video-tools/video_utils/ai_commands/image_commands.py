@@ -20,10 +20,22 @@ from ..file_utils import find_image_files
 from ..ai_utils import analyze_image_file, save_analysis_result
 
 # Supported image extensions (keep in sync with file_utils.py)
-IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.webp', '.heic', '.heif', '.bmp', '.tiff', '.gif'}
+IMAGE_EXTENSIONS = {
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".webp",
+    ".heic",
+    ".heif",
+    ".bmp",
+    ".tiff",
+    ".gif",
+}
 
 
-def _save_result_with_format(result: dict, output_path, format_type: str, content_key: str) -> bool:
+def _save_result_with_format(
+    result: dict, output_path, format_type: str, content_key: str
+) -> bool:
     """Save analysis result based on format_type.
 
     Args:
@@ -40,19 +52,19 @@ def _save_result_with_format(result: dict, output_path, format_type: str, conten
 
     try:
         output_path = Path(output_path)
-        json_file = output_path.with_suffix('.json')
-        txt_file = output_path.with_suffix('.txt')
+        json_file = output_path.with_suffix(".json")
+        txt_file = output_path.with_suffix(".txt")
 
         # Save JSON if format allows
-        if format_type in ['json', 'both']:
-            with open(json_file, 'w', encoding='utf-8') as f:
+        if format_type in ["json", "both"]:
+            with open(json_file, "w", encoding="utf-8") as f:
                 json.dump(result, f, indent=2, ensure_ascii=False)
             print(f"💾 Saved JSON: {json_file.name}")
 
         # Save TXT if format allows
-        if format_type in ['txt', 'both']:
-            with open(txt_file, 'w', encoding='utf-8') as f:
-                f.write(f"Analysis Result\n")
+        if format_type in ["txt", "both"]:
+            with open(txt_file, "w", encoding="utf-8") as f:
+                f.write("Analysis Result\n")
                 f.write("=" * 50 + "\n\n")
                 if content_key in result:
                     f.write(result[content_key])
@@ -62,9 +74,9 @@ def _save_result_with_format(result: dict, output_path, format_type: str, conten
             print(f"💾 Saved TXT: {txt_file.name}")
 
         # Default: save both if format_type is 'json' (original behavior)
-        if format_type == 'json':
-            with open(txt_file, 'w', encoding='utf-8') as f:
-                f.write(f"Analysis Result\n")
+        if format_type == "json":
+            with open(txt_file, "w", encoding="utf-8") as f:
+                f.write("Analysis Result\n")
                 f.write("=" * 50 + "\n\n")
                 if content_key in result:
                     f.write(result[content_key])
@@ -78,14 +90,15 @@ def _save_result_with_format(result: dict, output_path, format_type: str, conten
         print(f"❌ Error saving results: {e}")
         return False
 
+
 # Analysis types for image
 IMAGE_ANALYSIS_TYPES = {
-    '1': ('description', 'Image description and visual analysis'),
-    '2': ('classification', 'Image classification and categorization'),
-    '3': ('objects', 'Object detection and identification'),
-    '4': ('text', 'Text extraction (OCR) from images'),
-    '5': ('composition', 'Artistic and technical composition analysis'),
-    '6': ('qa', 'Question and answer analysis'),
+    "1": ("description", "Image description and visual analysis"),
+    "2": ("classification", "Image classification and categorization"),
+    "3": ("objects", "Object detection and identification"),
+    "4": ("text", "Text extraction (OCR) from images"),
+    "5": ("composition", "Artistic and technical composition analysis"),
+    "6": ("qa", "Question and answer analysis"),
 }
 
 
@@ -116,7 +129,7 @@ def cmd_analyze_images() -> None:
             file_path,
             config.analysis_type,
             questions=config.questions,
-            detailed=config.detailed
+            detailed=config.detailed,
         )
 
     successful, failed = process_files_with_progress(
@@ -126,7 +139,7 @@ def cmd_analyze_images() -> None:
         output_dir=paths.output_dir,
         output_suffix=f"_{analysis_type}_analysis",
         media_emoji="🖼️",
-        analysis_type=analysis_type
+        analysis_type=analysis_type,
     )
 
     print_results_summary(successful, failed, paths.output_dir)
@@ -146,12 +159,13 @@ def cmd_describe_images() -> None:
 
     print(f"🖼️ Found {len(paths.files)} image file(s)")
 
-    config = get_analysis_options('description')
+    config = get_analysis_options("description")
     if not config:
         return
 
     # Initialize analyzer once for all files (not per-file)
     from ..gemini_analyzer import GeminiVideoAnalyzer
+
     gemini_analyzer = GeminiVideoAnalyzer()
 
     def analyzer(file_path: Path):
@@ -164,7 +178,7 @@ def cmd_describe_images() -> None:
         output_dir=paths.output_dir,
         output_suffix="_description",
         media_emoji="🖼️",
-        analysis_type="description"
+        analysis_type="description",
     )
 
     print_results_summary(successful, failed, paths.output_dir)
@@ -186,6 +200,7 @@ def cmd_extract_text() -> None:
 
     # Initialize analyzer once for all files (not per-file)
     from ..gemini_analyzer import GeminiVideoAnalyzer
+
     gemini_analyzer = GeminiVideoAnalyzer()
 
     def analyzer(file_path: Path):
@@ -198,7 +213,7 @@ def cmd_extract_text() -> None:
         output_dir=paths.output_dir,
         output_suffix="_text",
         media_emoji="🖼️",
-        analysis_type="text"
+        analysis_type="text",
     )
 
     print_results_summary(successful, failed, paths.output_dir)
@@ -207,7 +222,7 @@ def cmd_extract_text() -> None:
 def cmd_analyze_images_with_params(
     input_path: Optional[str] = None,
     output_path: Optional[str] = None,
-    format_type: str = 'json'
+    format_type: str = "json",
 ) -> None:
     """Enhanced analyze-images command with parameter support.
 
@@ -222,7 +237,9 @@ def cmd_analyze_images_with_params(
     if not check_and_report_gemini_status():
         return
 
-    paths = setup_paths(input_path, output_path, find_image_files, "image", IMAGE_EXTENSIONS)
+    paths = setup_paths(
+        input_path, output_path, find_image_files, "image", IMAGE_EXTENSIONS
+    )
     if not paths:
         return
 
@@ -243,19 +260,19 @@ def cmd_analyze_images_with_params(
             file_path,
             config.analysis_type,
             questions=config.questions,
-            detailed=config.detailed
+            detailed=config.detailed,
         )
 
     # Determine content key for saving
     content_key_map = {
-        'description': 'description',
-        'classification': 'classification',
-        'objects': 'object_detection',
-        'text': 'extracted_text',
-        'composition': 'composition_analysis',
-        'qa': 'answers',
+        "description": "description",
+        "classification": "classification",
+        "objects": "object_detection",
+        "text": "extracted_text",
+        "composition": "composition_analysis",
+        "qa": "answers",
     }
-    content_key = content_key_map.get(analysis_type, 'description')
+    content_key = content_key_map.get(analysis_type, "description")
 
     # Custom save function based on format_type
     def save_with_format(result, output_path):
@@ -268,7 +285,7 @@ def cmd_analyze_images_with_params(
         output_dir=paths.output_dir,
         output_suffix=f"_{analysis_type}_analysis",
         media_emoji="🖼️",
-        analysis_type=analysis_type
+        analysis_type=analysis_type,
     )
 
     print_results_summary(successful, failed, paths.output_dir)

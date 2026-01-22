@@ -5,7 +5,7 @@ from .fal_ai import (
     FALImageToImageStep,
     FALTextToVideoStep,
     FALVideoGenerationStep,
-    FALAvatarGenerationStep
+    FALAvatarGenerationStep,
 )
 from .elevenlabs import ElevenLabsTTSStep
 from .google import GoogleVeoStep
@@ -14,13 +14,12 @@ from .openrouter import OpenRouterTTSStep
 __all__ = [
     # FAL AI services
     "FALTextToImageStep",
-    "FALImageToImageStep", 
+    "FALImageToImageStep",
     "FALTextToVideoStep",
     "FALVideoGenerationStep",
     "FALAvatarGenerationStep",
-    
     # Other services
     "ElevenLabsTTSStep",
     "GoogleVeoStep",
-    "OpenRouterTTSStep"
+    "OpenRouterTTSStep",
 ]
