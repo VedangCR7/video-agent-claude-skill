@@ -25,10 +25,10 @@ from .analyzer_protocol import MediaAnalyzerProtocol
 
 # Provider selection via environment variable
 # Options: 'gemini' (default), 'fal'
-DEFAULT_PROVIDER = os.getenv('MEDIA_ANALYZER_PROVIDER', 'gemini')
+DEFAULT_PROVIDER = os.getenv("MEDIA_ANALYZER_PROVIDER", "gemini")
 
 # Default model for FAL provider
-DEFAULT_FAL_MODEL = os.getenv('FAL_DEFAULT_MODEL', 'google/gemini-2.5-flash')
+DEFAULT_FAL_MODEL = os.getenv("FAL_DEFAULT_MODEL", "google/gemini-2.5-flash")
 
 
 class AnalyzerFactory:
@@ -45,10 +45,7 @@ class AnalyzerFactory:
 
     @classmethod
     def create(
-        cls,
-        provider: Optional[str] = None,
-        model: Optional[str] = None,
-        **kwargs
+        cls, provider: Optional[str] = None, model: Optional[str] = None, **kwargs
     ) -> MediaAnalyzerProtocol:
         """Create an analyzer instance.
 
@@ -67,20 +64,21 @@ class AnalyzerFactory:
         """
         provider = provider or DEFAULT_PROVIDER
 
-        if provider == 'gemini':
+        if provider == "gemini":
             from .gemini_analyzer import GeminiVideoAnalyzer
+
             return GeminiVideoAnalyzer(**kwargs)
 
-        elif provider == 'fal':
+        elif provider == "fal":
             from .fal_video_analyzer import FalVideoAnalyzer
+
             model = model or DEFAULT_FAL_MODEL
             return FalVideoAnalyzer(model=model, **kwargs)
 
         else:
             available = cls.list_providers()
             raise ValueError(
-                f"Unknown provider: '{provider}'. "
-                f"Available providers: {available}"
+                f"Unknown provider: '{provider}'. Available providers: {available}"
             )
 
     @classmethod
@@ -99,12 +97,13 @@ class AnalyzerFactory:
         Returns:
             List of available provider names
         """
-        providers = ['gemini']
+        providers = ["gemini"]
 
         try:
             from .fal_video_analyzer import FAL_AVAILABLE
+
             if FAL_AVAILABLE:
-                providers.append('fal')
+                providers.append("fal")
         except ImportError:
             pass
 
@@ -120,16 +119,18 @@ class AnalyzerFactory:
         Returns:
             True if provider is available, False otherwise
         """
-        if provider == 'gemini':
+        if provider == "gemini":
             try:
                 from .gemini_analyzer import GEMINI_AVAILABLE
+
                 return GEMINI_AVAILABLE
             except ImportError:
                 return False
 
-        elif provider == 'fal':
+        elif provider == "fal":
             try:
                 from .fal_video_analyzer import FAL_AVAILABLE
+
                 return FAL_AVAILABLE
             except ImportError:
                 return False
@@ -146,35 +147,35 @@ class AnalyzerFactory:
         Returns:
             Dict with 'available' bool and 'message' string
         """
-        if provider == 'gemini':
+        if provider == "gemini":
             try:
                 from .gemini_analyzer import check_gemini_requirements
+
                 available, message = check_gemini_requirements()
-                return {'available': available, 'message': message}
+                return {"available": available, "message": message}
             except ImportError:
                 return {
-                    'available': False,
-                    'message': 'Gemini SDK not installed. Run: pip install google-generativeai'
+                    "available": False,
+                    "message": "Gemini SDK not installed. Run: pip install google-generativeai",
                 }
 
-        elif provider == 'fal':
+        elif provider == "fal":
             try:
                 from .fal_video_analyzer import check_fal_requirements
+
                 available, message = check_fal_requirements()
-                return {'available': available, 'message': message}
+                return {"available": available, "message": message}
             except ImportError:
                 return {
-                    'available': False,
-                    'message': 'FAL client not installed. Run: pip install fal-client'
+                    "available": False,
+                    "message": "FAL client not installed. Run: pip install fal-client",
                 }
 
-        return {'available': False, 'message': f'Unknown provider: {provider}'}
+        return {"available": False, "message": f"Unknown provider: {provider}"}
 
 
 def get_analyzer(
-    provider: Optional[str] = None,
-    model: Optional[str] = None,
-    **kwargs
+    provider: Optional[str] = None, model: Optional[str] = None, **kwargs
 ) -> MediaAnalyzerProtocol:
     """Convenience function to get an analyzer.
 
@@ -212,9 +213,9 @@ def print_provider_status():
     print(f"📌 Default provider: {DEFAULT_PROVIDER}")
     print()
 
-    for provider in ['gemini', 'fal']:
+    for provider in ["gemini", "fal"]:
         status = AnalyzerFactory.get_provider_requirements(provider)
-        icon = "✅" if status['available'] else "❌"
+        icon = "✅" if status["available"] else "❌"
         print(f"{icon} {provider.upper()}: {status['message']}")
 
     print()

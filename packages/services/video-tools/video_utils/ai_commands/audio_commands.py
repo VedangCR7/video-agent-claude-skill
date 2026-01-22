@@ -20,10 +20,12 @@ from ..file_utils import find_audio_files
 from ..ai_utils import analyze_audio_file, save_analysis_result
 
 # Supported audio extensions (keep in sync with file_utils.py)
-AUDIO_EXTENSIONS = {'.mp3', '.wav', '.aac', '.ogg', '.m4a', '.flac', '.wma'}
+AUDIO_EXTENSIONS = {".mp3", ".wav", ".aac", ".ogg", ".m4a", ".flac", ".wma"}
 
 
-def _save_result_with_format(result: dict, output_path, format_type: str, content_key: str) -> bool:
+def _save_result_with_format(
+    result: dict, output_path, format_type: str, content_key: str
+) -> bool:
     """Save analysis result based on format_type.
 
     Args:
@@ -40,19 +42,19 @@ def _save_result_with_format(result: dict, output_path, format_type: str, conten
 
     try:
         output_path = Path(output_path)
-        json_file = output_path.with_suffix('.json')
-        txt_file = output_path.with_suffix('.txt')
+        json_file = output_path.with_suffix(".json")
+        txt_file = output_path.with_suffix(".txt")
 
         # Save JSON if format allows
-        if format_type in ['json', 'both']:
-            with open(json_file, 'w', encoding='utf-8') as f:
+        if format_type in ["json", "both"]:
+            with open(json_file, "w", encoding="utf-8") as f:
                 json.dump(result, f, indent=2, ensure_ascii=False)
             print(f"💾 Saved JSON: {json_file.name}")
 
         # Save TXT if format allows
-        if format_type in ['txt', 'both']:
-            with open(txt_file, 'w', encoding='utf-8') as f:
-                f.write(f"Analysis Result\n")
+        if format_type in ["txt", "both"]:
+            with open(txt_file, "w", encoding="utf-8") as f:
+                f.write("Analysis Result\n")
                 f.write("=" * 50 + "\n\n")
                 if content_key in result:
                     f.write(result[content_key])
@@ -62,9 +64,9 @@ def _save_result_with_format(result: dict, output_path, format_type: str, conten
             print(f"💾 Saved TXT: {txt_file.name}")
 
         # Default: save both if format_type is 'json' (original behavior)
-        if format_type == 'json':
-            with open(txt_file, 'w', encoding='utf-8') as f:
-                f.write(f"Analysis Result\n")
+        if format_type == "json":
+            with open(txt_file, "w", encoding="utf-8") as f:
+                f.write("Analysis Result\n")
                 f.write("=" * 50 + "\n\n")
                 if content_key in result:
                     f.write(result[content_key])
@@ -78,13 +80,14 @@ def _save_result_with_format(result: dict, output_path, format_type: str, conten
         print(f"❌ Error saving results: {e}")
         return False
 
+
 # Analysis types for audio
 AUDIO_ANALYSIS_TYPES = {
-    '1': ('description', 'Audio description and characteristics'),
-    '2': ('transcription', 'Speech-to-text transcription'),
-    '3': ('content_analysis', 'Comprehensive content analysis'),
-    '4': ('events', 'Audio event and segment detection'),
-    '5': ('qa', 'Question and answer analysis'),
+    "1": ("description", "Audio description and characteristics"),
+    "2": ("transcription", "Speech-to-text transcription"),
+    "3": ("content_analysis", "Comprehensive content analysis"),
+    "4": ("events", "Audio event and segment detection"),
+    "5": ("qa", "Question and answer analysis"),
 }
 
 
@@ -102,7 +105,7 @@ def cmd_analyze_audio() -> None:
 
     print(f"🎵 Found {len(paths.files)} audio file(s)")
 
-    analysis_type = select_analysis_type(AUDIO_ANALYSIS_TYPES, default_key='2')
+    analysis_type = select_analysis_type(AUDIO_ANALYSIS_TYPES, default_key="2")
     if not analysis_type:
         return
 
@@ -116,7 +119,7 @@ def cmd_analyze_audio() -> None:
             config.analysis_type,
             questions=config.questions,
             detailed=config.detailed,
-            speaker_identification=config.speaker_identification
+            speaker_identification=config.speaker_identification,
         )
 
     successful, failed = process_files_with_progress(
@@ -126,7 +129,7 @@ def cmd_analyze_audio() -> None:
         output_dir=paths.output_dir,
         output_suffix=f"_{analysis_type}_analysis",
         media_emoji="🎵",
-        analysis_type=analysis_type
+        analysis_type=analysis_type,
     )
 
     print_results_summary(successful, failed, paths.output_dir)
@@ -146,18 +149,17 @@ def cmd_transcribe_audio() -> None:
 
     print(f"🎵 Found {len(paths.files)} audio file(s)")
 
-    config = get_analysis_options('transcription')
+    config = get_analysis_options("transcription")
     if not config:
         return
 
     from ..gemini_analyzer import GeminiVideoAnalyzer
+
     gemini_analyzer = GeminiVideoAnalyzer()
 
     def analyzer(file_path: Path):
         return gemini_analyzer.transcribe_audio(
-            file_path,
-            config.include_timestamps,
-            config.speaker_identification
+            file_path, config.include_timestamps, config.speaker_identification
         )
 
     successful, failed = process_files_with_progress(
@@ -167,7 +169,7 @@ def cmd_transcribe_audio() -> None:
         output_dir=paths.output_dir,
         output_suffix="_transcription",
         media_emoji="🎵",
-        analysis_type="transcription"
+        analysis_type="transcription",
     )
 
     print_results_summary(successful, failed, paths.output_dir)
@@ -187,11 +189,12 @@ def cmd_describe_audio() -> None:
 
     print(f"🎵 Found {len(paths.files)} audio file(s)")
 
-    config = get_analysis_options('description')
+    config = get_analysis_options("description")
     if not config:
         return
 
     from ..gemini_analyzer import GeminiVideoAnalyzer
+
     gemini_analyzer = GeminiVideoAnalyzer()
 
     def analyzer(file_path: Path):
@@ -204,7 +207,7 @@ def cmd_describe_audio() -> None:
         output_dir=paths.output_dir,
         output_suffix="_description",
         media_emoji="🎵",
-        analysis_type="description"
+        analysis_type="description",
     )
 
     print_results_summary(successful, failed, paths.output_dir)
@@ -213,7 +216,7 @@ def cmd_describe_audio() -> None:
 def cmd_analyze_audio_with_params(
     input_path: Optional[str] = None,
     output_path: Optional[str] = None,
-    format_type: str = 'json'
+    format_type: str = "json",
 ) -> None:
     """Enhanced analyze-audio command with parameter support.
 
@@ -228,7 +231,9 @@ def cmd_analyze_audio_with_params(
     if not check_and_report_gemini_status():
         return
 
-    paths = setup_paths(input_path, output_path, find_audio_files, "audio", AUDIO_EXTENSIONS)
+    paths = setup_paths(
+        input_path, output_path, find_audio_files, "audio", AUDIO_EXTENSIONS
+    )
     if not paths:
         return
 
@@ -236,7 +241,7 @@ def cmd_analyze_audio_with_params(
     print(f"📁 Output directory: {paths.output_dir}")
     print(f"📋 Format: {format_type}")
 
-    analysis_type = select_analysis_type(AUDIO_ANALYSIS_TYPES, default_key='2')
+    analysis_type = select_analysis_type(AUDIO_ANALYSIS_TYPES, default_key="2")
     if not analysis_type:
         return
 
@@ -250,18 +255,18 @@ def cmd_analyze_audio_with_params(
             config.analysis_type,
             questions=config.questions,
             detailed=config.detailed,
-            speaker_identification=config.speaker_identification
+            speaker_identification=config.speaker_identification,
         )
 
     # Determine content key for saving
     content_key_map = {
-        'description': 'description',
-        'transcription': 'transcription',
-        'content_analysis': 'content_analysis',
-        'events': 'event_detection',
-        'qa': 'answers',
+        "description": "description",
+        "transcription": "transcription",
+        "content_analysis": "content_analysis",
+        "events": "event_detection",
+        "qa": "answers",
     }
-    content_key = content_key_map.get(analysis_type, 'description')
+    content_key = content_key_map.get(analysis_type, "description")
 
     # Custom save function based on format_type
     def save_with_format(result, output_path):
@@ -274,7 +279,7 @@ def cmd_analyze_audio_with_params(
         output_dir=paths.output_dir,
         output_suffix=f"_{analysis_type}_analysis",
         media_emoji="🎵",
-        analysis_type=analysis_type
+        analysis_type=analysis_type,
     )
 
     print_results_summary(successful, failed, paths.output_dir)

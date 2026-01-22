@@ -4,7 +4,7 @@ ByteDance Seedance v1.5 Pro model implementation.
 Advanced motion synthesis with seed control.
 """
 
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 from .base import BaseVideoModel
 from ..config.constants import MODEL_INFO, DEFAULT_VALUES, DURATION_OPTIONS
 
@@ -42,22 +42,16 @@ class SeedanceModel(BaseVideoModel):
             if not isinstance(seed, int) or seed < 0:
                 raise ValueError("Seed must be a non-negative integer")
 
-        return {
-            "duration": duration,
-            "seed": seed
-        }
+        return {"duration": duration, "seed": seed}
 
     def prepare_arguments(
-        self,
-        prompt: str,
-        image_url: str,
-        **kwargs
+        self, prompt: str, image_url: str, **kwargs
     ) -> Dict[str, Any]:
         """Prepare API arguments for Seedance."""
         args = {
             "prompt": prompt,
             "image_url": image_url,
-            "duration": kwargs.get("duration", "5")
+            "duration": kwargs.get("duration", "5"),
         }
 
         # Add optional seed
@@ -73,5 +67,5 @@ class SeedanceModel(BaseVideoModel):
             **MODEL_INFO.get("seedance_1_5_pro", {}),
             "endpoint": self.endpoint,
             "price_per_second": self.price_per_second,
-            "supports_seed": True
+            "supports_seed": True,
         }

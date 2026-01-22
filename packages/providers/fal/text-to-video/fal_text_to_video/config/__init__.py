@@ -10,7 +10,7 @@ from .constants import (
     RESOLUTION_OPTIONS,
     ASPECT_RATIO_OPTIONS,
     DEFAULT_VALUES,
-    MODEL_INFO
+    MODEL_INFO,
 )
 
 __all__ = [
@@ -23,5 +23,5 @@ __all__ = [
     "RESOLUTION_OPTIONS",
     "ASPECT_RATIO_OPTIONS",
     "DEFAULT_VALUES",
-    "MODEL_INFO"
+    "MODEL_INFO",
 ]
