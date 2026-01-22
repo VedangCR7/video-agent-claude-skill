@@ -15,7 +15,7 @@ from ..utils.validators import (
     validate_resolution,
     validate_image_urls,
     validate_num_images,
-    validate_output_format
+    validate_output_format,
 )
 
 
@@ -54,7 +54,9 @@ class NanoBananaProEditModel(BaseModel):
         # Get parameters with defaults
         aspect_ratio = kwargs.get("aspect_ratio", defaults.get("aspect_ratio", "auto"))
         resolution = kwargs.get("resolution", defaults.get("resolution", "1K"))
-        output_format = kwargs.get("output_format", defaults.get("output_format", "png"))
+        output_format = kwargs.get(
+            "output_format", defaults.get("output_format", "png")
+        )
         num_images = kwargs.get("num_images", defaults.get("num_images", 1))
         enable_web_search = kwargs.get("enable_web_search", False)
         sync_mode = kwargs.get("sync_mode", defaults.get("sync_mode", True))
@@ -79,7 +81,7 @@ class NanoBananaProEditModel(BaseModel):
             "output_format": validated_output_format,
             "num_images": validated_num_images,
             "enable_web_search": bool(enable_web_search),
-            "sync_mode": bool(sync_mode)
+            "sync_mode": bool(sync_mode),
         }
 
     def prepare_arguments(
@@ -87,7 +89,7 @@ class NanoBananaProEditModel(BaseModel):
         prompt: str,
         image_url: Optional[str] = None,
         image_urls: Optional[List[str]] = None,
-        **kwargs
+        **kwargs,
     ) -> Dict[str, Any]:
         """
         Prepare API arguments for Nano Banana Pro Edit.
@@ -126,7 +128,7 @@ class NanoBananaProEditModel(BaseModel):
             "resolution": kwargs.get("resolution", "1K"),
             "output_format": kwargs.get("output_format", "png"),
             "num_images": kwargs.get("num_images", 1),
-            "sync_mode": kwargs.get("sync_mode", True)
+            "sync_mode": kwargs.get("sync_mode", True),
         }
 
         # Add optional web search
@@ -141,14 +143,14 @@ class NanoBananaProEditModel(BaseModel):
             **MODEL_INFO.get("nano_banana_pro_edit", {}),
             "endpoint": self.endpoint,
             "supports_multi_image": True,
-            "max_input_images": 4
+            "max_input_images": 4,
         }
 
     def estimate_cost(
         self,
         resolution: str = "1K",
         num_images: int = 1,
-        enable_web_search: bool = False
+        enable_web_search: bool = False,
     ) -> float:
         """
         Estimate cost for generation.

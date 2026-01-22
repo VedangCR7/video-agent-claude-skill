@@ -15,13 +15,13 @@ import fal_client
 def upload_local_image(image_path: str) -> str:
     """
     Upload a local image to FAL AI and return the URL.
-    
+
     Args:
         image_path: Path to local image file
-        
+
     Returns:
         URL of uploaded image
-        
+
     Raises:
         FileNotFoundError: If image file doesn't exist
         Exception: If upload fails
@@ -29,7 +29,7 @@ def upload_local_image(image_path: str) -> str:
     image_file = Path(image_path)
     if not image_file.exists():
         raise FileNotFoundError(f"Image file not found: {image_path}")
-    
+
     try:
         # Upload file to FAL AI
         url = fal_client.upload_file(str(image_file))
@@ -64,7 +64,7 @@ def download_image(image_url: str, output_path: Path) -> str:
         response = requests.get(image_url, timeout=30)
         response.raise_for_status()
 
-        with open(output_path, 'wb') as f:
+        with open(output_path, "wb") as f:
             f.write(response.content)
 
         return str(output_path)
@@ -94,7 +94,7 @@ def save_base64_image(data_url: str, output_path: Path) -> str:
         # Decode and save
         image_data = base64.b64decode(encoded_data)
 
-        with open(output_path, 'wb') as f:
+        with open(output_path, "wb") as f:
             f.write(image_data)
 
         print(f"💾 Saved base64 image ({len(image_data) / 1024:.1f} KB)")
@@ -104,7 +104,9 @@ def save_base64_image(data_url: str, output_path: Path) -> str:
         raise ValueError(f"Failed to decode base64 image: {e}")
 
 
-def download_images(images: List[dict], output_dir: Path, prefix: str = "modified_image") -> List[str]:
+def download_images(
+    images: List[dict], output_dir: Path, prefix: str = "modified_image"
+) -> List[str]:
     """
     Download multiple images from API response.
 
@@ -127,7 +129,7 @@ def download_images(images: List[dict], output_dir: Path, prefix: str = "modifie
             # Generate filename with appropriate extension
             timestamp = int(time.time())
             ext = get_extension_from_url(image_url)
-            filename = f"{prefix}_{timestamp}_{i+1}{ext}"
+            filename = f"{prefix}_{timestamp}_{i + 1}{ext}"
             file_path = output_dir / filename
 
             # Download image
@@ -136,7 +138,7 @@ def download_images(images: List[dict], output_dir: Path, prefix: str = "modifie
                 downloaded_files.append(str(file_path))
                 print(f"✅ Image saved: {file_path}")
             except Exception as e:
-                print(f"❌ Failed to download image {i+1}: {e}")
+                print(f"❌ Failed to download image {i + 1}: {e}")
 
     return downloaded_files
 
@@ -187,10 +189,10 @@ def get_extension_from_url(url: str) -> str:
 def ensure_output_directory(output_dir: Optional[str] = None) -> Path:
     """
     Ensure output directory exists and return Path object.
-    
+
     Args:
         output_dir: Custom output directory path
-        
+
     Returns:
         Path object for output directory
     """
@@ -198,7 +200,7 @@ def ensure_output_directory(output_dir: Optional[str] = None) -> Path:
         output_path = Path(output_dir)
     else:
         output_path = Path("output")
-    
+
     output_path.mkdir(exist_ok=True)
     return output_path
 
@@ -206,10 +208,10 @@ def ensure_output_directory(output_dir: Optional[str] = None) -> Path:
 def get_file_size_kb(file_path: str) -> float:
     """
     Get file size in kilobytes.
-    
+
     Args:
         file_path: Path to file
-        
+
     Returns:
         File size in KB
     """

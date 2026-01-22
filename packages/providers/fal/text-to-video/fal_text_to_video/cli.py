@@ -47,14 +47,18 @@ def cmd_generate(args):
         output_dir=args.output,
         verbose=True,
         mock=args.mock,
-        **kwargs
+        **kwargs,
     )
 
     if result.get("success"):
-        print(f"\n✅ Success{'  [MOCK - No actual API call]' if result.get('mock') else ''}!")
+        print(
+            f"\n✅ Success{'  [MOCK - No actual API call]' if result.get('mock') else ''}!"
+        )
         print(f"   📁 Output: {result.get('local_path')}")
-        if result.get('mock'):
-            print(f"   💰 Estimated cost: ${result.get('estimated_cost', 0):.2f} (not charged)")
+        if result.get("mock"):
+            print(
+                f"   💰 Estimated cost: ${result.get('estimated_cost', 0):.2f} (not charged)"
+            )
         else:
             print(f"   💰 Cost: ${result.get('cost_usd', 0):.2f}")
             print(f"   🔗 URL: {result.get('video_url', 'N/A')}")
@@ -96,12 +100,12 @@ def cmd_model_info(args):
         print(f"Endpoint: {info.get('endpoint', 'N/A')}")
         print(f"Max duration: {info.get('max_duration', 'N/A')}s")
 
-        print(f"\nFeatures:")
-        for feature in info.get('features', []):
+        print("\nFeatures:")
+        for feature in info.get("features", []):
             print(f"   • {feature}")
 
-        print(f"\nPricing:")
-        pricing = info.get('pricing', {})
+        print("\nPricing:")
+        pricing = info.get("pricing", {})
         for key, value in pricing.items():
             print(f"   • {key}: ${value}")
 
@@ -177,37 +181,58 @@ Examples:
     --model sora_2_pro \\
     --duration 8 \\
     --resolution 1080p
-        """
+        """,
     )
 
     subparsers = parser.add_subparsers(dest="command", help="Commands")
 
     # Generate command
     gen_parser = subparsers.add_parser("generate", help="Generate video from text")
-    gen_parser.add_argument("--prompt", "-p", required=True,
-                           help="Text prompt for video generation")
-    gen_parser.add_argument("--model", "-m", default="kling_2_6_pro",
-                           choices=["kling_2_6_pro", "sora_2", "sora_2_pro"],
-                           help="Model to use (default: kling_2_6_pro)")
-    gen_parser.add_argument("--duration", "-d", default="5",
-                           help="Video duration (default: 5)")
-    gen_parser.add_argument("--aspect-ratio", "-a", default="16:9",
-                           choices=["16:9", "9:16", "1:1"],
-                           help="Aspect ratio (default: 16:9)")
-    gen_parser.add_argument("--resolution", "-r", default="720p",
-                           choices=["720p", "1080p"],
-                           help="Resolution for Sora 2 Pro (default: 720p)")
-    gen_parser.add_argument("--output", "-o", default="output",
-                           help="Output directory")
+    gen_parser.add_argument(
+        "--prompt", "-p", required=True, help="Text prompt for video generation"
+    )
+    gen_parser.add_argument(
+        "--model",
+        "-m",
+        default="kling_2_6_pro",
+        choices=["kling_2_6_pro", "sora_2", "sora_2_pro"],
+        help="Model to use (default: kling_2_6_pro)",
+    )
+    gen_parser.add_argument(
+        "--duration", "-d", default="5", help="Video duration (default: 5)"
+    )
+    gen_parser.add_argument(
+        "--aspect-ratio",
+        "-a",
+        default="16:9",
+        choices=["16:9", "9:16", "1:1"],
+        help="Aspect ratio (default: 16:9)",
+    )
+    gen_parser.add_argument(
+        "--resolution",
+        "-r",
+        default="720p",
+        choices=["720p", "1080p"],
+        help="Resolution for Sora 2 Pro (default: 720p)",
+    )
+    gen_parser.add_argument("--output", "-o", default="output", help="Output directory")
     gen_parser.add_argument("--negative-prompt", help="Negative prompt (Kling only)")
-    gen_parser.add_argument("--cfg-scale", type=float, default=0.5,
-                           help="CFG scale 0-1 (Kling only)")
-    gen_parser.add_argument("--audio", action="store_true",
-                           help="Generate audio (Kling only)")
-    gen_parser.add_argument("--keep-remote", action="store_true",
-                           help="Keep video on remote server (Sora only)")
-    gen_parser.add_argument("--mock", action="store_true",
-                           help="Mock mode: simulate API call without actual generation (FREE)")
+    gen_parser.add_argument(
+        "--cfg-scale", type=float, default=0.5, help="CFG scale 0-1 (Kling only)"
+    )
+    gen_parser.add_argument(
+        "--audio", action="store_true", help="Generate audio (Kling only)"
+    )
+    gen_parser.add_argument(
+        "--keep-remote",
+        action="store_true",
+        help="Keep video on remote server (Sora only)",
+    )
+    gen_parser.add_argument(
+        "--mock",
+        action="store_true",
+        help="Mock mode: simulate API call without actual generation (FREE)",
+    )
     gen_parser.set_defaults(func=cmd_generate)
 
     # List models command
@@ -216,22 +241,33 @@ Examples:
 
     # Model info command
     info_parser = subparsers.add_parser("model-info", help="Show model information")
-    info_parser.add_argument("model", choices=["kling_2_6_pro", "sora_2", "sora_2_pro"],
-                            help="Model key")
+    info_parser.add_argument(
+        "model", choices=["kling_2_6_pro", "sora_2", "sora_2_pro"], help="Model key"
+    )
     info_parser.set_defaults(func=cmd_model_info)
 
     # Estimate cost command
-    cost_parser = subparsers.add_parser("estimate-cost", help="Estimate generation cost")
-    cost_parser.add_argument("--model", "-m", default="kling_2_6_pro",
-                            choices=["kling_2_6_pro", "sora_2", "sora_2_pro"],
-                            help="Model to estimate (default: kling_2_6_pro)")
-    cost_parser.add_argument("--duration", "-d", default="5",
-                            help="Video duration")
-    cost_parser.add_argument("--resolution", "-r", default="720p",
-                            choices=["720p", "1080p"],
-                            help="Resolution (Sora 2 Pro only)")
-    cost_parser.add_argument("--audio", action="store_true",
-                            help="Include audio (Kling only)")
+    cost_parser = subparsers.add_parser(
+        "estimate-cost", help="Estimate generation cost"
+    )
+    cost_parser.add_argument(
+        "--model",
+        "-m",
+        default="kling_2_6_pro",
+        choices=["kling_2_6_pro", "sora_2", "sora_2_pro"],
+        help="Model to estimate (default: kling_2_6_pro)",
+    )
+    cost_parser.add_argument("--duration", "-d", default="5", help="Video duration")
+    cost_parser.add_argument(
+        "--resolution",
+        "-r",
+        default="720p",
+        choices=["720p", "1080p"],
+        help="Resolution (Sora 2 Pro only)",
+    )
+    cost_parser.add_argument(
+        "--audio", action="store_true", help="Include audio (Kling only)"
+    )
     cost_parser.set_defaults(func=cmd_estimate_cost)
 
     args = parser.parse_args()
