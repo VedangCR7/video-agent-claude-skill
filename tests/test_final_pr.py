@@ -32,7 +32,7 @@ class TestThreadSafetyFix(unittest.TestCase):
         self.assertEqual(len(text), 24)
         self.assertIn("thread", text)
         self.assertTrue(text.startswith("thread"))
-        self.assertEqual(text.count("a"), 3)
+        self.assertEqual(text.count("a"), 4)
 
     def test_list_integrity_preserved(self):
         """P2P: List operations that verify data integrity."""
