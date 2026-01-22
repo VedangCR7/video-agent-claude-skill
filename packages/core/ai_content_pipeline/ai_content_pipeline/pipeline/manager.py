@@ -19,6 +19,12 @@ Error Handling:
 - Comprehensive error reporting for debugging
 - Graceful degradation when individual steps fail
 - Retry mechanisms for transient failures
+
+Monitoring Integration:
+- Real-time pipeline performance metrics
+- Success/failure rate tracking
+- Cost monitoring and optimization
+- Alert generation for operational issues
 """
 
 import yaml
@@ -29,6 +35,26 @@ from typing import Dict, Any, List
 from .chain import ContentCreationChain, ChainResult, PipelineStep, StepType
 from .executor import ChainExecutor
 from ..models.text_to_image import UnifiedTextToImageGenerator
+
+# Import monitoring system
+try:
+    from ...monitoring.monitoring.metrics import (
+        increment_counter, set_gauge, record_timer, start_timer
+    )
+    from ...monitoring.monitoring.metrics_config import is_monitoring_enabled
+    MONITORING_AVAILABLE = True
+except ImportError:
+    MONITORING_AVAILABLE = False
+    # Fallback functions that do nothing if monitoring is not available
+    def increment_counter(*args, **kwargs): pass
+    def set_gauge(*args, **kwargs): pass
+    def record_timer(*args, **kwargs): pass
+    def start_timer(*args, **kwargs): return TimerContextStub()
+
+class TimerContextStub:
+    """Stub timer context when monitoring is not available."""
+    def __enter__(self): return self
+    def __exit__(self, exc_type, exc_val, exc_tb): pass
 from ..models.image_understanding import UnifiedImageUnderstandingGenerator
 from ..models.prompt_generation import UnifiedPromptGenerator
 from ..models.image_to_image import UnifiedImageToImageGenerator
@@ -149,9 +175,16 @@ class AIPipelineManager:
         Returns:
             ChainResult with execution results
         """
+        # Metrics: Track chain execution requests
+        increment_counter("chain_execution_requests_total",
+                         tags={"chain_name": chain.name})
+
         # Validate chain
         errors = chain.validate()
         if errors:
+            # Metrics: Track validation failures
+            increment_counter("chain_validation_failures",
+                             tags={"chain_name": chain.name})
             return ChainResult(
                 success=False,
                 steps_completed=0,
