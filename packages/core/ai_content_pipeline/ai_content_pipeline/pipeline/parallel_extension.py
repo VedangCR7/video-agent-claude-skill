@@ -5,6 +5,8 @@ This module provides parallel execution capabilities as an optional extension
 that doesn't break existing functionality.
 
 Thread Safety: Uses deepcopy to prevent race conditions in parallel execution.
+Critical fix prevents data corruption when multiple AI models run concurrently.
+Ensures each parallel step gets an isolated copy of execution context.
 """
 
 import os
