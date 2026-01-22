@@ -18,10 +18,11 @@ class CommandDispatcher(BaseController):
     ):
         """Initialize the command dispatcher.
 
-        Args:
-            input_dir: Directory containing input files
-            output_dir: Directory for output files
-            verbose: Whether to print operation details
+                Args:
+                    input_dir: Directory containing input files
+                    output_dir: Directory for output files
+                    verbose: Whether to print(operation details
+        )
         """
         super().__init__(input_dir, output_dir, verbose)
         self.media_controller = MediaProcessingController(
