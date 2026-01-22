@@ -20,12 +20,40 @@ Resource Management:
 - Proper cleanup of temporary resources
 - Concurrent execution without resource conflicts
 - Performance monitoring and optimization
+
+Monitoring Integration:
+- Comprehensive metrics collection for all operations
+- Performance monitoring with configurable thresholds
+- Error tracking and alerting for operational issues
+- Circuit breaker state monitoring for resilience
 """
 
 import time
 from typing import Any, Dict
 
 from .chain import ContentCreationChain, ChainResult, PipelineStep, StepType
+
+# Import monitoring system
+try:
+    from ...monitoring.monitoring.metrics import (
+        increment_counter, set_gauge, record_timer, start_timer,
+        evaluate_alerts
+    )
+    from ...monitoring.monitoring.metrics_config import is_monitoring_enabled
+    MONITORING_AVAILABLE = True
+except ImportError:
+    MONITORING_AVAILABLE = False
+    # Fallback functions that do nothing if monitoring is not available
+    def increment_counter(*args, **kwargs): pass
+    def set_gauge(*args, **kwargs): pass
+    def record_timer(*args, **kwargs): pass
+    def start_timer(*args, **kwargs): return TimerContextStub()
+    def evaluate_alerts(): return [], []
+
+class TimerContextStub:
+    """Stub timer context when monitoring is not available."""
+    def __enter__(self): return self
+    def __exit__(self, exc_type, exc_val, exc_tb): pass
 from .report_generator import ReportGenerator
 from .step_executors import (
     TextToImageExecutor,
@@ -129,17 +157,28 @@ class ChainExecutor:
         Returns:
             ChainResult with execution results
         """
-        start_time = time.time()
-        step_results = []
-        outputs = {}
-        total_cost = 0.0
-        current_data = input_data
-        current_type = chain.get_initial_input_type()
-        step_context = {}
+        # Metrics collection: Track pipeline executions
+        increment_counter("pipeline_executions_total", tags={"chain_name": chain.name})
+        set_gauge("active_pipelines", 1, tags={"operation": "increment"})
 
-        enabled_steps = chain.get_enabled_steps()
+        execution_timer = start_timer("pipeline_execution_duration",
+                                    tags={"chain_name": chain.name, "step_count": str(len(chain.get_enabled_steps()))})
 
-        print(f"Starting chain execution: {len(enabled_steps)} steps")
+        with execution_timer:
+            start_time = time.time()
+            step_results = []
+            outputs = {}
+            total_cost = 0.0
+            current_data = input_data
+            current_type = chain.get_initial_input_type()
+            step_context = {}
+
+            enabled_steps = chain.get_enabled_steps()
+
+            print(f"Starting chain execution: {len(enabled_steps)} steps")
+
+            # Metrics: Track pipeline start
+            set_gauge("pipeline_steps_total", len(enabled_steps), tags={"chain_name": chain.name})
 
         try:
             for i, step in enumerate(enabled_steps):
@@ -193,6 +232,12 @@ class ChainExecutor:
                 # Store intermediate output
                 step_name = f"step_{i + 1}_{step.step_type.value}"
                 outputs[step_name] = self._create_step_output(step, step_result)
+
+                # Metrics: Track successful step completion
+                increment_counter("pipeline_steps_completed",
+                                tags={"step_type": step.step_type.value, "chain_name": chain.name})
+                set_gauge("current_pipeline_progress", (i + 1) / len(enabled_steps),
+                         tags={"chain_name": chain.name})
 
                 # Save intermediate results if enabled
                 if chain.save_intermediates:
@@ -393,6 +438,24 @@ class ChainExecutor:
         print(f"Step failed: {error_msg}")
         total_time = time.time() - start_time
 
+        # Metrics: Track pipeline failure
+        increment_counter("pipeline_executions_failed",
+                         tags={"chain_name": chain.name, "failed_at_step": str(step_index + 1)})
+        set_gauge("pipeline_failure_rate", 1,
+                 tags={"chain_name": chain.name, "failure_reason": "step_failure"})
+        set_gauge("active_pipelines", -1, tags={"operation": "decrement"})
+
+        # Track error details
+        increment_counter("pipeline_errors_total",
+                         tags={"error_type": "step_failure", "chain_name": chain.name})
+
+        # Evaluate alerts after failure
+        if MONITORING_AVAILABLE and is_monitoring_enabled():
+            try:
+                evaluate_alerts()
+            except Exception as e:
+                print(f"Alert evaluation failed: {e}")
+
         execution_report = self.report_generator.create_execution_report(
             chain=chain,
             input_data=input_data,
@@ -437,6 +500,22 @@ class ChainExecutor:
         print("\nChain completed successfully!")
         print(f"Total time: {total_time:.1f}s")
         print(f"Total cost: ${total_cost:.3f}")
+
+        # Metrics: Track successful pipeline completion
+        increment_counter("pipeline_executions_successful",
+                         tags={"chain_name": chain.name})
+        set_gauge("pipeline_execution_cost", total_cost,
+                 tags={"chain_name": chain.name, "status": "success"})
+        set_gauge("pipeline_execution_time", total_time,
+                 tags={"chain_name": chain.name, "status": "success"})
+        set_gauge("active_pipelines", -1, tags={"operation": "decrement"})
+
+        # Evaluate alerts after successful execution
+        if MONITORING_AVAILABLE and is_monitoring_enabled():
+            try:
+                evaluate_alerts()
+            except Exception as e:
+                print(f"Alert evaluation failed: {e}")
 
         execution_report = self.report_generator.create_execution_report(
             chain=chain,
