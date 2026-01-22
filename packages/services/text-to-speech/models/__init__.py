@@ -14,7 +14,7 @@ from .common import (
     AudioFormat,
     VoiceSettings,
     VoiceInfo,
-    POPULAR_VOICE_IDS
+    POPULAR_VOICE_IDS,
 )
 from .pipeline import (
     OpenRouterModel,
@@ -22,12 +22,12 @@ from .pipeline import (
     VoiceStyle,
     PipelineInput,
     GeneratedContent,
-    PipelineResult
+    PipelineResult,
 )
 
 __all__ = [
     "ElevenLabsModel",
-    "AudioFormat", 
+    "AudioFormat",
     "VoiceSettings",
     "VoiceInfo",
     "POPULAR_VOICE_IDS",
@@ -36,5 +36,5 @@ __all__ = [
     "VoiceStyle",
     "PipelineInput",
     "GeneratedContent",
-    "PipelineResult"
+    "PipelineResult",
 ]

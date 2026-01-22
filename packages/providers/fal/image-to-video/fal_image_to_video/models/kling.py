@@ -4,7 +4,7 @@ Kling Video model implementations (v2.1 and v2.6 Pro).
 Supports frame interpolation via end_frame parameter (tail_image_url).
 """
 
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 from .base import BaseVideoModel
 from ..config.constants import MODEL_INFO, DEFAULT_VALUES, DURATION_OPTIONS
 
@@ -32,7 +32,10 @@ class KlingModel(BaseVideoModel):
         defaults = DEFAULT_VALUES.get("kling_2_1", {})
 
         duration = kwargs.get("duration", defaults.get("duration", "5"))
-        negative_prompt = kwargs.get("negative_prompt", defaults.get("negative_prompt", "blur, distort, and low quality"))
+        negative_prompt = kwargs.get(
+            "negative_prompt",
+            defaults.get("negative_prompt", "blur, distort, and low quality"),
+        )
         cfg_scale = kwargs.get("cfg_scale", defaults.get("cfg_scale", 0.5))
         end_frame = kwargs.get("end_frame")  # Optional end frame for interpolation
 
@@ -49,22 +52,21 @@ class KlingModel(BaseVideoModel):
             "duration": duration,
             "negative_prompt": negative_prompt,
             "cfg_scale": cfg_scale,
-            "end_frame": end_frame
+            "end_frame": end_frame,
         }
 
     def prepare_arguments(
-        self,
-        prompt: str,
-        image_url: str,
-        **kwargs
+        self, prompt: str, image_url: str, **kwargs
     ) -> Dict[str, Any]:
         """Prepare API arguments for Kling v2.1."""
         args = {
             "prompt": prompt,
             "image_url": image_url,
             "duration": kwargs.get("duration", "5"),
-            "negative_prompt": kwargs.get("negative_prompt", "blur, distort, and low quality"),
-            "cfg_scale": kwargs.get("cfg_scale", 0.5)
+            "negative_prompt": kwargs.get(
+                "negative_prompt", "blur, distort, and low quality"
+            ),
+            "cfg_scale": kwargs.get("cfg_scale", 0.5),
         }
 
         # Add end frame for interpolation (tail_image_url)
@@ -79,7 +81,7 @@ class KlingModel(BaseVideoModel):
         return {
             **MODEL_INFO.get("kling_2_1", {}),
             "endpoint": self.endpoint,
-            "price_per_second": self.price_per_second
+            "price_per_second": self.price_per_second,
         }
 
 
@@ -106,7 +108,10 @@ class Kling26ProModel(BaseVideoModel):
         defaults = DEFAULT_VALUES.get("kling_2_6_pro", {})
 
         duration = kwargs.get("duration", defaults.get("duration", "5"))
-        negative_prompt = kwargs.get("negative_prompt", defaults.get("negative_prompt", "blur, distort, and low quality"))
+        negative_prompt = kwargs.get(
+            "negative_prompt",
+            defaults.get("negative_prompt", "blur, distort, and low quality"),
+        )
         cfg_scale = kwargs.get("cfg_scale", defaults.get("cfg_scale", 0.5))
         end_frame = kwargs.get("end_frame")  # Optional end frame for interpolation
 
@@ -123,22 +128,21 @@ class Kling26ProModel(BaseVideoModel):
             "duration": duration,
             "negative_prompt": negative_prompt,
             "cfg_scale": cfg_scale,
-            "end_frame": end_frame
+            "end_frame": end_frame,
         }
 
     def prepare_arguments(
-        self,
-        prompt: str,
-        image_url: str,
-        **kwargs
+        self, prompt: str, image_url: str, **kwargs
     ) -> Dict[str, Any]:
         """Prepare API arguments for Kling v2.6 Pro."""
         args = {
             "prompt": prompt,
             "image_url": image_url,
             "duration": kwargs.get("duration", "5"),
-            "negative_prompt": kwargs.get("negative_prompt", "blur, distort, and low quality"),
-            "cfg_scale": kwargs.get("cfg_scale", 0.5)
+            "negative_prompt": kwargs.get(
+                "negative_prompt", "blur, distort, and low quality"
+            ),
+            "cfg_scale": kwargs.get("cfg_scale", 0.5),
         }
 
         # Add end frame for interpolation (tail_image_url)
@@ -154,5 +158,5 @@ class Kling26ProModel(BaseVideoModel):
             **MODEL_INFO.get("kling_2_6_pro", {}),
             "endpoint": self.endpoint,
             "price_per_second": self.price_per_second,
-            "professional_tier": True
+            "professional_tier": True,
         }

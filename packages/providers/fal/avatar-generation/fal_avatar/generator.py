@@ -377,7 +377,8 @@ class FALAvatarGenerator:
             return False
 
         missing = [
-            param for param in requirements["required"]
+            param
+            for param in requirements["required"]
             if param not in kwargs or _is_empty(kwargs[param])
         ]
 

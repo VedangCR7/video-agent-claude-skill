@@ -60,7 +60,9 @@ class OmniHumanModel(BaseAvatarModel):
 
         # Apply defaults
         resolution = resolution or self.defaults["resolution"]
-        turbo_mode = turbo_mode if turbo_mode is not None else self.defaults["turbo_mode"]
+        turbo_mode = (
+            turbo_mode if turbo_mode is not None else self.defaults["turbo_mode"]
+        )
 
         # Validate resolution
         self._validate_resolution(resolution)

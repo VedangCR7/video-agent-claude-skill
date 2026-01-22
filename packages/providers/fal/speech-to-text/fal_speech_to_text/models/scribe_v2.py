@@ -43,7 +43,7 @@ class ScribeV2Model(BaseSpeechToTextModel):
         diarize: Optional[bool] = None,
         tag_audio_events: Optional[bool] = None,
         keyterms: Optional[List[str]] = None,
-        **kwargs
+        **kwargs,
     ) -> Dict[str, Any]:
         """
         Validate and apply defaults to parameters.
@@ -79,9 +79,13 @@ class ScribeV2Model(BaseSpeechToTextModel):
         # Build params with defaults
         params = {
             "audio_url": audio_url,
-            "language_code": language_code if language_code is not None else self.defaults["language_code"],
+            "language_code": language_code
+            if language_code is not None
+            else self.defaults["language_code"],
             "diarize": diarize if diarize is not None else self.defaults["diarize"],
-            "tag_audio_events": tag_audio_events if tag_audio_events is not None else self.defaults["tag_audio_events"],
+            "tag_audio_events": tag_audio_events
+            if tag_audio_events is not None
+            else self.defaults["tag_audio_events"],
         }
 
         # Only include keyterms if provided (affects pricing)
@@ -97,7 +101,7 @@ class ScribeV2Model(BaseSpeechToTextModel):
         diarize: bool = True,
         tag_audio_events: bool = True,
         keyterms: Optional[List[str]] = None,
-        **kwargs
+        **kwargs,
     ) -> TranscriptionResult:
         """
         Transcribe audio using ElevenLabs Scribe v2.
@@ -221,10 +225,7 @@ class ScribeV2Model(BaseSpeechToTextModel):
         )
 
     def estimate_cost(
-        self,
-        duration_minutes: float,
-        use_keyterms: bool = False,
-        **kwargs
+        self, duration_minutes: float, use_keyterms: bool = False, **kwargs
     ) -> float:
         """
         Estimate transcription cost.
@@ -238,7 +239,7 @@ class ScribeV2Model(BaseSpeechToTextModel):
         """
         base_cost = duration_minutes * self.pricing["per_minute"]
         if use_keyterms:
-            base_cost *= (1 + self.pricing["keyterms_surcharge"])
+            base_cost *= 1 + self.pricing["keyterms_surcharge"]
         return round(base_cost, 4)
 
     def get_model_info(self) -> Dict[str, Any]:

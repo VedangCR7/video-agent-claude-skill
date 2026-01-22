@@ -222,7 +222,9 @@ class FabricTextModel(BaseAvatarModel):
         if not text:
             raise ValueError("Text is required")
         if len(text) > self.max_text_length:
-            raise ValueError(f"Text exceeds maximum length of {self.max_text_length} characters")
+            raise ValueError(
+                f"Text exceeds maximum length of {self.max_text_length} characters"
+            )
 
         resolution = resolution or self.defaults["resolution"]
         self._validate_resolution(resolution)
@@ -294,7 +296,9 @@ class FabricTextModel(BaseAvatarModel):
                 success=True,
                 video_url=video_url,
                 duration=estimated_duration,
-                cost=self.estimate_cost(estimated_duration, resolution=arguments["resolution"]),
+                cost=self.estimate_cost(
+                    estimated_duration, resolution=arguments["resolution"]
+                ),
                 processing_time=response["processing_time"],
                 model_used=self.model_name,
                 metadata={
