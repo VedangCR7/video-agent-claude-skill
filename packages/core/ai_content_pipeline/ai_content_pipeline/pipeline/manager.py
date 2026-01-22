@@ -2,6 +2,7 @@
 Main pipeline manager for AI Content Pipeline
 
 Orchestrates the execution of content creation chains with multiple AI models.
+Enhanced for thread safety and improved error handling.
 """
 
 import yaml
