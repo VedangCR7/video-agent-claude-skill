@@ -5,8 +5,11 @@ Sora 2 and Sora 2 Pro text-to-video model implementations.
 from typing import Dict, Any
 from .base import BaseTextToVideoModel
 from ..config.constants import (
-    MODEL_INFO, DEFAULT_VALUES,
-    DURATION_OPTIONS, RESOLUTION_OPTIONS, ASPECT_RATIO_OPTIONS
+    MODEL_INFO,
+    DEFAULT_VALUES,
+    DURATION_OPTIONS,
+    RESOLUTION_OPTIONS,
+    ASPECT_RATIO_OPTIONS,
 )
 
 
@@ -44,18 +47,22 @@ class Sora2Model(BaseTextToVideoModel):
         # Validate resolution
         valid_resolutions = RESOLUTION_OPTIONS.get("sora_2", ["720p"])
         if resolution not in valid_resolutions:
-            raise ValueError(f"Invalid resolution: {resolution}. Valid: {valid_resolutions}")
+            raise ValueError(
+                f"Invalid resolution: {resolution}. Valid: {valid_resolutions}"
+            )
 
         # Validate aspect ratio
         valid_ratios = ASPECT_RATIO_OPTIONS.get("sora_2", ["9:16", "16:9"])
         if aspect_ratio not in valid_ratios:
-            raise ValueError(f"Invalid aspect_ratio: {aspect_ratio}. Valid: {valid_ratios}")
+            raise ValueError(
+                f"Invalid aspect_ratio: {aspect_ratio}. Valid: {valid_ratios}"
+            )
 
         return {
             "duration": duration,
             "resolution": resolution,
             "aspect_ratio": aspect_ratio,
-            "delete_video": bool(delete_video)
+            "delete_video": bool(delete_video),
         }
 
     def prepare_arguments(self, prompt: str, **kwargs) -> Dict[str, Any]:
@@ -65,7 +72,7 @@ class Sora2Model(BaseTextToVideoModel):
             "duration": kwargs.get("duration", 4),
             "resolution": kwargs.get("resolution", "720p"),
             "aspect_ratio": kwargs.get("aspect_ratio", "16:9"),
-            "delete_video": kwargs.get("delete_video", True)
+            "delete_video": kwargs.get("delete_video", True),
         }
 
     def get_model_info(self) -> Dict[str, Any]:
@@ -73,7 +80,7 @@ class Sora2Model(BaseTextToVideoModel):
         return {
             **MODEL_INFO.get("sora_2", {}),
             "endpoint": self.endpoint,
-            "pricing": self.pricing
+            "pricing": self.pricing,
         }
 
     def estimate_cost(self, duration: int = 4, **kwargs) -> float:
@@ -116,18 +123,22 @@ class Sora2ProModel(BaseTextToVideoModel):
         # Validate resolution
         valid_resolutions = RESOLUTION_OPTIONS.get("sora_2_pro", ["720p", "1080p"])
         if resolution not in valid_resolutions:
-            raise ValueError(f"Invalid resolution: {resolution}. Valid: {valid_resolutions}")
+            raise ValueError(
+                f"Invalid resolution: {resolution}. Valid: {valid_resolutions}"
+            )
 
         # Validate aspect ratio
         valid_ratios = ASPECT_RATIO_OPTIONS.get("sora_2_pro", ["9:16", "16:9"])
         if aspect_ratio not in valid_ratios:
-            raise ValueError(f"Invalid aspect_ratio: {aspect_ratio}. Valid: {valid_ratios}")
+            raise ValueError(
+                f"Invalid aspect_ratio: {aspect_ratio}. Valid: {valid_ratios}"
+            )
 
         return {
             "duration": duration,
             "resolution": resolution,
             "aspect_ratio": aspect_ratio,
-            "delete_video": bool(delete_video)
+            "delete_video": bool(delete_video),
         }
 
     def prepare_arguments(self, prompt: str, **kwargs) -> Dict[str, Any]:
@@ -137,7 +148,7 @@ class Sora2ProModel(BaseTextToVideoModel):
             "duration": kwargs.get("duration", 4),
             "resolution": kwargs.get("resolution", "1080p"),
             "aspect_ratio": kwargs.get("aspect_ratio", "16:9"),
-            "delete_video": kwargs.get("delete_video", True)
+            "delete_video": kwargs.get("delete_video", True),
         }
 
     def get_model_info(self) -> Dict[str, Any]:
@@ -145,10 +156,12 @@ class Sora2ProModel(BaseTextToVideoModel):
         return {
             **MODEL_INFO.get("sora_2_pro", {}),
             "endpoint": self.endpoint,
-            "pricing": self.pricing
+            "pricing": self.pricing,
         }
 
-    def estimate_cost(self, duration: int = 4, resolution: str = "1080p", **kwargs) -> float:
+    def estimate_cost(
+        self, duration: int = 4, resolution: str = "1080p", **kwargs
+    ) -> float:
         """Estimate cost based on duration and resolution."""
         if resolution == "1080p":
             cost_per_second = self.pricing.get("cost_1080p", 0.50)

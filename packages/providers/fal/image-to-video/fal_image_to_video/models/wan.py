@@ -2,11 +2,13 @@
 Wan v2.6 image-to-video model implementation.
 """
 
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 from .base import BaseVideoModel
 from ..config.constants import (
-    MODEL_INFO, DEFAULT_VALUES,
-    DURATION_OPTIONS, RESOLUTION_OPTIONS
+    MODEL_INFO,
+    DEFAULT_VALUES,
+    DURATION_OPTIONS,
+    RESOLUTION_OPTIONS,
 )
 
 
@@ -38,16 +40,16 @@ class Wan26Model(BaseVideoModel):
 
         duration = kwargs.get("duration", defaults.get("duration", "5"))
         resolution = kwargs.get("resolution", defaults.get("resolution", "1080p"))
-        negative_prompt = kwargs.get("negative_prompt", defaults.get("negative_prompt", ""))
+        negative_prompt = kwargs.get(
+            "negative_prompt", defaults.get("negative_prompt", "")
+        )
         enable_prompt_expansion = kwargs.get(
-            "enable_prompt_expansion",
-            defaults.get("enable_prompt_expansion", True)
+            "enable_prompt_expansion", defaults.get("enable_prompt_expansion", True)
         )
         multi_shots = kwargs.get("multi_shots", defaults.get("multi_shots", False))
         seed = kwargs.get("seed", defaults.get("seed"))
         enable_safety_checker = kwargs.get(
-            "enable_safety_checker",
-            defaults.get("enable_safety_checker", True)
+            "enable_safety_checker", defaults.get("enable_safety_checker", True)
         )
         audio_url = kwargs.get("audio_url")
 
@@ -59,7 +61,9 @@ class Wan26Model(BaseVideoModel):
         # Validate resolution
         valid_resolutions = RESOLUTION_OPTIONS.get("wan_2_6", ["720p", "1080p"])
         if resolution not in valid_resolutions:
-            raise ValueError(f"Invalid resolution: {resolution}. Valid: {valid_resolutions}")
+            raise ValueError(
+                f"Invalid resolution: {resolution}. Valid: {valid_resolutions}"
+            )
 
         # Validate prompt lengths
         if negative_prompt and len(negative_prompt) > 500:
@@ -73,14 +77,11 @@ class Wan26Model(BaseVideoModel):
             "multi_shots": bool(multi_shots),
             "seed": seed,
             "enable_safety_checker": bool(enable_safety_checker),
-            "audio_url": audio_url
+            "audio_url": audio_url,
         }
 
     def prepare_arguments(
-        self,
-        prompt: str,
-        image_url: str,
-        **kwargs
+        self, prompt: str, image_url: str, **kwargs
     ) -> Dict[str, Any]:
         """Prepare API arguments for Wan v2.6."""
         # Validate prompt length
@@ -94,7 +95,7 @@ class Wan26Model(BaseVideoModel):
             "resolution": kwargs.get("resolution", "1080p"),
             "enable_prompt_expansion": kwargs.get("enable_prompt_expansion", True),
             "multi_shots": kwargs.get("multi_shots", False),
-            "enable_safety_checker": kwargs.get("enable_safety_checker", True)
+            "enable_safety_checker": kwargs.get("enable_safety_checker", True),
         }
 
         # Add optional parameters
@@ -116,17 +117,11 @@ class Wan26Model(BaseVideoModel):
         """Get Wan v2.6 model information."""
         info = MODEL_INFO.get("wan_2_6", {}).copy()
         info["endpoint"] = self.endpoint
-        info["pricing_per_second"] = {
-            "720p": 0.10,
-            "1080p": 0.15
-        }
+        info["pricing_per_second"] = {"720p": 0.10, "1080p": 0.15}
         return info
 
     def estimate_cost(
-        self,
-        duration: str = "5",
-        resolution: str = "1080p",
-        **kwargs
+        self, duration: str = "5", resolution: str = "1080p", **kwargs
     ) -> float:
         """Estimate cost based on duration and resolution."""
         duration_seconds = int(duration)

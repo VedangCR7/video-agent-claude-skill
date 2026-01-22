@@ -6,7 +6,7 @@ from .avatar import ReplicateMultiTalkGenerator
 
 __all__ = [
     "UnifiedTextToImageGenerator",
-    "BaseContentModel", 
+    "BaseContentModel",
     "ModelResult",
-    "ReplicateMultiTalkGenerator"
+    "ReplicateMultiTalkGenerator",
 ]

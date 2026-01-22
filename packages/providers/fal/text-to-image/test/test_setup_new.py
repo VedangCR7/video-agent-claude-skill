@@ -19,6 +19,7 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from fal_text_to_image_generator import FALTextToImageGenerator
 
+
 def print_banner():
     """Print the test banner."""
     print("=" * 60)
@@ -29,10 +30,11 @@ def print_banner():
     print("✅ Safe to run anytime for troubleshooting")
     print("=" * 60)
 
+
 def test_environment_setup() -> bool:
     """Test environment setup and API key validation (FREE)."""
     print("\n🔍 Testing Environment Setup...")
-    
+
     try:
         # Check if .env file exists
         env_file = ".env"
@@ -41,11 +43,11 @@ def test_environment_setup() -> bool:
         else:
             print(f"⚠️  No {env_file} file found")
             print("💡 Create a .env file with your FAL_KEY")
-        
+
         # Try to initialize generator
         generator = FALTextToImageGenerator()
         print("✅ FAL AI Text-to-Image Generator initialized successfully")
-        
+
         # Test API key presence
         if generator.api_key:
             print("✅ FAL_KEY found in environment")
@@ -55,33 +57,35 @@ def test_environment_setup() -> bool:
         else:
             print("❌ FAL_KEY not found in environment")
             return False
-        
+
         # Test model information
         model_info = generator.get_model_info()
         print(f"✅ Found {len(model_info)} supported models:")
         for model_name, info in model_info.items():
             print(f"   • {info.get('name', model_name)}")
-        
+
         print("✅ Generator setup completed successfully")
-        
+
         return True
-        
+
     except Exception as e:
         print(f"❌ Environment setup failed: {e}")
         import traceback
+
         traceback.print_exc()
         return False
+
 
 def main():
     """Main function."""
     print_banner()
-    
+
     success = test_environment_setup()
-    
+
     print("\n" + "=" * 60)
     print("📊 SETUP TEST RESULTS")
     print("-" * 25)
-    
+
     if success:
         print("✅ Setup test: PASSED")
         print("🎉 Environment is correctly configured!")
@@ -95,8 +99,9 @@ def main():
         print("   • FAL_KEY is set in .env file")
         print("   • Virtual environment is activated")
         print("   • Dependencies are installed")
-    
+
     print("\n" + "=" * 60)
+
 
 if __name__ == "__main__":
     main()

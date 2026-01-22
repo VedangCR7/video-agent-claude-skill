@@ -1,35 +1,27 @@
 """AI Content Platform - Comprehensive AI content generation framework."""
 
-from .__version__ import (
-    __version__,
-    __author__, 
-    __email__,
-    __description__,
-    __url__
-)
+from .__version__ import __version__, __author__, __email__, __description__, __url__
 
 # Core imports
 from .core import (
     # Models
     StepType,
     StepConfig,
-    ParallelStepConfig, 
+    ParallelStepConfig,
     PipelineConfig,
     StepResult,
     PipelineResult,
-    
     # Exceptions
     AIPlatformError,
     ConfigurationError,
     ValidationError,
     StepExecutionError,
     PipelineExecutionError,
-    
     # Core classes
     BaseStep,
     StepFactory,
     PipelineExecutor,
-    ParallelPipelineExecutor
+    ParallelPipelineExecutor,
 )
 
 # Utility imports
@@ -40,7 +32,7 @@ from .utils import (
     ConfigValidator,
     InputValidator,
     CostCalculator,
-    ConfigLoader
+    ConfigLoader,
 )
 
 # Main public API
@@ -51,28 +43,24 @@ __all__ = [
     "__email__",
     "__description__",
     "__url__",
-    
     # Models
     "StepType",
     "StepConfig",
-    "ParallelStepConfig", 
+    "ParallelStepConfig",
     "PipelineConfig",
     "StepResult",
     "PipelineResult",
-    
     # Exceptions
     "AIPlatformError",
     "ConfigurationError",
     "ValidationError",
     "StepExecutionError",
     "PipelineExecutionError",
-    
     # Core classes
     "BaseStep",
     "StepFactory",
     "PipelineExecutor",
     "ParallelPipelineExecutor",
-    
     # Utilities
     "get_logger",
     "setup_logging",
@@ -80,17 +68,20 @@ __all__ = [
     "ConfigValidator",
     "InputValidator",
     "CostCalculator",
-    "ConfigLoader"
+    "ConfigLoader",
 ]
+
 
 # Initialize step registry on import
 def _initialize_platform():
     """Initialize the platform and register all step types."""
     try:
         from .core.registry import initialize_registry
+
         initialize_registry()
     except Exception:
         # Fail silently during import - registry can be initialized manually
         pass
+
 
 _initialize_platform()
