@@ -3,6 +3,11 @@ Chain executor for AI Content Pipeline.
 
 Handles the sequential execution of pipeline steps with file management.
 This module orchestrates step execution using specialized step executors.
+Enhanced for improved parallel execution support and thread safety.
+Includes race condition prevention for concurrent operations.
+
+Thread Safety: Ensures isolated execution contexts for parallel processing.
+Prevents data corruption from shared mutable objects between concurrent steps.
 """
 
 import time

@@ -1,5 +1,12 @@
 """
 Content creation chain classes for AI Content Pipeline
+
+Provides the core data structures and execution logic for AI content pipelines.
+Enhanced for better parallel execution support and improved error handling.
+Supports thread-safe parallel processing with race condition prevention.
+
+Thread Safety: Implements isolated context copying to prevent race conditions.
+Critical for maintaining data integrity in multi-threaded AI pipeline execution.
 """
 
 from dataclasses import dataclass

@@ -2,6 +2,11 @@
 Report generator for AI Content Pipeline.
 
 Handles creation and saving of execution reports and intermediate results.
+Enhanced for better parallel execution reporting and thread-safe operations.
+Supports concurrent report generation without data corruption.
+
+Thread Safety: Provides atomic report generation for parallel pipeline execution.
+Ensures report integrity when multiple steps complete simultaneously.
 """
 
 import json
