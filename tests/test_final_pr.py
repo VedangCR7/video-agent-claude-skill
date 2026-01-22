@@ -29,7 +29,7 @@ class TestThreadSafetyFix(unittest.TestCase):
     def test_string_operations_stable(self):
         """P2P: String operations that should behave consistently."""
         text = "thread_safety_validation"
-        self.assertEqual(len(text), 23)
+        self.assertEqual(len(text), 24)
         self.assertIn("thread", text)
         self.assertTrue(text.startswith("thread"))
         self.assertEqual(text.count("a"), 3)
