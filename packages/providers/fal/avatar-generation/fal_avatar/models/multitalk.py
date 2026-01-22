@@ -66,7 +66,11 @@ class MultiTalkModel(BaseAvatarModel):
             raise ValueError("prompt is required and cannot be empty")
 
         # Apply defaults
-        num_frames = num_frames if num_frames is not None else self.defaults.get("num_frames", 81)
+        num_frames = (
+            num_frames
+            if num_frames is not None
+            else self.defaults.get("num_frames", 81)
+        )
         resolution = resolution or self.defaults.get("resolution", "480p")
         acceleration = acceleration or self.defaults.get("acceleration", "regular")
 
@@ -74,9 +78,13 @@ class MultiTalkModel(BaseAvatarModel):
         if not (81 <= num_frames <= 129):
             raise ValueError(f"num_frames must be 81-129, got {num_frames}")
         if resolution not in self.supported_resolutions:
-            raise ValueError(f"resolution must be one of {self.supported_resolutions}, got {resolution}")
+            raise ValueError(
+                f"resolution must be one of {self.supported_resolutions}, got {resolution}"
+            )
         if acceleration not in self.supported_accelerations:
-            raise ValueError(f"acceleration must be one of {self.supported_accelerations}, got {acceleration}")
+            raise ValueError(
+                f"acceleration must be one of {self.supported_accelerations}, got {acceleration}"
+            )
 
         # Build arguments
         arguments = {

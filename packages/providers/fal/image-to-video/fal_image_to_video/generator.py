@@ -17,7 +17,7 @@ from .models import (
     Sora2Model,
     Sora2ProModel,
     Veo31FastModel,
-    Wan26Model
+    Wan26Model,
 )
 from .utils.file_utils import (
     upload_image,
@@ -26,9 +26,9 @@ from .utils.file_utils import (
     upload_audio,
     upload_video,
     ensure_output_directory,
-    is_url
+    is_url,
 )
-from .config.constants import SUPPORTED_MODELS, MODEL_INFO, MODEL_EXTENDED_FEATURES
+from .config.constants import MODEL_EXTENDED_FEATURES
 
 load_dotenv()
 
@@ -59,9 +59,9 @@ class FALImageToVideoGenerator:
         if api_key:
             fal_client.api_key = api_key
         else:
-            api_key = os.getenv('FAL_KEY')
+            api_key = os.getenv("FAL_KEY")
             if not api_key:
-                if os.environ.get('CI') or os.environ.get('GITHUB_ACTIONS'):
+                if os.environ.get("CI") or os.environ.get("GITHUB_ACTIONS"):
                     print("⚠️  Running in CI environment - using mock mode")
                     self.mock_mode = True
                     api_key = "mock_key"
@@ -81,7 +81,7 @@ class FALImageToVideoGenerator:
             "sora_2": Sora2Model(),
             "sora_2_pro": Sora2ProModel(),
             "veo_3_1_fast": Veo31FastModel(),
-            "wan_2_6": Wan26Model()
+            "wan_2_6": Wan26Model(),
         }
 
         self.output_dir = ensure_output_directory("output")
@@ -99,7 +99,7 @@ class FALImageToVideoGenerator:
         ref_images: Optional[List[str]] = None,
         audio: Optional[str] = None,
         ref_video: Optional[str] = None,
-        **kwargs
+        **kwargs,
     ) -> Dict[str, Any]:
         """
         Generate video from image using specified model.
@@ -123,18 +123,18 @@ class FALImageToVideoGenerator:
         # Mock mode for CI
         if self.mock_mode:
             import time
+
             return {
-                'success': True,
-                'video': {'url': f'mock://video-{int(time.time())}.mp4'},
-                'local_path': f'/tmp/mock_video_{int(time.time())}.mp4',
-                'model': model,
-                'mock_mode': True
+                "success": True,
+                "video": {"url": f"mock://video-{int(time.time())}.mp4"},
+                "local_path": f"/tmp/mock_video_{int(time.time())}.mp4",
+                "model": model,
+                "mock_mode": True,
             }
 
         if model not in self.models:
             raise ValueError(
-                f"Unsupported model: {model}. "
-                f"Supported: {list(self.models.keys())}"
+                f"Unsupported model: {model}. Supported: {list(self.models.keys())}"
             )
 
         # Get model feature support
@@ -149,7 +149,7 @@ class FALImageToVideoGenerator:
                     return {
                         "success": False,
                         "error": f"Failed to upload start_frame: {start_frame}",
-                        "model": model
+                        "model": model,
                     }
             else:
                 effective_image_url = start_frame
@@ -165,28 +165,28 @@ class FALImageToVideoGenerator:
                         return {
                             "success": False,
                             "error": "Failed to upload end_frame",
-                            "model": model
+                            "model": model,
                         }
                 kwargs["end_frame"] = end_frame
 
         # Process ref_images if supported (future)
         if ref_images:
             if not features.get("ref_images"):
-                print(f"⚠️ Model {model} does not support ref_images parameter, ignoring")
+                print(
+                    f"⚠️ Model {model} does not support ref_images parameter, ignoring"
+                )
             else:
                 try:
                     kwargs["ref_images"] = upload_images(ref_images)
                 except ValueError as e:
-                    return {
-                        "success": False,
-                        "error": str(e),
-                        "model": model
-                    }
+                    return {"success": False, "error": str(e), "model": model}
 
         # Process audio if supported (future)
         if audio:
             if not features.get("audio_input"):
-                print(f"⚠️ Model {model} does not support audio input parameter, ignoring")
+                print(
+                    f"⚠️ Model {model} does not support audio input parameter, ignoring"
+                )
             else:
                 if not is_url(audio):
                     audio = upload_audio(audio)
@@ -194,7 +194,7 @@ class FALImageToVideoGenerator:
                         return {
                             "success": False,
                             "error": "Failed to upload audio",
-                            "model": model
+                            "model": model,
                         }
                 kwargs["audio_url"] = audio
 
@@ -209,7 +209,7 @@ class FALImageToVideoGenerator:
                         return {
                             "success": False,
                             "error": "Failed to upload ref_video",
-                            "model": model
+                            "model": model,
                         }
                 kwargs["ref_video_url"] = ref_video
 
@@ -218,7 +218,7 @@ class FALImageToVideoGenerator:
             image_url=effective_image_url,
             output_dir=output_dir,
             use_async=use_async,
-            **kwargs
+            **kwargs,
         )
 
     def generate_video_from_local_image(
@@ -228,7 +228,7 @@ class FALImageToVideoGenerator:
         model: str = "hailuo",
         output_dir: Optional[str] = None,
         use_async: bool = False,
-        **kwargs
+        **kwargs,
     ) -> Dict[str, Any]:
         """
         Generate video from local image file.
@@ -250,7 +250,7 @@ class FALImageToVideoGenerator:
             return {
                 "success": False,
                 "error": f"Failed to upload image: {image_path}",
-                "model": model
+                "model": model,
             }
 
         return self.generate_video(
@@ -259,7 +259,7 @@ class FALImageToVideoGenerator:
             model=model,
             output_dir=output_dir,
             use_async=use_async,
-            **kwargs
+            **kwargs,
         )
 
     # Convenience methods for each model
@@ -269,7 +269,7 @@ class FALImageToVideoGenerator:
         image_url: str,
         duration: int = 4,
         resolution: str = "auto",
-        **kwargs
+        **kwargs,
     ) -> Dict[str, Any]:
         """Generate video using Sora 2."""
         return self.generate_video(
@@ -278,7 +278,7 @@ class FALImageToVideoGenerator:
             model="sora_2",
             duration=duration,
             resolution=resolution,
-            **kwargs
+            **kwargs,
         )
 
     def generate_with_sora_pro(
@@ -287,7 +287,7 @@ class FALImageToVideoGenerator:
         image_url: str,
         duration: int = 4,
         resolution: str = "1080p",
-        **kwargs
+        **kwargs,
     ) -> Dict[str, Any]:
         """Generate video using Sora 2 Pro."""
         return self.generate_video(
@@ -296,7 +296,7 @@ class FALImageToVideoGenerator:
             model="sora_2_pro",
             duration=duration,
             resolution=resolution,
-            **kwargs
+            **kwargs,
         )
 
     def generate_with_veo(
@@ -305,7 +305,7 @@ class FALImageToVideoGenerator:
         image_url: str,
         duration: str = "8s",
         generate_audio: bool = True,
-        **kwargs
+        **kwargs,
     ) -> Dict[str, Any]:
         """Generate video using Veo 3.1 Fast."""
         return self.generate_video(
@@ -314,7 +314,7 @@ class FALImageToVideoGenerator:
             model="veo_3_1_fast",
             duration=duration,
             generate_audio=generate_audio,
-            **kwargs
+            **kwargs,
         )
 
     def generate_with_seedance(
@@ -323,7 +323,7 @@ class FALImageToVideoGenerator:
         image_url: str,
         duration: str = "5",
         seed: Optional[int] = None,
-        **kwargs
+        **kwargs,
     ) -> Dict[str, Any]:
         """Generate video using ByteDance Seedance."""
         return self.generate_video(
@@ -332,7 +332,7 @@ class FALImageToVideoGenerator:
             model="seedance_1_5_pro",
             duration=duration,
             seed=seed,
-            **kwargs
+            **kwargs,
         )
 
     def generate_with_kling_pro(
@@ -341,7 +341,7 @@ class FALImageToVideoGenerator:
         image_url: str,
         duration: str = "5",
         negative_prompt: str = "blur, distort, and low quality",
-        **kwargs
+        **kwargs,
     ) -> Dict[str, Any]:
         """Generate video using Kling v2.6 Pro."""
         return self.generate_video(
@@ -350,7 +350,7 @@ class FALImageToVideoGenerator:
             model="kling_2_6_pro",
             duration=duration,
             negative_prompt=negative_prompt,
-            **kwargs
+            **kwargs,
         )
 
     def generate_with_hailuo(
@@ -359,7 +359,7 @@ class FALImageToVideoGenerator:
         image_url: str,
         duration: str = "6",
         prompt_optimizer: bool = True,
-        **kwargs
+        **kwargs,
     ) -> Dict[str, Any]:
         """Generate video using MiniMax Hailuo-02."""
         return self.generate_video(
@@ -368,7 +368,7 @@ class FALImageToVideoGenerator:
             model="hailuo",
             duration=duration,
             prompt_optimizer=prompt_optimizer,
-            **kwargs
+            **kwargs,
         )
 
     def generate_with_kling(
@@ -378,7 +378,7 @@ class FALImageToVideoGenerator:
         duration: str = "5",
         negative_prompt: str = "blur, distort, and low quality",
         cfg_scale: float = 0.5,
-        **kwargs
+        **kwargs,
     ) -> Dict[str, Any]:
         """Generate video using Kling v2.1."""
         return self.generate_video(
@@ -388,7 +388,7 @@ class FALImageToVideoGenerator:
             duration=duration,
             negative_prompt=negative_prompt,
             cfg_scale=cfg_scale,
-            **kwargs
+            **kwargs,
         )
 
     # Information methods
@@ -423,7 +423,7 @@ class FALImageToVideoGenerator:
                 "provider": info.get("provider", "Unknown"),
                 "price_per_second": model_obj.price_per_second,
                 "max_duration": info.get("max_duration", 10),
-                "features": info.get("features", [])
+                "features": info.get("features", []),
             }
         return comparison
 
@@ -435,7 +435,7 @@ class FALImageToVideoGenerator:
         end_frame: str,
         model: str = "kling_2_6_pro",
         duration: str = "5",
-        **kwargs
+        **kwargs,
     ) -> Dict[str, Any]:
         """
         Generate video interpolating between two frames.
@@ -455,8 +455,7 @@ class FALImageToVideoGenerator:
         """
         if model not in ["kling_2_1", "kling_2_6_pro"]:
             raise ValueError(
-                f"Frame interpolation only supported by Kling models. "
-                f"Got: {model}"
+                f"Frame interpolation only supported by Kling models. Got: {model}"
             )
 
         return self.generate_video(
@@ -466,7 +465,7 @@ class FALImageToVideoGenerator:
             start_frame=start_frame,
             end_frame=end_frame,
             duration=duration,
-            **kwargs
+            **kwargs,
         )
 
     def get_model_features(self, model: str) -> Dict[str, bool]:

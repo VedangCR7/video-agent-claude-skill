@@ -78,7 +78,9 @@ class KlingRefToVideoModel(BaseAvatarModel):
         # Validate duration (must be "5" or "10", and within max_duration)
         valid_durations = ["5", "10"]
         if duration not in valid_durations:
-            raise ValueError(f"duration must be one of {valid_durations}, got '{duration}'")
+            raise ValueError(
+                f"duration must be one of {valid_durations}, got '{duration}'"
+            )
         if int(duration) > self.max_duration:
             raise ValueError(f"duration {duration}s exceeds max {self.max_duration}s")
 
@@ -104,7 +106,9 @@ class KlingRefToVideoModel(BaseAvatarModel):
             if param in kwargs and kwargs[param] is not None:
                 value = kwargs[param]
                 if not isinstance(value, (int, float)):
-                    raise ValueError(f"{param} must be a number (milliseconds), got {type(value).__name__}")
+                    raise ValueError(
+                        f"{param} must be a number (milliseconds), got {type(value).__name__}"
+                    )
                 if value < 0:
                     raise ValueError(f"{param} must be non-negative, got {value}")
                 arguments[param] = value
@@ -254,7 +258,9 @@ class KlingV2VReferenceModel(BaseAvatarModel):
         # Validate duration (must be "5" or "10", and within max_duration)
         valid_durations = ["5", "10"]
         if duration not in valid_durations:
-            raise ValueError(f"duration must be one of {valid_durations}, got '{duration}'")
+            raise ValueError(
+                f"duration must be one of {valid_durations}, got '{duration}'"
+            )
         if int(duration) > self.max_duration:
             raise ValueError(f"duration {duration}s exceeds max {self.max_duration}s")
 
@@ -279,7 +285,9 @@ class KlingV2VReferenceModel(BaseAvatarModel):
             if param in kwargs and kwargs[param] is not None:
                 value = kwargs[param]
                 if not isinstance(value, (int, float)):
-                    raise ValueError(f"{param} must be a number (milliseconds), got {type(value).__name__}")
+                    raise ValueError(
+                        f"{param} must be a number (milliseconds), got {type(value).__name__}"
+                    )
                 if value < 0:
                     raise ValueError(f"{param} must be non-negative, got {value}")
                 arguments[param] = value
@@ -492,7 +500,11 @@ class KlingV2VEditModel(BaseAvatarModel):
             "max_duration": self.max_duration,
             "input_types": ["video", "prompt", "mask (optional)"],
             "description": "Targeted video modifications through natural language",
-            "best_for": ["background changes", "object removal", "lighting adjustments"],
+            "best_for": [
+                "background changes",
+                "object removal",
+                "lighting adjustments",
+            ],
         }
 
 
@@ -557,11 +569,15 @@ class KlingMotionControlModel(BaseAvatarModel):
         self._validate_url(video_url, "video_url")
 
         # Apply defaults
-        character_orientation = character_orientation or self.defaults["character_orientation"]
+        character_orientation = (
+            character_orientation or self.defaults["character_orientation"]
+        )
         if keep_original_sound is None:
             keep_original_sound = self.defaults["keep_original_sound"]
         elif not isinstance(keep_original_sound, bool):
-            raise TypeError(f"keep_original_sound must be a boolean, got: {type(keep_original_sound).__name__}")
+            raise TypeError(
+                f"keep_original_sound must be a boolean, got: {type(keep_original_sound).__name__}"
+            )
 
         # Validate character_orientation
         valid_orientations = ["video", "image"]
@@ -639,7 +655,9 @@ class KlingMotionControlModel(BaseAvatarModel):
                 success=True,
                 video_url=result["video"]["url"],
                 duration=video_duration,
-                cost=self.estimate_cost(video_duration, character_orientation=orientation),
+                cost=self.estimate_cost(
+                    video_duration, character_orientation=orientation
+                ),
                 processing_time=response.get("processing_time"),
                 model_used=self.model_name,
                 metadata={
@@ -684,6 +702,11 @@ class KlingMotionControlModel(BaseAvatarModel):
             "orientation_options": ["video", "image"],
             "input_types": ["image", "video"],
             "description": "Motion transfer from reference video to reference image",
-            "best_for": ["dance videos", "action sequences", "character animation", "motion transfer"],
+            "best_for": [
+                "dance videos",
+                "action sequences",
+                "character animation",
+                "motion transfer",
+            ],
             "commercial_use": True,
         }

@@ -12,8 +12,9 @@ except ImportError:
     # Fallback for direct execution
     import sys
     import os
+
     sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    from models.common import VoiceInfo, POPULAR_VOICE_IDS
+    from models.common import VoiceInfo
 
 
 # Popular voice configurations with detailed information
@@ -24,7 +25,7 @@ POPULAR_VOICES = {
         category="premade",
         description="Versatile, clear female voice",
         language="en",
-        gender="female"
+        gender="female",
     ),
     "drew": VoiceInfo(
         voice_id="29vD33N1CtxCmqQRPOHJ",
@@ -32,7 +33,7 @@ POPULAR_VOICES = {
         category="premade",
         description="Warm, professional male voice",
         language="en",
-        gender="male"
+        gender="male",
     ),
     "clyde": VoiceInfo(
         voice_id="2EiwWnXFnvU5JabPnv8n",
@@ -40,7 +41,7 @@ POPULAR_VOICES = {
         category="premade",
         description="Mature, distinguished male voice",
         language="en",
-        gender="male"
+        gender="male",
     ),
     "bella": VoiceInfo(
         voice_id="EXAVITQu4vr4xnSDxMaL",
@@ -48,7 +49,7 @@ POPULAR_VOICES = {
         category="premade",
         description="Friendly, expressive female voice",
         language="en",
-        gender="female"
+        gender="female",
     ),
     "antoni": VoiceInfo(
         voice_id="ErXwobaYiN019PkySvjV",
@@ -56,7 +57,7 @@ POPULAR_VOICES = {
         category="premade",
         description="Deep, authoritative male voice",
         language="en",
-        gender="male"
+        gender="male",
     ),
     "elli": VoiceInfo(
         voice_id="MF3mGyEYCl7XYWbV9V6O",
@@ -64,7 +65,7 @@ POPULAR_VOICES = {
         category="premade",
         description="Young, energetic female voice",
         language="en",
-        gender="female"
+        gender="female",
     ),
     "josh": VoiceInfo(
         voice_id="TxGEqnHWrfWFTfGW9XjX",
@@ -72,7 +73,7 @@ POPULAR_VOICES = {
         category="premade",
         description="Casual, conversational male voice",
         language="en",
-        gender="male"
+        gender="male",
     ),
     "arnold": VoiceInfo(
         voice_id="VR6AewLTigWG4xSOukaG",
@@ -80,7 +81,7 @@ POPULAR_VOICES = {
         category="premade",
         description="Strong, confident male voice",
         language="en",
-        gender="male"
+        gender="male",
     ),
     "adam": VoiceInfo(
         voice_id="pNInz6obpgDQGcFmaJgB",
@@ -88,7 +89,7 @@ POPULAR_VOICES = {
         category="premade",
         description="Neutral, reliable male voice",
         language="en",
-        gender="male"
+        gender="male",
     ),
     "sam": VoiceInfo(
         voice_id="yoZ06aMxZJJ28mfd3POQ",
@@ -96,8 +97,8 @@ POPULAR_VOICES = {
         category="premade",
         description="Smooth, professional male voice",
         language="en",
-        gender="male"
-    )
+        gender="male",
+    ),
 }
 
 
@@ -106,38 +107,38 @@ VOICE_STYLE_PRESETS = {
     "professional": {
         "primary": "rachel",
         "secondary": "drew",
-        "description": "Business, formal tone"
+        "description": "Business, formal tone",
     },
     "casual": {
         "primary": "bella",
         "secondary": "antoni",
-        "description": "Friendly, relaxed conversation"
+        "description": "Friendly, relaxed conversation",
     },
     "dramatic": {
         "primary": "elli",
         "secondary": "josh",
-        "description": "Expressive, theatrical delivery"
+        "description": "Expressive, theatrical delivery",
     },
     "authoritative": {
         "primary": "arnold",
         "secondary": "clyde",
-        "description": "Strong, commanding presence"
+        "description": "Strong, commanding presence",
     },
     "conversational": {
         "primary": "sam",
         "secondary": "adam",
-        "description": "Natural, everyday speech"
-    }
+        "description": "Natural, everyday speech",
+    },
 }
 
 
 def get_voice_preset(voice_name: str) -> Optional[VoiceInfo]:
     """
     Get voice information for a popular voice preset.
-    
+
     Args:
         voice_name: Name of the voice preset
-        
+
     Returns:
         VoiceInfo object if found, None otherwise
     """
@@ -147,10 +148,10 @@ def get_voice_preset(voice_name: str) -> Optional[VoiceInfo]:
 def get_voice_id(voice_name: str) -> Optional[str]:
     """
     Get voice ID for a popular voice preset.
-    
+
     Args:
         voice_name: Name of the voice preset
-        
+
     Returns:
         Voice ID string if found, None otherwise
     """
@@ -161,23 +162,25 @@ def get_voice_id(voice_name: str) -> Optional[str]:
 def get_voices_by_gender(gender: str) -> List[VoiceInfo]:
     """
     Get all voices of a specific gender.
-    
+
     Args:
         gender: Gender filter ("male", "female", "neutral")
-        
+
     Returns:
         List of VoiceInfo objects matching the gender
     """
-    return [voice for voice in POPULAR_VOICES.values() if voice.gender == gender.lower()]
+    return [
+        voice for voice in POPULAR_VOICES.values() if voice.gender == gender.lower()
+    ]
 
 
 def get_voice_style_preset(style: str) -> Optional[Dict[str, str]]:
     """
     Get voice style preset configuration.
-    
+
     Args:
         style: Style name ("professional", "casual", "dramatic", etc.)
-        
+
     Returns:
         Style configuration dictionary if found, None otherwise
     """
@@ -187,7 +190,7 @@ def get_voice_style_preset(style: str) -> Optional[Dict[str, str]]:
 def list_available_voices() -> List[str]:
     """
     Get list of all available voice preset names.
-    
+
     Returns:
         List of voice preset names
     """
@@ -197,7 +200,7 @@ def list_available_voices() -> List[str]:
 def list_voice_styles() -> List[str]:
     """
     Get list of all available voice style presets.
-    
+
     Returns:
         List of voice style names
     """

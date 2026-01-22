@@ -1,6 +1,6 @@
 """Unified FAL Speech-to-Text Generator - Routes to appropriate model implementations."""
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from .models import (
     BaseSpeechToTextModel,
