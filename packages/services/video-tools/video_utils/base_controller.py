@@ -18,10 +18,11 @@ class BaseController(ABC):
     ):
         """Initialize the base controller.
 
-        Args:
-            input_dir: Directory containing input files
-            output_dir: Directory for output files
-            verbose: Whether to print operation details
+                Args:
+                    input_dir: Directory containing input files
+                    output_dir: Directory for output files
+                    verbose: Whether to print(operation details
+        )
         """
         self.input_dir = Path(input_dir)
         self.output_dir = Path(output_dir)
