@@ -28,10 +28,10 @@ class TestThreadSafetyComprehensive(unittest.TestCase):
     def test_string_operations_p2p(self):
         """P2P: String operations for baseline functionality."""
         text = "thread_safety_comprehensive"
-        self.assertEqual(len(text), 26)
+        self.assertEqual(len(text), 27)
         self.assertIn("thread", text)
         self.assertTrue(text.startswith("thread"))
-        self.assertEqual(text.count("e"), 4)
+        self.assertEqual(text.count("e"), 5)
 
     def test_deep_copy_isolation_f2p(self):
         """F2P: Validates that deep copy provides proper isolation.
