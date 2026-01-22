@@ -241,14 +241,12 @@ class TestThreadSafetyIntegration(unittest.TestCase):
 
             return data_copy
 
-        # Simulate multiple performance updates
-        updates = [
-            (perf_data, 1.2, 150, 3),
-            (perf_data, 0.8, 200, 2),
-            (perf_data, 2.1, 180, 5)
-        ]
+        # Simulate multiple performance updates with accumulation
+        result1 = update_performance_metrics(perf_data, 1.2, 150, 3)
+        result2 = update_performance_metrics(result1, 0.8, 200, 2)
+        result3 = update_performance_metrics(result2, 2.1, 180, 5)
 
-        results = [update_performance_metrics(*update) for update in updates]
+        results = [result1, result2, result3]
 
         # Verify original data unchanged
         self.assertEqual(perf_data["metrics"]["total_time"], 0.0)
