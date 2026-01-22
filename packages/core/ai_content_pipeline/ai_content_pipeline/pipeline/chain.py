@@ -1,5 +1,8 @@
 """
 Content creation chain classes for AI Content Pipeline
+
+Provides the core data structures and execution logic for AI content pipelines.
+Enhanced for better parallel execution support and improved error handling.
 """
 
 from dataclasses import dataclass
