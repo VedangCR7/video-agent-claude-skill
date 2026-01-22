@@ -13,24 +13,24 @@ Example:
 """
 
 # Re-export all commands for backwards compatibility
-from .ai_commands import (
-    # Video commands
-    cmd_analyze_videos,
-    cmd_transcribe_videos,
-    cmd_describe_videos,
-    cmd_describe_videos_with_params,
-    cmd_transcribe_videos_with_params,
-    # Audio commands
-    cmd_analyze_audio,
-    cmd_transcribe_audio,
-    cmd_describe_audio,
-    cmd_analyze_audio_with_params,
-    # Image commands
-    cmd_analyze_images,
-    cmd_describe_images,
-    cmd_extract_text,
-    cmd_analyze_images_with_params,
-)
+# from .ai_commands import (
+# Video commands
+# cmd_analyze_videos,
+# cmd_transcribe_videos,
+# cmd_describe_videos,
+# cmd_describe_videos_with_params,
+# cmd_transcribe_videos_with_params,
+# Audio commands
+# cmd_analyze_audio,
+# cmd_transcribe_audio,
+# cmd_describe_audio,
+# cmd_analyze_audio_with_params,
+# Image commands
+# cmd_analyze_images,
+# cmd_describe_images,
+# cmd_extract_text,
+# cmd_analyze_images_with_params,
+# )
 
 __all__ = [
     "cmd_analyze_videos",
