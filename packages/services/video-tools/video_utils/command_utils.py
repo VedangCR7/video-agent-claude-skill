@@ -10,17 +10,17 @@ from typing import Optional, Tuple, List, Callable, Dict, Any, TypeVar
 from dataclasses import dataclass
 
 from .gemini_analyzer import check_gemini_requirements
-from .ai_utils import save_analysis_result
-from .file_utils import find_video_files, find_audio_files, find_image_files
 
 
 # ============================================================================
 # Data Classes
 # ============================================================================
 
+
 @dataclass
 class AnalysisConfig:
     """Configuration for an analysis operation."""
+
     analysis_type: str
     detailed: bool = False
     include_timestamps: bool = True
@@ -31,6 +31,7 @@ class AnalysisConfig:
 @dataclass
 class PathConfig:
     """Resolved input/output paths."""
+
     input_dir: Path
     output_dir: Path
     output_file: Optional[Path]
@@ -40,6 +41,7 @@ class PathConfig:
 # ============================================================================
 # Gemini Setup Utilities
 # ============================================================================
+
 
 def check_and_report_gemini_status() -> bool:
     """
@@ -69,12 +71,13 @@ def check_and_report_gemini_status() -> bool:
 # Path Resolution Utilities
 # ============================================================================
 
+
 def setup_paths(
     input_path: Optional[str],
     output_path: Optional[str],
     file_finder: Callable[[Path], List[Path]],
     media_type: str,
-    supported_extensions: set
+    supported_extensions: set,
 ) -> Optional[PathConfig]:
     """
     Set up and validate input/output paths, find media files.
@@ -99,7 +102,9 @@ def setup_paths(
         if input_path_obj.is_file():
             if input_path_obj.suffix.lower() not in supported_extensions:
                 print(f"❌ File is not a supported {media_type} format: {input_path}")
-                print(f"💡 Supported formats: {', '.join(sorted(supported_extensions))}")
+                print(
+                    f"💡 Supported formats: {', '.join(sorted(supported_extensions))}"
+                )
                 return None
             files = [input_path_obj]
             input_dir = input_path_obj.parent
@@ -107,10 +112,12 @@ def setup_paths(
             input_dir = input_path_obj
             files = file_finder(input_dir)
     else:
-        input_dir = Path('input')
+        input_dir = Path("input")
         if not input_dir.exists():
             print("📁 Input directory 'input' not found")
-            print(f"💡 Create an 'input' directory and place your {media_type} files there")
+            print(
+                f"💡 Create an 'input' directory and place your {media_type} files there"
+            )
             return None
         files = file_finder(input_dir)
 
@@ -123,9 +130,7 @@ def setup_paths(
         output_path_obj = Path(output_path)
         # Treat as file output only if: single file, has suffix, and path doesn't exist as directory
         is_file_output = (
-            len(files) == 1
-            and output_path_obj.suffix
-            and not output_path_obj.is_dir()
+            len(files) == 1 and output_path_obj.suffix and not output_path_obj.is_dir()
         )
         if is_file_output:
             # Single file with specific output file
@@ -137,15 +142,12 @@ def setup_paths(
             output_file = None
         output_dir.mkdir(parents=True, exist_ok=True)
     else:
-        output_dir = Path('output')
+        output_dir = Path("output")
         output_dir.mkdir(exist_ok=True)
         output_file = None
 
     return PathConfig(
-        input_dir=input_dir,
-        output_dir=output_dir,
-        output_file=output_file,
-        files=files
+        input_dir=input_dir, output_dir=output_dir, output_file=output_file, files=files
     )
 
 
@@ -153,9 +155,9 @@ def setup_paths(
 # Analysis Type Selection
 # ============================================================================
 
+
 def select_analysis_type(
-    analysis_types: Dict[str, Tuple[str, str]],
-    default_key: str = '1'
+    analysis_types: Dict[str, Tuple[str, str]], default_key: str = "1"
 ) -> Optional[str]:
     """
     Display analysis type menu and get user selection.
@@ -207,17 +209,17 @@ def get_analysis_options(analysis_type: str) -> Optional[AnalysisConfig]:
     config = AnalysisConfig(analysis_type=analysis_type)
 
     try:
-        if analysis_type in ['description', 'objects']:
+        if analysis_type in ["description", "objects"]:
             detailed = input("📖 Detailed analysis? (y/N): ").strip().lower()
-            config.detailed = (detailed == 'y')
+            config.detailed = detailed == "y"
 
-        elif analysis_type == 'transcription':
+        elif analysis_type == "transcription":
             timestamps = input("⏰ Include timestamps? (Y/n): ").strip().lower()
-            config.include_timestamps = (timestamps != 'n')
+            config.include_timestamps = timestamps != "n"
             speaker = input("👥 Speaker identification? (Y/n): ").strip().lower()
-            config.speaker_identification = (speaker != 'n')
+            config.speaker_identification = speaker != "n"
 
-        elif analysis_type == 'qa':
+        elif analysis_type == "qa":
             print("\n❓ Enter questions (one per line, empty line to finish):")
             questions = []
             while True:
@@ -242,24 +244,22 @@ def get_analysis_options(analysis_type: str) -> Optional[AnalysisConfig]:
 
 # Mapping of analysis types to their result keys
 RESULT_KEY_MAP = {
-    'description': 'description',
-    'transcription': 'transcription',
-    'scenes': 'scene_analysis',
-    'extraction': 'key_info',
-    'qa': 'answers',
-    'content_analysis': 'analysis',
-    'events': 'events',
-    'classification': 'classification',
-    'objects': 'objects',
-    'text': 'extracted_text',
-    'composition': 'composition_analysis',
+    "description": "description",
+    "transcription": "transcription",
+    "scenes": "scene_analysis",
+    "extraction": "key_info",
+    "qa": "answers",
+    "content_analysis": "analysis",
+    "events": "events",
+    "classification": "classification",
+    "objects": "objects",
+    "text": "extracted_text",
+    "composition": "composition_analysis",
 }
 
 
 def show_result_preview(
-    result: Dict[str, Any],
-    analysis_type: str,
-    max_length: int = 200
+    result: Dict[str, Any], analysis_type: str, max_length: int = 200
 ) -> None:
     """
     Display a truncated preview of the analysis result.
@@ -283,9 +283,7 @@ def show_result_preview(
 
 
 def print_results_summary(
-    successful: int,
-    failed: int,
-    output_dir: Optional[Path] = None
+    successful: int, failed: int, output_dir: Optional[Path] = None
 ) -> None:
     """Print analysis results summary."""
     print(f"\n📊 Results: {successful} successful | {failed} failed")
@@ -300,7 +298,7 @@ def print_results_summary(
 # File Processing Loop
 # ============================================================================
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 def process_files_with_progress(
@@ -310,7 +308,7 @@ def process_files_with_progress(
     output_dir: Path,
     output_suffix: str,
     media_emoji: str = "📄",
-    analysis_type: str = "analysis"
+    analysis_type: str = "analysis",
 ) -> Tuple[int, int]:
     """
     Process multiple files with progress reporting.

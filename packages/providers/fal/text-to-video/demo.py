@@ -10,6 +10,7 @@ import sys
 import time
 from pathlib import Path
 
+
 def show_welcome():
     """Display welcome message and model information."""
     print("🎬 FAL Text-to-Video Interactive Demo")
@@ -20,6 +21,7 @@ def show_welcome():
     print("💰 Cost: ~$0.08 per video")
     print("✅ Commercial use allowed")
     print("=" * 50)
+
 
 def show_menu():
     """Display main menu options."""
@@ -32,67 +34,73 @@ def show_menu():
     print("6. ❓ Help")
     print("7. 🚪 Exit")
 
+
 def test_setup():
     """Run setup test without costs."""
     print("\n🧪 Running setup test (FREE)...")
     try:
         from test_setup import main as test_setup_main
+
         return test_setup_main()
     except ImportError:
         print("❌ test_setup.py not found")
         return False
 
+
 def generate_single_video():
     """Generate a single video with user input."""
     print("\n🎬 Single Video Generation")
     print("💰 Cost: ~$0.08")
-    
+
     # Get user confirmation
     confirm = input("Proceed with paid generation? (yes/no): ").strip().lower()
-    if confirm not in ['yes', 'y']:
+    if confirm not in ["yes", "y"]:
         print("❌ Generation cancelled")
         return False
-    
+
     # Get prompt from user
     print("\n📝 Enter your video description:")
     prompt = input("Prompt: ").strip()
-    
+
     if not prompt:
         print("❌ Empty prompt - generation cancelled")
         return False
-    
+
     # Optional custom filename
-    custom_name = input("Custom filename (optional, press Enter to auto-generate): ").strip()
-    
+    custom_name = input(
+        "Custom filename (optional, press Enter to auto-generate): "
+    ).strip()
+
     try:
         from fal_text_to_video_generator import FALTextToVideoGenerator
-        
+
         generator = FALTextToVideoGenerator(verbose=True)
-        
-        print(f"\n🔄 Generating video...")
+
+        print("\n🔄 Generating video...")
         result = generator.generate_video(
             prompt=prompt,
             prompt_optimizer=True,
-            output_filename=custom_name if custom_name else None
+            output_filename=custom_name if custom_name else None,
         )
-        
-        if result['success']:
-            print(f"\n✅ Video generated successfully!")
+
+        if result["success"]:
+            print("\n✅ Video generated successfully!")
             print(f"📁 Saved to: {result['local_path']}")
             print(f"🔗 Original URL: {result['video_url']}")
             return True
         else:
             print(f"\n❌ Generation failed: {result['error']}")
             return False
-            
+
     except Exception as e:
         print(f"\n❌ Error: {e}")
         return False
 
+
 def generate_batch_videos():
     """Generate multiple videos with user input."""
     print("\n📚 Batch Video Generation")
-    
+
     # Get number of videos
     try:
         num_videos = int(input("How many videos to generate? "))
@@ -102,86 +110,95 @@ def generate_batch_videos():
     except ValueError:
         print("❌ Invalid number")
         return False
-    
+
     cost = num_videos * 0.08
     print(f"💰 Estimated cost: ~${cost:.2f}")
-    
+
     # Get user confirmation
-    confirm = input(f"Proceed with generating {num_videos} videos? (yes/no): ").strip().lower()
-    if confirm not in ['yes', 'y']:
+    confirm = (
+        input(f"Proceed with generating {num_videos} videos? (yes/no): ")
+        .strip()
+        .lower()
+    )
+    if confirm not in ["yes", "y"]:
         print("❌ Batch generation cancelled")
         return False
-    
+
     # Get prompts
     prompts = []
     print(f"\n📝 Enter {num_videos} video descriptions:")
     for i in range(num_videos):
-        prompt = input(f"Video {i+1}: ").strip()
+        prompt = input(f"Video {i + 1}: ").strip()
         if not prompt:
-            print(f"❌ Empty prompt for video {i+1} - skipping")
+            print(f"❌ Empty prompt for video {i + 1} - skipping")
             continue
         prompts.append(prompt)
-    
+
     if not prompts:
         print("❌ No valid prompts - batch cancelled")
         return False
-    
+
     try:
         from fal_text_to_video_generator import FALTextToVideoGenerator
-        
+
         generator = FALTextToVideoGenerator(verbose=True)
-        
+
         print(f"\n🔄 Generating {len(prompts)} videos...")
         results = generator.generate_batch(prompts=prompts)
-        
-        successful = sum(1 for r in results.values() if r['success'])
+
+        successful = sum(1 for r in results.values() if r["success"])
         print(f"\n📊 Batch Results: {successful}/{len(prompts)} successful")
-        
+
         for prompt, result in results.items():
-            if result['success']:
+            if result["success"]:
                 print(f"✅ {prompt[:40]}... → {result['filename']}")
             else:
                 print(f"❌ {prompt[:40]}... → {result['error']}")
-        
+
         return successful > 0
-        
+
     except Exception as e:
         print(f"\n❌ Error: {e}")
         return False
+
 
 def show_model_info():
     """Display detailed model information."""
     try:
         from fal_text_to_video_generator import FALTextToVideoGenerator
-        
+
         generator = FALTextToVideoGenerator(api_key="dummy", verbose=False)
         generator.print_model_info()
-        
+
     except Exception as e:
         print(f"❌ Error displaying model info: {e}")
+
 
 def list_generated_videos():
     """List all generated videos in output directory."""
     print("\n📁 Generated Videos:")
-    
+
     output_dir = Path("output")
     if not output_dir.exists():
         print("No output directory found")
         return
-    
+
     video_files = list(output_dir.glob("*.mp4"))
-    
+
     if not video_files:
         print("No videos found in output directory")
         return
-    
+
     print(f"Found {len(video_files)} video(s):")
-    
-    for video_file in sorted(video_files, key=lambda x: x.stat().st_mtime, reverse=True):
+
+    for video_file in sorted(
+        video_files, key=lambda x: x.stat().st_mtime, reverse=True
+    ):
         file_size = video_file.stat().st_size / (1024 * 1024)  # MB
         mod_time = time.ctime(video_file.stat().st_mtime)
         print(f"  📹 {video_file.name}")
         print(f"     Size: {file_size:.1f} MB | Modified: {mod_time}")
+
 
 def show_help():
     """Display help information."""
@@ -212,33 +229,35 @@ def show_help():
     print("  • Check internet connection")
     print("  • Videos are saved to output/ directory")
 
+
 def main():
     """Main interactive loop."""
     show_welcome()
-    
+
     while True:
         show_menu()
         choice = input("\nEnter your choice (1-7): ").strip()
-        
-        if choice == '1':
+
+        if choice == "1":
             test_setup()
-        elif choice == '2':
+        elif choice == "2":
             generate_single_video()
-        elif choice == '3':
+        elif choice == "3":
             generate_batch_videos()
-        elif choice == '4':
+        elif choice == "4":
             show_model_info()
-        elif choice == '5':
+        elif choice == "5":
             list_generated_videos()
-        elif choice == '6':
+        elif choice == "6":
             show_help()
-        elif choice == '7':
+        elif choice == "7":
             print("\n👋 Thank you for using FAL Text-to-Video Generator!")
             break
         else:
             print("❌ Invalid choice. Please enter 1-7.")
-        
+
         input("\nPress Enter to continue...")
+
 
 if __name__ == "__main__":
     try:

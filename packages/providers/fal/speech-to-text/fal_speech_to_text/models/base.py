@@ -9,6 +9,7 @@ import os
 # Try to import fal_client, gracefully handle if not available
 try:
     import fal_client
+
     FAL_AVAILABLE = True
 except ImportError:
     FAL_AVAILABLE = False
@@ -17,9 +18,10 @@ except ImportError:
 @dataclass
 class WordTimestamp:
     """Word-level timestamp information."""
+
     word: str
     start: float  # Start time in seconds
-    end: float    # End time in seconds
+    end: float  # End time in seconds
     speaker: Optional[str] = None  # Speaker ID if diarization enabled
     confidence: Optional[float] = None
 
@@ -27,9 +29,10 @@ class WordTimestamp:
 @dataclass
 class AudioEvent:
     """Audio event annotation."""
+
     event_type: str  # "laughter", "applause", "music", etc.
-    start: float     # Start time in seconds
-    end: float       # End time in seconds
+    start: float  # Start time in seconds
+    end: float  # End time in seconds
 
 
 @dataclass

@@ -7,12 +7,14 @@ import sys
 import os
 
 # Add parent directory to path for imports
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from fal_text_to_video.models.kling import Kling26ProModel
 from fal_text_to_video.models.sora import Sora2Model, Sora2ProModel
 from fal_text_to_video.config.constants import (
-    SUPPORTED_MODELS, MODEL_ENDPOINTS, MODEL_PRICING
+    SUPPORTED_MODELS,
+    MODEL_ENDPOINTS,
+    MODEL_PRICING,
 )
 
 
@@ -39,10 +41,7 @@ class TestKling26ProModel:
         """Test parameter validation with custom values."""
         model = Kling26ProModel()
         params = model.validate_parameters(
-            duration="10",
-            aspect_ratio="9:16",
-            cfg_scale=0.7,
-            generate_audio=False
+            duration="10", aspect_ratio="9:16", cfg_scale=0.7, generate_audio=False
         )
 
         assert params["duration"] == "10"
@@ -66,19 +65,25 @@ class TestKling26ProModel:
         """Test cost estimation."""
         model = Kling26ProModel()
         # With audio (default)
-        assert model.estimate_cost(duration="5", generate_audio=True) == pytest.approx(0.70)
-        assert model.estimate_cost(duration="10", generate_audio=True) == pytest.approx(1.40)
+        assert model.estimate_cost(duration="5", generate_audio=True) == pytest.approx(
+            0.70
+        )
+        assert model.estimate_cost(duration="10", generate_audio=True) == pytest.approx(
+            1.40
+        )
         # Without audio
-        assert model.estimate_cost(duration="5", generate_audio=False) == pytest.approx(0.35)
-        assert model.estimate_cost(duration="10", generate_audio=False) == pytest.approx(0.70)
+        assert model.estimate_cost(duration="5", generate_audio=False) == pytest.approx(
+            0.35
+        )
+        assert model.estimate_cost(
+            duration="10", generate_audio=False
+        ) == pytest.approx(0.70)
 
     def test_prepare_arguments(self):
         """Test argument preparation."""
         model = Kling26ProModel()
         args = model.prepare_arguments(
-            prompt="A beautiful sunset",
-            duration="5",
-            aspect_ratio="16:9"
+            prompt="A beautiful sunset", duration="5", aspect_ratio="16:9"
         )
         assert args["prompt"] == "A beautiful sunset"
         assert args["duration"] == "5"
@@ -119,9 +124,7 @@ class TestSora2Model:
         """Test argument preparation."""
         model = Sora2Model()
         args = model.prepare_arguments(
-            prompt="A cinematic scene",
-            duration=8,
-            aspect_ratio="9:16"
+            prompt="A cinematic scene", duration=8, aspect_ratio="9:16"
         )
         assert args["prompt"] == "A cinematic scene"
         assert args["duration"] == 8
@@ -148,15 +151,15 @@ class TestSora2ProModel:
         # 720p pricing
         assert model.estimate_cost(duration=4, resolution="720p") == pytest.approx(1.20)
         # 1080p pricing
-        assert model.estimate_cost(duration=4, resolution="1080p") == pytest.approx(2.00)
+        assert model.estimate_cost(duration=4, resolution="1080p") == pytest.approx(
+            2.00
+        )
 
     def test_prepare_arguments(self):
         """Test argument preparation."""
         model = Sora2ProModel()
         args = model.prepare_arguments(
-            prompt="Professional footage",
-            duration=4,
-            resolution="1080p"
+            prompt="Professional footage", duration=4, resolution="1080p"
         )
         assert args["prompt"] == "Professional footage"
         assert args["resolution"] == "1080p"
@@ -178,8 +181,12 @@ class TestConstants:
     def test_supported_models_count(self):
         """Verify expected supported models are present."""
         expected_models = {
-            "hailuo_pro", "veo3", "veo3_fast",
-            "kling_2_6_pro", "sora_2", "sora_2_pro"
+            "hailuo_pro",
+            "veo3",
+            "veo3_fast",
+            "kling_2_6_pro",
+            "sora_2",
+            "sora_2_pro",
         }
         assert set(SUPPORTED_MODELS) == expected_models
 

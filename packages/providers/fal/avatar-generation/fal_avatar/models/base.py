@@ -9,6 +9,7 @@ import os
 # Try to import fal_client, gracefully handle if not available
 try:
     import fal_client
+
     FAL_AVAILABLE = True
 except ImportError:
     FAL_AVAILABLE = False
@@ -196,7 +197,10 @@ class BaseAvatarModel(ABC):
         Raises:
             ValueError: If aspect ratio not supported
         """
-        if self.supported_aspect_ratios and aspect_ratio not in self.supported_aspect_ratios:
+        if (
+            self.supported_aspect_ratios
+            and aspect_ratio not in self.supported_aspect_ratios
+        ):
             raise ValueError(
                 f"Unsupported aspect ratio '{aspect_ratio}'. "
                 f"Supported: {self.supported_aspect_ratios}"
@@ -219,7 +223,9 @@ class BaseAvatarModel(ABC):
         import math
 
         if not isinstance(duration, (int, float)):
-            raise ValueError(f"Duration must be a number, got {type(duration).__name__}")
+            raise ValueError(
+                f"Duration must be a number, got {type(duration).__name__}"
+            )
         if math.isnan(duration) or math.isinf(duration):
             raise ValueError(f"Duration must be finite, got {duration}")
         if duration <= 0:

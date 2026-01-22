@@ -7,6 +7,7 @@ from pydantic import BaseModel, Field
 
 class StepType(str, Enum):
     """Available step types in the pipeline."""
+
     TEXT_TO_SPEECH = "text_to_speech"
     TEXT_TO_IMAGE = "text_to_image"
     IMAGE_TO_IMAGE = "image_to_image"
@@ -20,6 +21,7 @@ class StepType(str, Enum):
 
 class MergeStrategy(str, Enum):
     """Merge strategies for parallel execution."""
+
     COLLECT_ALL = "collect_all"
     FIRST_SUCCESS = "first_success"
     BEST_QUALITY = "best_quality"
@@ -27,6 +29,7 @@ class MergeStrategy(str, Enum):
 
 class StepConfig(BaseModel):
     """Configuration for a single pipeline step."""
+
     step_type: StepType
     config: Dict[str, Any] = Field(default_factory=dict)
     output_filename: Optional[str] = None
@@ -37,6 +40,7 @@ class StepConfig(BaseModel):
 
 class ParallelConfig(BaseModel):
     """Configuration for parallel execution."""
+
     merge_strategy: MergeStrategy = MergeStrategy.COLLECT_ALL
     max_workers: Optional[int] = None
     timeout: Optional[int] = None
@@ -44,6 +48,7 @@ class ParallelConfig(BaseModel):
 
 class ParallelStepConfig(BaseModel):
     """Configuration for parallel step group."""
+
     step_type: StepType = StepType.PARALLEL_GROUP
     parallel_config: ParallelConfig
     steps: List[StepConfig]
@@ -52,6 +57,7 @@ class ParallelStepConfig(BaseModel):
 
 class PipelineConfig(BaseModel):
     """Main pipeline configuration."""
+
     pipeline_name: str
     description: Optional[str] = None
     output_directory: str = "output"
@@ -61,6 +67,7 @@ class PipelineConfig(BaseModel):
 
 class StepResult(BaseModel):
     """Result of a pipeline step execution."""
+
     step_id: str
     step_type: StepType
     success: bool
@@ -73,6 +80,7 @@ class StepResult(BaseModel):
 
 class PipelineResult(BaseModel):
     """Result of pipeline execution."""
+
     pipeline_name: str
     success: bool
     total_steps: int

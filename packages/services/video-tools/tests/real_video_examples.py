@@ -16,19 +16,20 @@ Author: AI Assistant
 import os
 import sys
 from pathlib import Path
-from typing import List, Optional
 
 # Add video_tools directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+
 def setup_environment():
     """Setup and verify environment for Gemini API."""
     print("🔧 Setting up environment...")
-    
+
     # Load environment variables
     try:
         from dotenv import load_dotenv
-        env_file = Path(__file__).parent.parent / '.env'
+
+        env_file = Path(__file__).parent.parent / ".env"
         if env_file.exists():
             load_dotenv(env_file)
             print("✅ .env file loaded")
@@ -36,9 +37,9 @@ def setup_environment():
             print("⚠️  .env file not found")
     except ImportError:
         print("⚠️  python-dotenv not installed")
-    
+
     # Check API key
-    api_key = os.getenv('GEMINI_API_KEY')
+    api_key = os.getenv("GEMINI_API_KEY")
     if api_key:
         print(f"✅ GEMINI_API_KEY found: {api_key[:10]}...{api_key[-4:]}")
         return True
@@ -48,17 +49,18 @@ def setup_environment():
         print("   GEMINI_API_KEY=your_actual_api_key_here")
         return False
 
+
 def example_1_basic_video_description():
     """Example 1: Basic video description"""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("📹 EXAMPLE 1: Basic Video Description")
-    print("="*60)
-    
+    print("=" * 60)
+
     print("Command Line Usage:")
     print("cd /path/to/your/videos")
     print("python ../video_audio_utils.py describe-videos")
     print("# Choose 'N' for basic description")
-    
+
     print("\nPython Function Usage:")
     print("""
 from video_utils import GeminiVideoAnalyzer
@@ -77,38 +79,44 @@ if result:
     print("File ID:", result['file_id'])
     print("Duration:", result.get('duration'))
 """)
-    
+
     # Live example if video exists
-    video_path = Path(__file__).parent.parent / 'input/sample_video.mp4'
+    video_path = Path(__file__).parent.parent / "input/sample_video.mp4"
     if video_path.exists():
         print(f"\n🎬 Live Example with {video_path}:")
         try:
             from video_utils import GeminiVideoAnalyzer
+
             analyzer = GeminiVideoAnalyzer()
             result = analyzer.describe_video(video_path, detailed=False)
             if result:
-                preview = result['description'][:150] + "..." if len(result['description']) > 150 else result['description']
+                preview = (
+                    result["description"][:150] + "..."
+                    if len(result["description"]) > 150
+                    else result["description"]
+                )
                 print(f"✅ Result: {preview}")
         except Exception as e:
             print(f"❌ Error: {e}")
     else:
         print(f"\n⚠️  Sample video not found at {video_path}")
 
+
 def example_2_detailed_video_analysis():
     """Example 2: Detailed video analysis with multiple options"""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("🎯 EXAMPLE 2: Comprehensive Video Analysis")
-    print("="*60)
-    
+    print("=" * 60)
+
     print("Command Line Usage:")
     print("python ../video_audio_utils.py analyze-videos")
     print("# Choose option 1-5:")
     print("# 1. Video Description (detailed)")
-    print("# 2. Audio Transcription") 
+    print("# 2. Audio Transcription")
     print("# 3. Scene Analysis")
     print("# 4. Key Information Extraction")
     print("# 5. Custom Q&A")
-    
+
     print("\nPython Function Usage:")
     print("""
 from video_utils import analyze_video_file
@@ -145,18 +153,19 @@ result = analyze_video_file(
 )
 """)
 
+
 def example_3_batch_video_processing():
     """Example 3: Batch processing multiple videos"""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("📦 EXAMPLE 3: Batch Video Processing")
-    print("="*60)
-    
+    print("=" * 60)
+
     print("Command Line Usage:")
     print("# Put all videos in one directory, then run:")
     print("cd /path/to/video/directory")
     print("python ../video_audio_utils.py describe-videos")
     print("# This will process ALL video files in the directory")
-    
+
     print("\nPython Function Usage:")
     print("""
 from pathlib import Path
@@ -189,18 +198,19 @@ for video_path in video_files:
         print(f"Failed to analyze: {video_path.name}")
 """)
 
+
 def example_4_audio_analysis():
     """Example 4: Audio file analysis"""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("🎵 EXAMPLE 4: Audio Analysis")
-    print("="*60)
-    
+    print("=" * 60)
+
     print("Command Line Usage:")
     print("cd /path/to/audio/files")
     print("python ../video_audio_utils.py analyze-audio")
     print("python ../video_audio_utils.py transcribe-audio")
     print("python ../video_audio_utils.py describe-audio")
-    
+
     print("\nPython Function Usage:")
     print("""
 from video_utils import analyze_audio_file, GeminiVideoAnalyzer
@@ -235,18 +245,19 @@ content_analysis = analyze_audio_file(
 )
 """)
 
+
 def example_5_image_analysis():
     """Example 5: Image analysis and OCR"""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("🖼️ EXAMPLE 5: Image Analysis & OCR")
-    print("="*60)
-    
+    print("=" * 60)
+
     print("Command Line Usage:")
     print("cd /path/to/images")
     print("python ../video_audio_utils.py analyze-images")
-    print("python ../video_audio_utils.py describe-images") 
+    print("python ../video_audio_utils.py describe-images")
     print("python ../video_audio_utils.py extract-text")
-    
+
     print("\nPython Function Usage:")
     print("""
 from video_utils import analyze_image_file, GeminiVideoAnalyzer
@@ -289,17 +300,18 @@ qa_result = analyze_image_file(
 )
 """)
 
+
 def example_6_whisper_integration():
     """Example 6: Whisper transcription comparison"""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("🎤 EXAMPLE 6: Whisper Integration")
-    print("="*60)
-    
+    print("=" * 60)
+
     print("Command Line Usage:")
     print("python ../video_audio_utils.py whisper-transcribe")
     print("python ../video_audio_utils.py whisper-compare")
     print("python ../video_audio_utils.py whisper-batch")
-    
+
     print("\nPython Function Usage:")
     print("""
 from video_utils import (
@@ -333,12 +345,13 @@ results = batch_transcribe_whisper(
 # This creates comparison files showing both transcriptions
 """)
 
+
 def example_7_advanced_configurations():
     """Example 7: Advanced configurations and error handling"""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("⚙️ EXAMPLE 7: Advanced Usage & Error Handling")
-    print("="*60)
-    
+    print("=" * 60)
+
     print("Python Function Usage:")
     print("""
 from video_utils import GeminiVideoAnalyzer
@@ -407,12 +420,13 @@ compatible, message = check_video_compatibility('test.mp4')
 print(message)
 """)
 
+
 def example_8_output_formats():
     """Example 8: Different output formats and saving options"""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("💾 EXAMPLE 8: Output Formats & Saving")
-    print("="*60)
-    
+    print("=" * 60)
+
     print("The system automatically saves results in multiple formats:")
     print("""
 # When you run CLI commands, files are automatically saved:
@@ -427,7 +441,7 @@ python ../video_audio_utils.py transcribe-videos
 python ../video_audio_utils.py whisper-batch
 # Options for: JSON, TXT, and SRT subtitle files
 """)
-    
+
     print("\nPython Function Usage:")
     print("""
 from video_utils import save_analysis_result
@@ -463,45 +477,47 @@ with open('batch_results.csv', 'w', newline='') as f:
         })
 """)
 
+
 def main():
     """Run all real-world examples."""
     print("🎬 REAL VIDEO UNDERSTANDING EXAMPLES")
-    print("="*70)
+    print("=" * 70)
     print("💡 Comprehensive guide to using Google Gemini AI video analysis")
-    
+
     if not setup_environment():
         print("\n❌ Environment setup failed. Please configure your API key first.")
         return
-    
+
     examples = [
         example_1_basic_video_description,
-        example_2_detailed_video_analysis, 
+        example_2_detailed_video_analysis,
         example_3_batch_video_processing,
         example_4_audio_analysis,
         example_5_image_analysis,
         example_6_whisper_integration,
         example_7_advanced_configurations,
-        example_8_output_formats
+        example_8_output_formats,
     ]
-    
+
     print(f"\n📚 Running {len(examples)} comprehensive examples...")
-    
+
     for i, example_func in enumerate(examples, 1):
         try:
             example_func()
         except Exception as e:
             print(f"\n❌ Example {i} error: {e}")
-    
-    print("\n" + "="*70)
+
+    print("\n" + "=" * 70)
     print("🎉 EXAMPLES COMPLETE!")
-    print("="*70)
+    print("=" * 70)
     print("\n💡 Quick Start Commands:")
     print("   python ../video_audio_utils.py describe-videos")
-    print("   python ../video_audio_utils.py analyze-videos") 
+    print("   python ../video_audio_utils.py analyze-videos")
     print("   python ../video_audio_utils.py transcribe-videos")
     print("   python ../video_audio_utils.py analyze-audio")
     print("   python ../video_audio_utils.py analyze-images")
     print("\n📖 For more help: python ../video_audio_utils.py --help")
+
 
 if __name__ == "__main__":
     main()

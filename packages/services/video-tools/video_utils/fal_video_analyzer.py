@@ -13,6 +13,7 @@ from .analyzer_protocol import MediaAnalyzerProtocol
 
 try:
     import fal_client
+
     FAL_AVAILABLE = True
 except ImportError:
     FAL_AVAILABLE = False
@@ -44,9 +45,7 @@ class FalVideoAnalyzer(MediaAnalyzerProtocol):
     ]
 
     def __init__(
-        self,
-        api_key: Optional[str] = None,
-        model: str = "google/gemini-2.5-flash"
+        self, api_key: Optional[str] = None, model: str = "google/gemini-2.5-flash"
     ):
         """Initialize FAL analyzer.
 
@@ -59,17 +58,13 @@ class FalVideoAnalyzer(MediaAnalyzerProtocol):
             ValueError: If FAL_KEY is not set
         """
         if not FAL_AVAILABLE:
-            raise ImportError(
-                "FAL client not installed. Run: pip install fal-client"
-            )
+            raise ImportError("FAL client not installed. Run: pip install fal-client")
 
-        self.api_key = api_key or os.getenv('FAL_KEY')
+        self.api_key = api_key or os.getenv("FAL_KEY")
         if not self.api_key:
-            raise ValueError(
-                "FAL API key required. Set FAL_KEY environment variable"
-            )
+            raise ValueError("FAL API key required. Set FAL_KEY environment variable")
 
-        os.environ['FAL_KEY'] = self.api_key
+        os.environ["FAL_KEY"] = self.api_key
         self.model = model
 
     @property
@@ -99,7 +94,7 @@ class FalVideoAnalyzer(MediaAnalyzerProtocol):
                 f"FAL requires video URLs, not local files. "
                 f"Upload {source} to cloud storage first."
             )
-        if isinstance(source, str) and not source.startswith(('http://', 'https://')):
+        if isinstance(source, str) and not source.startswith(("http://", "https://")):
             raise ValueError(
                 f"FAL requires video URLs, not local files. "
                 f"Upload {source} to cloud storage first."
@@ -113,10 +108,7 @@ class FalVideoAnalyzer(MediaAnalyzerProtocol):
     ]
 
     def _analyze(
-        self,
-        video_url: str,
-        prompt: str,
-        system_prompt: Optional[str] = None
+        self, video_url: str, prompt: str, system_prompt: Optional[str] = None
     ) -> Dict[str, Any]:
         """Core analysis method using FAL OpenRouter.
 
@@ -146,8 +138,7 @@ class FalVideoAnalyzer(MediaAnalyzerProtocol):
 
         try:
             result = fal_client.subscribe(
-                "openrouter/router/video/enterprise",
-                arguments=input_params
+                "openrouter/router/video/enterprise", arguments=input_params
             )
         except Exception as e:
             raise RuntimeError(
@@ -158,7 +149,7 @@ class FalVideoAnalyzer(MediaAnalyzerProtocol):
             "output": result.get("output", ""),
             "usage": result.get("usage", {}),
             "model": self.model,
-            "provider": "fal"
+            "provider": "fal",
         }
 
     # =========================================================================
@@ -166,9 +157,7 @@ class FalVideoAnalyzer(MediaAnalyzerProtocol):
     # =========================================================================
 
     def describe_video(
-        self,
-        source: Union[Path, str],
-        detailed: bool = False
+        self, source: Union[Path, str], detailed: bool = False
     ) -> Dict[str, Any]:
         """Generate video description and summary."""
         url = self._get_url(source)
@@ -194,18 +183,16 @@ Provide structured analysis with clear sections."""
         result = self._analyze(url, prompt)
 
         return {
-            'description': result['output'],
-            'detailed': detailed,
-            'analysis_type': 'description',
-            'usage': result['usage'],
-            'provider': 'fal',
-            'model': self.model
+            "description": result["output"],
+            "detailed": detailed,
+            "analysis_type": "description",
+            "usage": result["usage"],
+            "provider": "fal",
+            "model": self.model,
         }
 
     def transcribe_video(
-        self,
-        source: Union[Path, str],
-        include_timestamps: bool = True
+        self, source: Union[Path, str], include_timestamps: bool = True
     ) -> Dict[str, Any]:
         """Transcribe audio content from video."""
         url = self._get_url(source)
@@ -226,12 +213,12 @@ Focus on accuracy and readability. Include speaker changes if multiple people sp
         result = self._analyze(url, prompt)
 
         return {
-            'transcription': result['output'],
-            'include_timestamps': include_timestamps,
-            'analysis_type': 'transcription',
-            'usage': result['usage'],
-            'provider': 'fal',
-            'model': self.model
+            "transcription": result["output"],
+            "include_timestamps": include_timestamps,
+            "analysis_type": "transcription",
+            "usage": result["usage"],
+            "provider": "fal",
+            "model": self.model,
         }
 
     def analyze_scenes(self, source: Union[Path, str]) -> Dict[str, Any]:
@@ -251,22 +238,20 @@ Create a detailed timeline of the video content."""
         result = self._analyze(url, prompt)
 
         return {
-            'scene_analysis': result['output'],
-            'analysis_type': 'scenes',
-            'usage': result['usage'],
-            'provider': 'fal',
-            'model': self.model
+            "scene_analysis": result["output"],
+            "analysis_type": "scenes",
+            "usage": result["usage"],
+            "provider": "fal",
+            "model": self.model,
         }
 
     def answer_questions(
-        self,
-        source: Union[Path, str],
-        questions: List[str]
+        self, source: Union[Path, str], questions: List[str]
     ) -> Dict[str, Any]:
         """Answer specific questions about the video."""
         url = self._get_url(source)
 
-        questions_text = "\n".join([f"{i+1}. {q}" for i, q in enumerate(questions)])
+        questions_text = "\n".join([f"{i + 1}. {q}" for i, q in enumerate(questions)])
         prompt = f"""Analyze this video and answer the following questions:
 
 {questions_text}
@@ -277,12 +262,12 @@ Provide detailed, accurate answers based on what you observe."""
         result = self._analyze(url, prompt)
 
         return {
-            'questions': questions,
-            'answers': result['output'],
-            'analysis_type': 'qa',
-            'usage': result['usage'],
-            'provider': 'fal',
-            'model': self.model
+            "questions": questions,
+            "answers": result["output"],
+            "analysis_type": "qa",
+            "usage": result["usage"],
+            "provider": "fal",
+            "model": self.model,
         }
 
     def extract_key_info(self, source: Union[Path, str]) -> Dict[str, Any]:
@@ -303,11 +288,11 @@ Provide structured, actionable information."""
         result = self._analyze(url, prompt)
 
         return {
-            'key_info': result['output'],
-            'analysis_type': 'extraction',
-            'usage': result['usage'],
-            'provider': 'fal',
-            'model': self.model
+            "key_info": result["output"],
+            "analysis_type": "extraction",
+            "usage": result["usage"],
+            "provider": "fal",
+            "model": self.model,
         }
 
     # =========================================================================
@@ -315,9 +300,7 @@ Provide structured, actionable information."""
     # =========================================================================
 
     def describe_audio(
-        self,
-        source: Union[Path, str],
-        detailed: bool = False
+        self, source: Union[Path, str], detailed: bool = False
     ) -> Dict[str, Any]:
         """Generate audio description and summary."""
         url = self._get_url(source)
@@ -340,19 +323,19 @@ Provide structured, actionable information."""
         result = self._analyze(url, prompt)
 
         return {
-            'description': result['output'],
-            'detailed': detailed,
-            'analysis_type': 'description',
-            'usage': result['usage'],
-            'provider': 'fal',
-            'model': self.model
+            "description": result["output"],
+            "detailed": detailed,
+            "analysis_type": "description",
+            "usage": result["usage"],
+            "provider": "fal",
+            "model": self.model,
         }
 
     def transcribe_audio(
         self,
         source: Union[Path, str],
         include_timestamps: bool = True,
-        speaker_identification: bool = True
+        speaker_identification: bool = True,
     ) -> Dict[str, Any]:
         """Transcribe spoken content from audio."""
         url = self._get_url(source)
@@ -370,13 +353,13 @@ Provide structured, actionable information."""
         result = self._analyze(url, prompt)
 
         return {
-            'transcription': result['output'],
-            'include_timestamps': include_timestamps,
-            'speaker_identification': speaker_identification,
-            'analysis_type': 'transcription',
-            'usage': result['usage'],
-            'provider': 'fal',
-            'model': self.model
+            "transcription": result["output"],
+            "include_timestamps": include_timestamps,
+            "speaker_identification": speaker_identification,
+            "analysis_type": "transcription",
+            "usage": result["usage"],
+            "provider": "fal",
+            "model": self.model,
         }
 
     def analyze_audio_content(self, source: Union[Path, str]) -> Dict[str, Any]:
@@ -394,11 +377,11 @@ Provide structured, actionable information."""
         result = self._analyze(url, prompt)
 
         return {
-            'content_analysis': result['output'],
-            'analysis_type': 'content_analysis',
-            'usage': result['usage'],
-            'provider': 'fal',
-            'model': self.model
+            "content_analysis": result["output"],
+            "analysis_type": "content_analysis",
+            "usage": result["usage"],
+            "provider": "fal",
+            "model": self.model,
         }
 
     def detect_audio_events(self, source: Union[Path, str]) -> Dict[str, Any]:
@@ -418,11 +401,11 @@ Create a detailed timeline of audio events."""
         result = self._analyze(url, prompt)
 
         return {
-            'event_detection': result['output'],
-            'analysis_type': 'event_detection',
-            'usage': result['usage'],
-            'provider': 'fal',
-            'model': self.model
+            "event_detection": result["output"],
+            "analysis_type": "event_detection",
+            "usage": result["usage"],
+            "provider": "fal",
+            "model": self.model,
         }
 
     # =========================================================================
@@ -430,9 +413,7 @@ Create a detailed timeline of audio events."""
     # =========================================================================
 
     def describe_image(
-        self,
-        source: Union[Path, str],
-        detailed: bool = False
+        self, source: Union[Path, str], detailed: bool = False
     ) -> Dict[str, Any]:
         """Generate image description and summary."""
         url = self._get_url(source)
@@ -457,12 +438,12 @@ Create a detailed timeline of audio events."""
         result = self._analyze(url, prompt)
 
         return {
-            'description': result['output'],
-            'detailed': detailed,
-            'analysis_type': 'description',
-            'usage': result['usage'],
-            'provider': 'fal',
-            'model': self.model
+            "description": result["output"],
+            "detailed": detailed,
+            "analysis_type": "description",
+            "usage": result["usage"],
+            "provider": "fal",
+            "model": self.model,
         }
 
     def classify_image(self, source: Union[Path, str]) -> Dict[str, Any]:
@@ -480,17 +461,15 @@ Create a detailed timeline of audio events."""
         result = self._analyze(url, prompt)
 
         return {
-            'classification': result['output'],
-            'analysis_type': 'classification',
-            'usage': result['usage'],
-            'provider': 'fal',
-            'model': self.model
+            "classification": result["output"],
+            "analysis_type": "classification",
+            "usage": result["usage"],
+            "provider": "fal",
+            "model": self.model,
         }
 
     def detect_objects(
-        self,
-        source: Union[Path, str],
-        detailed: bool = False
+        self, source: Union[Path, str], detailed: bool = False
     ) -> Dict[str, Any]:
         """Detect and identify objects in the image."""
         url = self._get_url(source)
@@ -513,12 +492,12 @@ Create a detailed timeline of audio events."""
         result = self._analyze(url, prompt)
 
         return {
-            'object_detection': result['output'],
-            'detailed': detailed,
-            'analysis_type': 'object_detection',
-            'usage': result['usage'],
-            'provider': 'fal',
-            'model': self.model
+            "object_detection": result["output"],
+            "detailed": detailed,
+            "analysis_type": "object_detection",
+            "usage": result["usage"],
+            "provider": "fal",
+            "model": self.model,
         }
 
     def extract_text_from_image(self, source: Union[Path, str]) -> Dict[str, Any]:
@@ -536,11 +515,11 @@ Create a detailed timeline of audio events."""
         result = self._analyze(url, prompt)
 
         return {
-            'extracted_text': result['output'],
-            'analysis_type': 'text_extraction',
-            'usage': result['usage'],
-            'provider': 'fal',
-            'model': self.model
+            "extracted_text": result["output"],
+            "analysis_type": "text_extraction",
+            "usage": result["usage"],
+            "provider": "fal",
+            "model": self.model,
         }
 
     def analyze_image_composition(self, source: Union[Path, str]) -> Dict[str, Any]:
@@ -560,11 +539,11 @@ Create a detailed timeline of audio events."""
         result = self._analyze(url, prompt)
 
         return {
-            'composition_analysis': result['output'],
-            'analysis_type': 'composition',
-            'usage': result['usage'],
-            'provider': 'fal',
-            'model': self.model
+            "composition_analysis": result["output"],
+            "analysis_type": "composition",
+            "usage": result["usage"],
+            "provider": "fal",
+            "model": self.model,
         }
 
 
@@ -577,7 +556,7 @@ def check_fal_requirements() -> tuple:
     if not FAL_AVAILABLE:
         return False, "FAL client not installed. Run: pip install fal-client"
 
-    api_key = os.getenv('FAL_KEY')
+    api_key = os.getenv("FAL_KEY")
     if not api_key:
         return False, "FAL_KEY environment variable not set"
 
