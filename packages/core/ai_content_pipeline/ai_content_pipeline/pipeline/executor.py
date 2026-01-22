@@ -8,6 +8,18 @@ Includes race condition prevention for concurrent operations.
 
 Thread Safety: Ensures isolated execution contexts for parallel processing.
 Prevents data corruption from shared mutable objects between concurrent steps.
+
+Execution Flow:
+- Initialize step contexts with deep copies for isolation
+- Execute steps sequentially or in parallel as configured
+- Aggregate results while maintaining data integrity
+- Handle errors without affecting other concurrent operations
+
+Resource Management:
+- Efficient memory usage through isolated contexts
+- Proper cleanup of temporary resources
+- Concurrent execution without resource conflicts
+- Performance monitoring and optimization
 """
 
 import time

@@ -7,6 +7,16 @@ that doesn't break existing functionality.
 Thread Safety: Uses deepcopy to prevent race conditions in parallel execution.
 Critical fix prevents data corruption when multiple AI models run concurrently.
 Ensures each parallel step gets an isolated copy of execution context.
+
+Race Condition Prevention:
+- Shallow copy (.copy()) shares nested mutable objects between threads
+- Deep copy (copy.deepcopy()) creates completely independent object graphs
+- Prevents concurrent modification of shared state during parallel processing
+
+Performance Considerations:
+- Deep copy has memory overhead but ensures thread safety
+- Critical for maintaining data integrity in multi-threaded AI pipelines
+- Essential for reliable concurrent execution of AI content generation tasks
 """
 
 import os
