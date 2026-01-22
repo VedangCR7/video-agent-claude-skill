@@ -13,7 +13,7 @@ ModelType = Literal[
     "sora_2",
     "sora_2_pro",
     "veo_3_1_fast",
-    "wan_2_6"
+    "wan_2_6",
 ]
 
 SUPPORTED_MODELS: List[str] = [
@@ -24,7 +24,7 @@ SUPPORTED_MODELS: List[str] = [
     "sora_2",
     "sora_2_pro",
     "veo_3_1_fast",
-    "wan_2_6"
+    "wan_2_6",
 ]
 
 # Model endpoints
@@ -36,7 +36,7 @@ MODEL_ENDPOINTS = {
     "sora_2": "fal-ai/sora-2/image-to-video",
     "sora_2_pro": "fal-ai/sora-2/image-to-video/pro",
     "veo_3_1_fast": "fal-ai/veo3.1/fast/image-to-video",
-    "wan_2_6": "wan/v2.6/image-to-video"
+    "wan_2_6": "wan/v2.6/image-to-video",
 }
 
 # Display names
@@ -48,7 +48,7 @@ MODEL_DISPLAY_NAMES = {
     "sora_2": "Sora 2",
     "sora_2_pro": "Sora 2 Pro",
     "veo_3_1_fast": "Veo 3.1 Fast",
-    "wan_2_6": "Wan v2.6"
+    "wan_2_6": "Wan v2.6",
 }
 
 # Pricing per second (USD)
@@ -60,7 +60,7 @@ MODEL_PRICING = {
     "sora_2": 0.10,
     "sora_2_pro": 0.30,
     "veo_3_1_fast": 0.10,
-    "wan_2_6": 0.10  # Base price, 1080p is 0.15/s
+    "wan_2_6": 0.10,  # Base price, 1080p is 0.15/s
 }
 
 # Duration options per model
@@ -72,7 +72,7 @@ DURATION_OPTIONS = {
     "sora_2": [4, 8, 12],
     "sora_2_pro": [4, 8, 12],
     "veo_3_1_fast": ["4s", "6s", "8s"],
-    "wan_2_6": ["5", "10", "15"]
+    "wan_2_6": ["5", "10", "15"],
 }
 
 # Resolution options per model
@@ -84,7 +84,7 @@ RESOLUTION_OPTIONS = {
     "sora_2": ["auto", "720p"],
     "sora_2_pro": ["auto", "720p", "1080p"],
     "veo_3_1_fast": ["720p", "1080p"],
-    "wan_2_6": ["720p", "1080p"]
+    "wan_2_6": ["720p", "1080p"],
 }
 
 # Aspect ratio options
@@ -92,47 +92,41 @@ ASPECT_RATIO_OPTIONS = {
     "sora_2": ["auto", "9:16", "16:9"],
     "sora_2_pro": ["auto", "9:16", "16:9"],
     "veo_3_1_fast": ["auto", "16:9", "9:16"],
-    "wan_2_6": ["16:9", "9:16", "1:1"]
+    "wan_2_6": ["16:9", "9:16", "1:1"],
 }
 
 # Default values per model
 DEFAULT_VALUES = {
-    "hailuo": {
-        "duration": "6",
-        "prompt_optimizer": True
-    },
+    "hailuo": {"duration": "6", "prompt_optimizer": True},
     "kling_2_1": {
         "duration": "5",
         "negative_prompt": "blur, distort, and low quality",
-        "cfg_scale": 0.5
+        "cfg_scale": 0.5,
     },
     "kling_2_6_pro": {
         "duration": "5",
         "negative_prompt": "blur, distort, and low quality",
-        "cfg_scale": 0.5
+        "cfg_scale": 0.5,
     },
-    "seedance_1_5_pro": {
-        "duration": "5",
-        "seed": None
-    },
+    "seedance_1_5_pro": {"duration": "5", "seed": None},
     "sora_2": {
         "duration": 4,
         "resolution": "auto",
         "aspect_ratio": "auto",
-        "delete_video": True
+        "delete_video": True,
     },
     "sora_2_pro": {
         "duration": 4,
         "resolution": "auto",
         "aspect_ratio": "auto",
-        "delete_video": True
+        "delete_video": True,
     },
     "veo_3_1_fast": {
         "duration": "8s",
         "resolution": "720p",
         "aspect_ratio": "auto",
         "generate_audio": True,
-        "auto_fix": False
+        "auto_fix": False,
     },
     "wan_2_6": {
         "duration": "5",
@@ -141,8 +135,8 @@ DEFAULT_VALUES = {
         "enable_prompt_expansion": True,
         "multi_shots": False,
         "seed": None,
-        "enable_safety_checker": True
-    }
+        "enable_safety_checker": True,
+    },
 }
 
 # Model info for documentation
@@ -153,7 +147,7 @@ MODEL_INFO = {
         "description": "Standard image-to-video with prompt optimization",
         "max_duration": 10,
         "features": ["prompt_optimizer"],
-        "extended_params": ["start_frame"]
+        "extended_params": ["start_frame"],
     },
     "kling_2_1": {
         "name": "Kling Video v2.1",
@@ -161,15 +155,20 @@ MODEL_INFO = {
         "description": "High-quality generation with negative prompts and frame interpolation",
         "max_duration": 10,
         "features": ["negative_prompt", "cfg_scale", "frame_interpolation"],
-        "extended_params": ["start_frame", "end_frame"]
+        "extended_params": ["start_frame", "end_frame"],
     },
     "kling_2_6_pro": {
         "name": "Kling Video v2.6 Pro",
         "provider": "Kuaishou",
         "description": "Professional tier with enhanced quality and frame interpolation",
         "max_duration": 10,
-        "features": ["negative_prompt", "cfg_scale", "professional_quality", "frame_interpolation"],
-        "extended_params": ["start_frame", "end_frame"]
+        "features": [
+            "negative_prompt",
+            "cfg_scale",
+            "professional_quality",
+            "frame_interpolation",
+        ],
+        "extended_params": ["start_frame", "end_frame"],
     },
     "seedance_1_5_pro": {
         "name": "ByteDance Seedance v1.5 Pro",
@@ -177,7 +176,7 @@ MODEL_INFO = {
         "description": "Advanced motion synthesis with seed control",
         "max_duration": 10,
         "features": ["seed_control", "motion_quality"],
-        "extended_params": ["start_frame"]
+        "extended_params": ["start_frame"],
     },
     "sora_2": {
         "name": "Sora 2",
@@ -185,7 +184,7 @@ MODEL_INFO = {
         "description": "OpenAI's image-to-video model",
         "max_duration": 12,
         "features": ["aspect_ratio", "resolution"],
-        "extended_params": ["start_frame"]
+        "extended_params": ["start_frame"],
     },
     "sora_2_pro": {
         "name": "Sora 2 Pro",
@@ -193,7 +192,7 @@ MODEL_INFO = {
         "description": "Professional Sora with 1080p support",
         "max_duration": 12,
         "features": ["aspect_ratio", "resolution", "1080p"],
-        "extended_params": ["start_frame"]
+        "extended_params": ["start_frame"],
     },
     "veo_3_1_fast": {
         "name": "Veo 3.1 Fast",
@@ -201,16 +200,22 @@ MODEL_INFO = {
         "description": "Fast video generation with optional audio",
         "max_duration": 8,
         "features": ["audio_generation", "auto_fix", "fast_processing"],
-        "extended_params": ["start_frame", "audio_generate"]
+        "extended_params": ["start_frame", "audio_generate"],
     },
     "wan_2_6": {
         "name": "Wan v2.6",
         "provider": "Wan",
         "description": "High-quality image-to-video with multi-shot support",
         "max_duration": 15,
-        "features": ["prompt_expansion", "multi_shots", "audio_input", "seed_control", "safety_checker"],
-        "extended_params": ["start_frame", "audio_input"]
-    }
+        "features": [
+            "prompt_expansion",
+            "multi_shots",
+            "audio_input",
+            "seed_control",
+            "safety_checker",
+        ],
+        "extended_params": ["start_frame", "audio_input"],
+    },
 }
 
 # Extended parameter support per model

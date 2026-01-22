@@ -17,7 +17,7 @@ from fal_image_to_video.utils.file_utils import (
     validate_file_format,
     SUPPORTED_IMAGE_FORMATS,
     SUPPORTED_AUDIO_FORMATS,
-    SUPPORTED_VIDEO_FORMATS
+    SUPPORTED_VIDEO_FORMATS,
 )
 
 
@@ -78,7 +78,9 @@ class TestFileUtilities:
     def test_validate_url_skips_validation(self):
         """URLs should skip format validation."""
         # Should not raise even with weird extension
-        validate_file_format("https://example.com/file.xyz", SUPPORTED_IMAGE_FORMATS, "image")
+        validate_file_format(
+            "https://example.com/file.xyz", SUPPORTED_IMAGE_FORMATS, "image"
+        )
 
 
 class TestKlingEndFrame:
@@ -91,7 +93,7 @@ class TestKlingEndFrame:
             prompt="Test prompt",
             image_url="http://example.com/start.jpg",
             end_frame="http://example.com/end.jpg",
-            duration="5"
+            duration="5",
         )
         assert args.get("tail_image_url") == "http://example.com/end.jpg"
 
@@ -99,9 +101,7 @@ class TestKlingEndFrame:
         """Without end_frame, tail_image_url should not be present."""
         model = KlingModel()
         args = model.prepare_arguments(
-            prompt="Test prompt",
-            image_url="http://example.com/start.jpg",
-            duration="5"
+            prompt="Test prompt", image_url="http://example.com/start.jpg", duration="5"
         )
         assert "tail_image_url" not in args
 
@@ -112,7 +112,7 @@ class TestKlingEndFrame:
             prompt="Test prompt",
             image_url="http://example.com/start.jpg",
             end_frame="http://example.com/end.jpg",
-            duration="5"
+            duration="5",
         )
         assert args.get("tail_image_url") == "http://example.com/end.jpg"
 
@@ -120,8 +120,7 @@ class TestKlingEndFrame:
         """Kling validation should accept and pass through end_frame."""
         model = KlingModel()
         params = model.validate_parameters(
-            duration="5",
-            end_frame="http://example.com/end.jpg"
+            duration="5", end_frame="http://example.com/end.jpg"
         )
         assert params["end_frame"] == "http://example.com/end.jpg"
 
@@ -138,8 +137,13 @@ class TestModelFeatureMatrix:
     def test_all_models_have_features(self):
         """All supported models should have feature definitions."""
         expected_models = [
-            "hailuo", "kling_2_1", "kling_2_6_pro",
-            "seedance_1_5_pro", "sora_2", "sora_2_pro", "veo_3_1_fast"
+            "hailuo",
+            "kling_2_1",
+            "kling_2_6_pro",
+            "seedance_1_5_pro",
+            "sora_2",
+            "sora_2_pro",
+            "veo_3_1_fast",
         ]
         for model in expected_models:
             assert model in MODEL_EXTENDED_FEATURES
@@ -147,8 +151,12 @@ class TestModelFeatureMatrix:
     def test_all_features_defined(self):
         """All models should define all expected features."""
         expected_features = [
-            "start_frame", "end_frame", "ref_images",
-            "audio_input", "audio_generate", "ref_video"
+            "start_frame",
+            "end_frame",
+            "ref_images",
+            "audio_input",
+            "audio_generate",
+            "ref_video",
         ]
         for model, features in MODEL_EXTENDED_FEATURES.items():
             for feature in expected_features:
@@ -165,14 +173,22 @@ class TestModelFeatureMatrix:
 
     def test_other_models_no_end_frame(self):
         """Non-Kling models should not support end_frame."""
-        non_kling = ["hailuo", "seedance_1_5_pro", "sora_2", "sora_2_pro", "veo_3_1_fast"]
+        non_kling = [
+            "hailuo",
+            "seedance_1_5_pro",
+            "sora_2",
+            "sora_2_pro",
+            "veo_3_1_fast",
+        ]
         for model in non_kling:
             assert MODEL_EXTENDED_FEATURES[model]["end_frame"] is False
 
     def test_all_models_support_start_frame(self):
         """All models should support start_frame."""
         for model, features in MODEL_EXTENDED_FEATURES.items():
-            assert features["start_frame"] is True, f"{model} should support start_frame"
+            assert features["start_frame"] is True, (
+                f"{model} should support start_frame"
+            )
 
     def test_no_models_support_ref_video_yet(self):
         """No models should support ref_video (future feature)."""
@@ -185,20 +201,20 @@ class TestSupportedFormats:
 
     def test_image_formats_include_common_types(self):
         """Image formats should include common types."""
-        assert '.jpg' in SUPPORTED_IMAGE_FORMATS
-        assert '.jpeg' in SUPPORTED_IMAGE_FORMATS
-        assert '.png' in SUPPORTED_IMAGE_FORMATS
-        assert '.webp' in SUPPORTED_IMAGE_FORMATS
+        assert ".jpg" in SUPPORTED_IMAGE_FORMATS
+        assert ".jpeg" in SUPPORTED_IMAGE_FORMATS
+        assert ".png" in SUPPORTED_IMAGE_FORMATS
+        assert ".webp" in SUPPORTED_IMAGE_FORMATS
 
     def test_audio_formats_include_common_types(self):
         """Audio formats should include common types."""
-        assert '.mp3' in SUPPORTED_AUDIO_FORMATS
-        assert '.wav' in SUPPORTED_AUDIO_FORMATS
+        assert ".mp3" in SUPPORTED_AUDIO_FORMATS
+        assert ".wav" in SUPPORTED_AUDIO_FORMATS
 
     def test_video_formats_include_common_types(self):
         """Video formats should include common types."""
-        assert '.mp4' in SUPPORTED_VIDEO_FORMATS
-        assert '.mov' in SUPPORTED_VIDEO_FORMATS
+        assert ".mp4" in SUPPORTED_VIDEO_FORMATS
+        assert ".mov" in SUPPORTED_VIDEO_FORMATS
 
 
 if __name__ == "__main__":

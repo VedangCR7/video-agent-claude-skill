@@ -2,7 +2,7 @@
 GPT Image 1.5 Edit model implementation
 """
 
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 from .base import BaseModel
 from ..config.constants import MODEL_INFO, DEFAULT_VALUES
 
@@ -23,23 +23,20 @@ class GPTImage15EditModel(BaseModel):
         if not 0.0 <= strength <= 1.0:
             raise ValueError(f"strength must be between 0.0 and 1.0, got {strength}")
 
-        return {
-            "strength": strength
-        }
+        return {"strength": strength}
 
-    def prepare_arguments(self, prompt: str, image_url: str, **kwargs) -> Dict[str, Any]:
+    def prepare_arguments(
+        self, prompt: str, image_url: str, **kwargs
+    ) -> Dict[str, Any]:
         """Prepare API arguments for GPT Image 1.5 Edit."""
         args = {
             "prompt": prompt,
             "image_url": image_url,
-            "strength": kwargs.get("strength", 0.75)
+            "strength": kwargs.get("strength", 0.75),
         }
 
         return args
 
     def get_model_info(self) -> Dict[str, Any]:
         """Get GPT Image 1.5 Edit model information."""
-        return {
-            **MODEL_INFO.get("gpt_image_1_5_edit", {}),
-            "endpoint": self.endpoint
-        }
+        return {**MODEL_INFO.get("gpt_image_1_5_edit", {}), "endpoint": self.endpoint}

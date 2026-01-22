@@ -14,7 +14,6 @@ from fal_image_to_video.config.constants import (
     SUPPORTED_MODELS,
     MODEL_ENDPOINTS,
     DURATION_OPTIONS,
-    RESOLUTION_OPTIONS
 )
 from fal_image_to_video.models.sora import Sora2Model, Sora2ProModel
 from fal_image_to_video.models.veo import Veo31FastModel
@@ -48,9 +47,7 @@ class TestSora2Model:
         """Valid parameters should pass validation."""
         model = Sora2Model()
         params = model.validate_parameters(
-            duration=8,
-            resolution="720p",
-            aspect_ratio="16:9"
+            duration=8, resolution="720p", aspect_ratio="16:9"
         )
         assert params["duration"] == 8
         assert params["resolution"] == "720p"
@@ -230,7 +227,7 @@ class TestModelInfo:
             SeedanceModel(),
             KlingModel(),
             Kling26ProModel(),
-            HailuoModel()
+            HailuoModel(),
         ]
         for model in models:
             info = model.get_model_info()

@@ -5,8 +5,10 @@ Kling Video v2.6 Pro text-to-video model implementation.
 from typing import Dict, Any
 from .base import BaseTextToVideoModel
 from ..config.constants import (
-    MODEL_INFO, DEFAULT_VALUES,
-    DURATION_OPTIONS, ASPECT_RATIO_OPTIONS
+    MODEL_INFO,
+    DEFAULT_VALUES,
+    DURATION_OPTIONS,
+    ASPECT_RATIO_OPTIONS,
 )
 
 
@@ -36,7 +38,9 @@ class Kling26ProModel(BaseTextToVideoModel):
         aspect_ratio = kwargs.get("aspect_ratio", defaults.get("aspect_ratio", "16:9"))
         negative_prompt = kwargs.get("negative_prompt", defaults.get("negative_prompt"))
         cfg_scale = kwargs.get("cfg_scale", defaults.get("cfg_scale", 0.5))
-        generate_audio = kwargs.get("generate_audio", defaults.get("generate_audio", True))
+        generate_audio = kwargs.get(
+            "generate_audio", defaults.get("generate_audio", True)
+        )
 
         # Validate duration
         valid_durations = DURATION_OPTIONS.get("kling_2_6_pro", ["5", "10"])
@@ -44,9 +48,13 @@ class Kling26ProModel(BaseTextToVideoModel):
             raise ValueError(f"Invalid duration: {duration}. Valid: {valid_durations}")
 
         # Validate aspect ratio
-        valid_ratios = ASPECT_RATIO_OPTIONS.get("kling_2_6_pro", ["16:9", "9:16", "1:1"])
+        valid_ratios = ASPECT_RATIO_OPTIONS.get(
+            "kling_2_6_pro", ["16:9", "9:16", "1:1"]
+        )
         if aspect_ratio not in valid_ratios:
-            raise ValueError(f"Invalid aspect_ratio: {aspect_ratio}. Valid: {valid_ratios}")
+            raise ValueError(
+                f"Invalid aspect_ratio: {aspect_ratio}. Valid: {valid_ratios}"
+            )
 
         # Validate cfg_scale
         if not 0.0 <= cfg_scale <= 1.0:
@@ -57,7 +65,7 @@ class Kling26ProModel(BaseTextToVideoModel):
             "aspect_ratio": aspect_ratio,
             "negative_prompt": negative_prompt,
             "cfg_scale": cfg_scale,
-            "generate_audio": bool(generate_audio)
+            "generate_audio": bool(generate_audio),
         }
 
     def prepare_arguments(self, prompt: str, **kwargs) -> Dict[str, Any]:
@@ -67,7 +75,7 @@ class Kling26ProModel(BaseTextToVideoModel):
             "duration": kwargs.get("duration", "5"),
             "aspect_ratio": kwargs.get("aspect_ratio", "16:9"),
             "cfg_scale": kwargs.get("cfg_scale", 0.5),
-            "generate_audio": kwargs.get("generate_audio", True)
+            "generate_audio": kwargs.get("generate_audio", True),
         }
 
         # Add negative prompt if provided
@@ -82,10 +90,12 @@ class Kling26ProModel(BaseTextToVideoModel):
         return {
             **MODEL_INFO.get("kling_2_6_pro", {}),
             "endpoint": self.endpoint,
-            "pricing": self.pricing
+            "pricing": self.pricing,
         }
 
-    def estimate_cost(self, duration: str = "5", generate_audio: bool = True, **kwargs) -> float:
+    def estimate_cost(
+        self, duration: str = "5", generate_audio: bool = True, **kwargs
+    ) -> float:
         """Estimate cost based on duration and audio setting."""
         duration_seconds = int(duration)
         if generate_audio:

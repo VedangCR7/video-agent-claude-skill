@@ -17,5 +17,5 @@ __all__ = [
     "Sora2Model",
     "Sora2ProModel",
     "Veo31FastModel",
-    "Wan26Model"
+    "Wan26Model",
 ]

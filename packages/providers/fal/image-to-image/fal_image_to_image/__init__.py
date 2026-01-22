@@ -12,9 +12,9 @@ Main Features:
 
 Quick Start:
     from fal_image_to_image import FALImageToImageGenerator
-    
+
     generator = FALImageToImageGenerator()
-    
+
     result = generator.modify_image_seededit(
         prompt="Make it more photorealistic",
         image_url="https://example.com/image.jpg"
@@ -28,9 +28,4 @@ __version__ = "2.0.0"
 __author__ = "AI Assistant"
 
 # Main exports
-__all__ = [
-    "FALImageToImageGenerator",
-    "ModelType",
-    "AspectRatio", 
-    "SUPPORTED_MODELS"
-]
+__all__ = ["FALImageToImageGenerator", "ModelType", "AspectRatio", "SUPPORTED_MODELS"]

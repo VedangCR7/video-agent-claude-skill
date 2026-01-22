@@ -2,7 +2,6 @@
 Base class for text-to-video models.
 """
 
-import os
 import time
 import requests
 from abc import ABC, abstractmethod
@@ -95,7 +94,7 @@ class BaseTextToVideoModel(ABC):
         timeout: int = 600,
         verbose: bool = True,
         mock: bool = False,
-        **kwargs
+        **kwargs,
     ) -> Dict[str, Any]:
         """
         Generate video from text prompt.
@@ -135,9 +134,13 @@ class BaseTextToVideoModel(ABC):
             if mock:
                 # Return simulated result without calling API
                 timestamp = int(time.time())
-                safe_prompt = "".join(
-                    c for c in prompt[:30] if c.isalnum() or c in (' ', '-', '_')
-                ).rstrip().replace(' ', '_')
+                safe_prompt = (
+                    "".join(
+                        c for c in prompt[:30] if c.isalnum() or c in (" ", "-", "_")
+                    )
+                    .rstrip()
+                    .replace(" ", "_")
+                )
                 filename = f"{self.model_key}_{safe_prompt}_{timestamp}_MOCK.mp4"
 
                 if verbose:
@@ -156,7 +159,7 @@ class BaseTextToVideoModel(ABC):
                     "cost_usd": 0.0,  # No actual cost in mock mode
                     "estimated_cost": cost,
                     "parameters": validated_params,
-                    "metadata": {"mock": True, "arguments": arguments}
+                    "metadata": {"mock": True, "arguments": arguments},
                 }
 
             if verbose:
@@ -164,24 +167,24 @@ class BaseTextToVideoModel(ABC):
 
             # Call FAL API
             result = fal_client.subscribe(
-                self.endpoint,
-                arguments=arguments,
-                with_logs=verbose
+                self.endpoint, arguments=arguments, with_logs=verbose
             )
 
             if verbose:
                 print("Video generation completed!")
 
             # Extract video URL
-            video_url = result.get('video', {}).get('url')
+            video_url = result.get("video", {}).get("url")
             if not video_url:
                 raise Exception("No video URL in response")
 
             # Generate filename
             timestamp = int(time.time())
-            safe_prompt = "".join(
-                c for c in prompt[:30] if c.isalnum() or c in (' ', '-', '_')
-            ).rstrip().replace(' ', '_')
+            safe_prompt = (
+                "".join(c for c in prompt[:30] if c.isalnum() or c in (" ", "-", "_"))
+                .rstrip()
+                .replace(" ", "_")
+            )
             filename = f"{self.model_key}_{safe_prompt}_{timestamp}.mp4"
 
             # Download video
@@ -197,7 +200,7 @@ class BaseTextToVideoModel(ABC):
                 "model_name": self.display_name,
                 "cost_usd": cost,
                 "parameters": validated_params,
-                "metadata": result
+                "metadata": result,
             }
 
         except Exception as e:
@@ -209,15 +212,10 @@ class BaseTextToVideoModel(ABC):
                 "error": str(e),
                 "prompt": prompt,
                 "model": self.model_key,
-                "estimated_cost": cost
+                "estimated_cost": cost,
             }
 
-    def _download_video(
-        self,
-        url: str,
-        local_path: Path,
-        verbose: bool = True
-    ) -> Path:
+    def _download_video(self, url: str, local_path: Path, verbose: bool = True) -> Path:
         """Download video from URL to local file."""
         if verbose:
             print(f"Downloading video: {local_path.name}")
@@ -225,10 +223,10 @@ class BaseTextToVideoModel(ABC):
         response = requests.get(url, stream=True, timeout=300)
         response.raise_for_status()
 
-        total_size = int(response.headers.get('content-length', 0))
+        total_size = int(response.headers.get("content-length", 0))
         downloaded = 0
 
-        with open(local_path, 'wb') as f:
+        with open(local_path, "wb") as f:
             for chunk in response.iter_content(chunk_size=8192):
                 if chunk:
                     f.write(chunk)
@@ -236,7 +234,7 @@ class BaseTextToVideoModel(ABC):
 
                     if verbose and total_size > 0:
                         progress = (downloaded / total_size) * 100
-                        print(f"\rDownloading: {progress:.1f}%", end='', flush=True)
+                        print(f"\rDownloading: {progress:.1f}%", end="", flush=True)
 
         if verbose and total_size > 0:
             print()  # New line after progress
