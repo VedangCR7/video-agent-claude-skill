@@ -36,7 +36,11 @@ MODEL_PRICING = {
     "kling_v2v_reference": {"per_second": 0.168},
     "kling_v2v_edit": {"per_second": 0.168},
     "kling_motion_control": {"per_second": 0.06},
-    "multitalk": {"base": 0.10, "720p_multiplier": 2.0, "extended_frames_multiplier": 1.25},
+    "multitalk": {
+        "base": 0.10,
+        "720p_multiplier": 2.0,
+        "extended_frames_multiplier": 1.25,
+    },
 }
 
 # Default values
@@ -158,13 +162,25 @@ INPUT_REQUIREMENTS = {
     },
     "multitalk": {
         "required": ["image_url", "first_audio_url", "prompt"],
-        "optional": ["second_audio_url", "num_frames", "resolution", "seed", "acceleration", "use_only_first_audio"],
+        "optional": [
+            "second_audio_url",
+            "num_frames",
+            "resolution",
+            "seed",
+            "acceleration",
+            "use_only_first_audio",
+        ],
     },
 }
 
 # Model categories
 MODEL_CATEGORIES = {
-    "avatar_lipsync": ["omnihuman_v1_5", "fabric_1_0", "fabric_1_0_fast", "fabric_1_0_text"],
+    "avatar_lipsync": [
+        "omnihuman_v1_5",
+        "fabric_1_0",
+        "fabric_1_0_fast",
+        "fabric_1_0_text",
+    ],
     "reference_to_video": ["kling_ref_to_video"],
     "video_to_video": ["kling_v2v_reference", "kling_v2v_edit"],
     "motion_transfer": ["kling_motion_control"],

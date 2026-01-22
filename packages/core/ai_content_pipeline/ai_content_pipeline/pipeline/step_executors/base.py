@@ -12,6 +12,7 @@ from dataclasses import dataclass
 @dataclass
 class StepResult:
     """Result of executing a single step."""
+
     success: bool
     output_path: Optional[str] = None
     output_url: Optional[str] = None
@@ -53,7 +54,7 @@ class BaseStepExecutor(ABC):
         input_data: Any,
         chain_config: Dict[str, Any],
         step_context: Optional[Dict[str, Any]] = None,
-        **kwargs
+        **kwargs,
     ) -> Dict[str, Any]:
         """
         Execute the step and return results.
@@ -75,7 +76,7 @@ class BaseStepExecutor(ABC):
         step_params: Dict[str, Any],
         chain_config: Dict[str, Any],
         kwargs: Dict[str, Any],
-        exclude_keys: Optional[list] = None
+        exclude_keys: Optional[list] = None,
     ) -> Dict[str, Any]:
         """
         Merge step params with chain config and kwargs.
@@ -93,11 +94,13 @@ class BaseStepExecutor(ABC):
         params = {
             **{k: v for k, v in step_params.items() if k not in exclude},
             **{k: v for k, v in kwargs.items() if k not in exclude},
-            "output_dir": chain_config.get("output_dir", "output")
+            "output_dir": chain_config.get("output_dir", "output"),
         }
         return params
 
-    def _create_error_result(self, error: str, model: Optional[str] = None) -> Dict[str, Any]:
+    def _create_error_result(
+        self, error: str, model: Optional[str] = None
+    ) -> Dict[str, Any]:
         """Create a standardized error result."""
         return {
             "success": False,
@@ -108,5 +111,5 @@ class BaseStepExecutor(ABC):
             "cost": 0.0,
             "model": model,
             "metadata": {},
-            "error": error
+            "error": error,
         }

@@ -8,7 +8,7 @@ changing consumer code.
 
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Dict, Any, List, Optional, Union
+from typing import Dict, Any, List, Union
 
 
 class MediaAnalyzerProtocol(ABC):
@@ -41,9 +41,7 @@ class MediaAnalyzerProtocol(ABC):
 
     @abstractmethod
     def describe_video(
-        self,
-        source: Union[Path, str],
-        detailed: bool = False
+        self, source: Union[Path, str], detailed: bool = False
     ) -> Dict[str, Any]:
         """Generate video description and summary.
 
@@ -58,9 +56,7 @@ class MediaAnalyzerProtocol(ABC):
 
     @abstractmethod
     def transcribe_video(
-        self,
-        source: Union[Path, str],
-        include_timestamps: bool = True
+        self, source: Union[Path, str], include_timestamps: bool = True
     ) -> Dict[str, Any]:
         """Transcribe audio content from video.
 
@@ -74,10 +70,7 @@ class MediaAnalyzerProtocol(ABC):
         pass
 
     @abstractmethod
-    def analyze_scenes(
-        self,
-        source: Union[Path, str]
-    ) -> Dict[str, Any]:
+    def analyze_scenes(self, source: Union[Path, str]) -> Dict[str, Any]:
         """Analyze video scenes and create timeline breakdown.
 
         Args:
@@ -90,9 +83,7 @@ class MediaAnalyzerProtocol(ABC):
 
     @abstractmethod
     def answer_questions(
-        self,
-        source: Union[Path, str],
-        questions: List[str]
+        self, source: Union[Path, str], questions: List[str]
     ) -> Dict[str, Any]:
         """Answer specific questions about the video.
 
@@ -106,10 +97,7 @@ class MediaAnalyzerProtocol(ABC):
         pass
 
     @abstractmethod
-    def extract_key_info(
-        self,
-        source: Union[Path, str]
-    ) -> Dict[str, Any]:
+    def extract_key_info(self, source: Union[Path, str]) -> Dict[str, Any]:
         """Extract key information and insights from video.
 
         Args:
@@ -126,9 +114,7 @@ class MediaAnalyzerProtocol(ABC):
 
     @abstractmethod
     def describe_audio(
-        self,
-        source: Union[Path, str],
-        detailed: bool = False
+        self, source: Union[Path, str], detailed: bool = False
     ) -> Dict[str, Any]:
         """Generate audio description and summary.
 
@@ -146,7 +132,7 @@ class MediaAnalyzerProtocol(ABC):
         self,
         source: Union[Path, str],
         include_timestamps: bool = True,
-        speaker_identification: bool = True
+        speaker_identification: bool = True,
     ) -> Dict[str, Any]:
         """Transcribe spoken content from audio.
 
@@ -161,10 +147,7 @@ class MediaAnalyzerProtocol(ABC):
         pass
 
     @abstractmethod
-    def analyze_audio_content(
-        self,
-        source: Union[Path, str]
-    ) -> Dict[str, Any]:
+    def analyze_audio_content(self, source: Union[Path, str]) -> Dict[str, Any]:
         """Analyze audio content for type, genre, mood, etc.
 
         Args:
@@ -176,10 +159,7 @@ class MediaAnalyzerProtocol(ABC):
         pass
 
     @abstractmethod
-    def detect_audio_events(
-        self,
-        source: Union[Path, str]
-    ) -> Dict[str, Any]:
+    def detect_audio_events(self, source: Union[Path, str]) -> Dict[str, Any]:
         """Detect and analyze specific events in audio.
 
         Args:
@@ -196,9 +176,7 @@ class MediaAnalyzerProtocol(ABC):
 
     @abstractmethod
     def describe_image(
-        self,
-        source: Union[Path, str],
-        detailed: bool = False
+        self, source: Union[Path, str], detailed: bool = False
     ) -> Dict[str, Any]:
         """Generate image description and summary.
 
@@ -212,10 +190,7 @@ class MediaAnalyzerProtocol(ABC):
         pass
 
     @abstractmethod
-    def classify_image(
-        self,
-        source: Union[Path, str]
-    ) -> Dict[str, Any]:
+    def classify_image(self, source: Union[Path, str]) -> Dict[str, Any]:
         """Classify image content and categorize.
 
         Args:
@@ -228,9 +203,7 @@ class MediaAnalyzerProtocol(ABC):
 
     @abstractmethod
     def detect_objects(
-        self,
-        source: Union[Path, str],
-        detailed: bool = False
+        self, source: Union[Path, str], detailed: bool = False
     ) -> Dict[str, Any]:
         """Detect and identify objects in the image.
 
@@ -244,10 +217,7 @@ class MediaAnalyzerProtocol(ABC):
         pass
 
     @abstractmethod
-    def extract_text_from_image(
-        self,
-        source: Union[Path, str]
-    ) -> Dict[str, Any]:
+    def extract_text_from_image(self, source: Union[Path, str]) -> Dict[str, Any]:
         """Extract and transcribe text from image (OCR).
 
         Args:
@@ -259,10 +229,7 @@ class MediaAnalyzerProtocol(ABC):
         pass
 
     @abstractmethod
-    def analyze_image_composition(
-        self,
-        source: Union[Path, str]
-    ) -> Dict[str, Any]:
+    def analyze_image_composition(self, source: Union[Path, str]) -> Dict[str, Any]:
         """Analyze image composition, style, and technical aspects.
 
         Args:
@@ -278,9 +245,7 @@ class MediaAnalyzerProtocol(ABC):
     # =========================================================================
 
     def answer_audio_questions(
-        self,
-        source: Union[Path, str],
-        questions: List[str]
+        self, source: Union[Path, str], questions: List[str]
     ) -> Dict[str, Any]:
         """Answer specific questions about the audio.
 
@@ -290,9 +255,7 @@ class MediaAnalyzerProtocol(ABC):
         return self.answer_questions(source, questions)
 
     def answer_image_questions(
-        self,
-        source: Union[Path, str],
-        questions: List[str]
+        self, source: Union[Path, str], questions: List[str]
     ) -> Dict[str, Any]:
         """Answer specific questions about the image.
 

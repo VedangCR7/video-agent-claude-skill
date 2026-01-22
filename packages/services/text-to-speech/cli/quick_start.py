@@ -13,32 +13,34 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
+
 def check_setup():
     """Check if the system is properly configured"""
-    
+
     print("🔧 Checking system setup...")
-    
+
     # Check API keys
     openrouter_key = os.getenv("OPENROUTER_API_KEY")
     elevenlabs_key = os.getenv("ELEVENLABS_API_KEY")
-    
+
     if not openrouter_key:
         print("❌ Missing OPENROUTER_API_KEY")
         print("   Get your key from: https://openrouter.ai/")
         print("   Set: export OPENROUTER_API_KEY='your_key'")
         return False
-    
+
     if not elevenlabs_key:
         print("❌ Missing ELEVENLABS_API_KEY")
         print("   Get your key from: https://elevenlabs.io/")
         print("   Set: export ELEVENLABS_API_KEY='your_key'")
         return False
-    
+
     # Check dependencies
     try:
         import requests
         from ..pipeline.core import OpenRouterTTSPipeline
         from ..models.pipeline import OpenRouterModel
+
         print("✅ All dependencies available")
         return True
     except ImportError as e:
@@ -49,25 +51,25 @@ def check_setup():
 
 def run_demo_examples():
     """Run demonstration examples of the pipeline"""
-    
+
     if not check_setup():
         return
-    
+
     # Get API keys
     openrouter_key = os.getenv("OPENROUTER_API_KEY")
     elevenlabs_key = os.getenv("ELEVENLABS_API_KEY")
-    
+
     # Import pipeline
     from ..pipeline.core import OpenRouterTTSPipeline
     from ..models.pipeline import OpenRouterModel
-    
+
     # Initialize pipeline
     print("\n🚀 Initializing OpenRouter + ElevenLabs Pipeline")
     pipeline = OpenRouterTTSPipeline(openrouter_key, elevenlabs_key)
-    
+
     # Ensure output directory exists
     os.makedirs("output", exist_ok=True)
-    
+
     # Define demo scenarios
     demo_scenarios = [
         {
@@ -78,7 +80,7 @@ def run_demo_examples():
             "content_type": "presentation",
             "voice_style": "professional",
             "model": OpenRouterModel.CLAUDE_SONNET_4,
-            "output_file": "tech_pitch_demo.mp3"
+            "output_file": "tech_pitch_demo.mp3",
         },
         {
             "name": "Coffee Shop Debate",
@@ -88,7 +90,7 @@ def run_demo_examples():
             "content_type": "conversation",
             "voice_style": "casual",
             "model": OpenRouterModel.DEEPSEEK_V3_FREE,  # Free model for demo
-            "output_file": "pizza_debate_demo.mp3"
+            "output_file": "pizza_debate_demo.mp3",
         },
         {
             "name": "Job Interview",
@@ -98,7 +100,7 @@ def run_demo_examples():
             "content_type": "interview",
             "voice_style": "professional",
             "model": OpenRouterModel.GEMINI_2_FLASH,
-            "output_file": "job_interview_demo.mp3"
+            "output_file": "job_interview_demo.mp3",
         },
         {
             "name": "Ghost Story",
@@ -108,23 +110,23 @@ def run_demo_examples():
             "content_type": "story",
             "voice_style": "dramatic",
             "model": OpenRouterModel.GEMINI_25_FLASH,
-            "output_file": "ghost_story_demo.mp3"
-        }
+            "output_file": "ghost_story_demo.mp3",
+        },
     ]
-    
+
     print(f"\n🎯 Running {len(demo_scenarios)} demo scenarios...")
     print("=" * 60)
-    
+
     results = []
     total_start_time = time.time()
-    
+
     for i, scenario in enumerate(demo_scenarios, 1):
         print(f"\n🎬 Demo {i}/{len(demo_scenarios)}: {scenario['name']}")
         print(f"   Description: {scenario['description']}")
         print(f"   People: {scenario['num_people']}")
         print(f"   Length: {scenario['length_minutes']} minutes")
         print(f"   Model: {scenario['model'].value}")
-        
+
         try:
             result = pipeline.run_complete_pipeline(
                 description=scenario["description"],
@@ -133,41 +135,45 @@ def run_demo_examples():
                 content_type=scenario["content_type"],
                 voice_style=scenario["voice_style"],
                 model=scenario["model"],
-                output_file=scenario["output_file"]
+                output_file=scenario["output_file"],
             )
-            
+
             if result["success"]:
                 print(f"   ✅ Success! Generated: {result['output_file']}")
                 print(f"   ⏱️ Time: {result['total_time']:.2f}s")
                 results.append(result)
             else:
                 print(f"   ❌ Failed to generate {scenario['name']}")
-                
+
         except Exception as e:
             print(f"   ❌ Error: {e}")
-        
+
         # Small delay between demos
         if i < len(demo_scenarios):
             print("   ⏳ Waiting 2 seconds before next demo...")
             time.sleep(2)
-    
+
     total_time = time.time() - total_start_time
-    
+
     # Summary
     print("\n" + "=" * 60)
     print("🎉 Demo Complete!")
     print(f"⏱️ Total time: {total_time:.2f} seconds")
     print(f"✅ Successful generations: {len(results)}/{len(demo_scenarios)}")
-    
+
     if results:
         print("\n🎵 Generated files:")
         for result in results:
             print(f"   📁 {result['output_file']}")
-            print(f"      Duration: {result['generated_content'].estimated_duration:.2f} min")
-        
+            print(
+                f"      Duration: {result['generated_content'].estimated_duration:.2f} min"
+            )
+
         print("\n🎧 You can now play these audio files to hear the results!")
-        print("💡 Try different descriptions and settings using interactive_pipeline.py")
-    
+        print(
+            "💡 Try different descriptions and settings using interactive_pipeline.py"
+        )
+
     else:
         print("\n❌ No files were generated successfully")
         print("   Check your API keys and internet connection")
@@ -175,7 +181,7 @@ def run_demo_examples():
 
 def show_pipeline_info():
     """Show information about the pipeline capabilities"""
-    
+
     print("\n🎙️ OpenRouter + ElevenLabs Text-to-Speech Pipeline")
     print("=" * 60)
     print("Complete AI-to-Speech pipeline with 5 steps:")
@@ -213,7 +219,7 @@ def show_pipeline_info():
 def main():
     """Main function for CLI entry point"""
     import sys
-    
+
     if len(sys.argv) > 1:
         if sys.argv[1] == "--info":
             show_pipeline_info()
@@ -232,4 +238,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main() 
+    main()

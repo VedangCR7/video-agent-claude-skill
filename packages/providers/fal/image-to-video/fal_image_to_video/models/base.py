@@ -43,10 +43,7 @@ class BaseVideoModel(ABC):
 
     @abstractmethod
     def prepare_arguments(
-        self,
-        prompt: str,
-        image_url: str,
-        **kwargs
+        self, prompt: str, image_url: str, **kwargs
     ) -> Dict[str, Any]:
         """
         Prepare API arguments for the model.
@@ -80,7 +77,7 @@ class BaseVideoModel(ABC):
             "duration": video_info.get("duration"),
             "fps": video_info.get("fps"),
             "width": video_info.get("width"),
-            "height": video_info.get("height")
+            "height": video_info.get("height"),
         }
 
     def generate(
@@ -89,7 +86,7 @@ class BaseVideoModel(ABC):
         image_url: str,
         output_dir: Optional[str] = None,
         use_async: bool = False,
-        **kwargs
+        **kwargs,
     ) -> Dict[str, Any]:
         """
         Generate video using the model.
@@ -118,7 +115,7 @@ class BaseVideoModel(ABC):
             start_time = time.time()
 
             def on_queue_update(update):
-                if hasattr(update, 'logs') and update.logs:
+                if hasattr(update, "logs") and update.logs:
                     for log in update.logs:
                         print(f"  {log.get('message', str(log))}")
 
@@ -129,7 +126,7 @@ class BaseVideoModel(ABC):
                     self.endpoint,
                     arguments=arguments,
                     with_logs=True,
-                    on_queue_update=on_queue_update
+                    on_queue_update=on_queue_update,
                 )
 
             processing_time = time.time() - start_time
@@ -143,9 +140,7 @@ class BaseVideoModel(ABC):
             # Download video
             output_directory = ensure_output_directory(output_dir)
             local_path = download_video(
-                video_info["url"],
-                output_directory,
-                self.model_key
+                video_info["url"], output_directory, self.model_key
             )
 
             # Calculate cost estimate using model-specific estimate_cost method
@@ -163,7 +158,7 @@ class BaseVideoModel(ABC):
                 "local_path": local_path,
                 "processing_time": processing_time,
                 "cost_estimate": cost_estimate,
-                **validated_params
+                **validated_params,
             }
 
         except Exception as e:
@@ -173,14 +168,11 @@ class BaseVideoModel(ABC):
                 "error": str(e),
                 "model": self.display_name,
                 "model_key": self.model_key,
-                "prompt": prompt
+                "prompt": prompt,
             }
 
     def _generate_async(
-        self,
-        arguments: Dict[str, Any],
-        timeout: int = 600,
-        poll_interval: int = 5
+        self, arguments: Dict[str, Any], timeout: int = 600, poll_interval: int = 5
     ) -> Dict[str, Any]:
         """
         Handle async generation with polling.
