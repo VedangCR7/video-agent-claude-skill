@@ -7,6 +7,18 @@ Supports parallel execution with race condition prevention.
 
 Thread Safety: Uses deep copy to prevent data corruption in parallel operations.
 Critical for maintaining data integrity when multiple pipeline steps execute concurrently.
+
+Pipeline Execution Model:
+- Sequential steps for simple workflows
+- Parallel steps for concurrent AI model execution
+- Isolated contexts prevent cross-step interference
+- Atomic operations ensure consistent pipeline state
+
+Error Handling:
+- Step-level error isolation prevents cascade failures
+- Comprehensive error reporting for debugging
+- Graceful degradation when individual steps fail
+- Retry mechanisms for transient failures
 """
 
 import yaml

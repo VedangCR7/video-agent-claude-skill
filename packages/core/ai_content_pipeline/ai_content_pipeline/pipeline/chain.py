@@ -3,6 +3,28 @@ Content creation chain classes for AI Content Pipeline
 
 Provides the core data structures and execution logic for AI content pipelines.
 Enhanced for better parallel execution support and improved error handling.
+Supports thread-safe parallel processing with race condition prevention.
+
+Thread Safety: Implements isolated context copying to prevent race conditions.
+Critical for maintaining data integrity in multi-threaded AI pipeline execution.
+
+Chain Architecture:
+- Configurable step sequences for flexible workflows
+- Parallel step support for concurrent AI model execution
+- Context isolation ensures step independence
+- Error boundaries prevent cascade failures
+
+Workflow Patterns:
+- Sequential: Text → Image → Video (traditional pipeline)
+- Parallel: Multiple AI models executing concurrently
+- Hybrid: Mix of sequential and parallel execution
+- Conditional: Dynamic step execution based on results
+
+Configuration Management:
+- YAML/JSON-based pipeline definitions
+- Runtime parameter validation
+- Step dependency resolution
+- Resource allocation optimization
 """
 
 from dataclasses import dataclass
