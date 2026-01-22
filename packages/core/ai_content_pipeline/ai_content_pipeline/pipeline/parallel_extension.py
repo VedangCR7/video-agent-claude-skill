@@ -101,13 +101,17 @@ class ParallelExtension:
             futures = {}
             for i, p_step in enumerate(parallel_steps):
                 print(f"  📍 Submitting: {p_step.step_type.value} ({p_step.model})")
+                # Create a deep copy to ensure thread safety
+                import copy
+                thread_safe_context = copy.deepcopy(step_context)
+
                 future = executor.submit(
                     self.base_executor._execute_step,
                     step=p_step,
                     input_data=input_data,
                     input_type=input_type,
                     chain_config=chain_config,
-                    step_context=step_context.copy(),  # Thread-safe copy
+                    step_context=thread_safe_context,
                 )
                 futures[future] = (i, p_step)
 
