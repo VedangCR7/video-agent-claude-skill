@@ -3,6 +3,8 @@ Parallel execution extension for AI Content Pipeline.
 
 This module provides parallel execution capabilities as an optional extension
 that doesn't break existing functionality.
+
+Thread Safety: Uses deepcopy to prevent race conditions in parallel execution.
 """
 
 import os
