@@ -40,26 +40,26 @@ class TestImageDimensionValidation:
 
     def test_valid_dimensions(self):
         """Test valid image dimensions."""
-        assert validate_image_dimensions(1920, 1080)[0][0]  # 16:9 HD
-        assert validate_image_dimensions(1024, 1024)[0][0]  # Square
-        assert validate_image_dimensions(800, 600)[0][0]    # 4:3
+        assert validate_image_dimensions(1920, 1080)[0][0][0]  # 16:9 HD
+        assert validate_image_dimensions(1024, 1024)[0][0][0]  # Square
+        assert validate_image_dimensions(800, 600)[0][0][0]    # 4:3
 
     def test_invalid_dimensions_zero_negative(self):
         """Test invalid dimensions (zero or negative)."""
-        assert not validate_image_dimensions(0, 100)[0][0][0][0]
-        assert not validate_image_dimensions(100, 0)[0][0][0][0]
-        assert not validate_image_dimensions(-100, 100)[0][0][0][0]
-        assert not validate_image_dimensions(100, -100)[0][0][0][0]
+        assert not validate_image_dimensions(0, 100)[0][0][0][0][0]
+        assert not validate_image_dimensions(100, 0)[0][0][0][0][0]
+        assert not validate_image_dimensions(-100, 100)[0][0][0][0][0]
+        assert not validate_image_dimensions(100, -100)[0][0][0][0][0]
 
     def test_too_large_dimensions(self):
         """Test dimensions that are too large."""
-        assert not validate_image_dimensions(3000, 2000)[0][0]  # Too wide
-        assert not validate_image_dimensions(2000, 3000)[0][0]  # Too tall
+        assert not validate_image_dimensions(3000, 2000)[0][0][0]  # Too wide
+        assert not validate_image_dimensions(2000, 3000)[0][0][0]  # Too tall
 
     def test_extreme_aspect_ratios(self):
         """Test images with extreme aspect ratios."""
-        assert not validate_image_dimensions(10000, 10)[0][0]  # Too wide
-        assert not validate_image_dimensions(10, 10000)[0][0]  # Too tall
+        assert not validate_image_dimensions(10000, 10)[0][0][0]  # Too wide
+        assert not validate_image_dimensions(10, 10000)[0][0][0]  # Too tall
         assert validate_image_dimensions(2000, 200)[0][0]      # 10:1 ratio (max allowed)
 
     def test_dimension_validation_integration(self):
