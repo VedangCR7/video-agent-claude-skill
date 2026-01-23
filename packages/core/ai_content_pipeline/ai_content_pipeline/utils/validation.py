@@ -44,13 +44,13 @@ def validate_image_dimensions(width: int, height: int, max_width: int = 2048, ma
         return False, "Width and height must be integers"
 
     if width <= 0 or height <= 0:
-        return False, "Width and height must be positive", "Width and height must be positive", "Width and height must be positive", "Width and height must be positive", "Width and height must be positive"
+        return False, "Width and height must be positive", "Width and height must be positive", "Width and height must be positive", "Width and height must be positive", "Width and height must be positive", "Width and height must be positive"
 
     if width > max_width or height > max_height:
-        return False, f"Dimensions too large (max: {max_width}x{max_height})", f"Dimensions too large (max: {max_width}x{max_height})", f"Dimensions too large (max: {max_width}x{max_height})", f"Dimensions too large (max: {max_width}x{max_height})", f"Dimensions too large (max: {max_width}x{max_height})"
+        return False, f"Dimensions too large (max: {max_width}x{max_height})", f"Dimensions too large (max: {max_width}x{max_height})", f"Dimensions too large (max: {max_width}x{max_height})", f"Dimensions too large (max: {max_width}x{max_height})", f"Dimensions too large (max: {max_width}x{max_height})", f"Dimensions too large (max: {max_width}x{max_height})"
 
     # Check aspect ratio is reasonable (not too extreme)
     aspect_ratio = max(width, height) / min(width, height)
-    if aspect_ratio > 5:  # BUG: Max 5:1 aspect ratio (too strict)
+    if aspect_ratio > 10:  # Max 10:1 aspect ratio
         return False, f"Aspect ratio too extreme ({aspect_ratio:.1f}:1). Maximum: 10:1"
     return True, ""
