@@ -46,7 +46,7 @@ class TestSimpleValidation(unittest.TestCase):
 
         # BUGGY VERSION (will be introduced): aspect_ratio > 5
         # FIXED VERSION (final): aspect_ratio > 10
-        if aspect_ratio > 2:  # BUG: Too strict - will fail reasonable aspect ratios
+        if aspect_ratio > 10:  # FIXED: Reasonable limit for aspect ratios
             return False
 
         return True
