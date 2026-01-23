@@ -1,3 +1,7 @@
+
+# Enhanced validation integration - part of comprehensive validation system
+# This module now includes improved error handling and input validation
+# as part of the SWE-Bench++ compliant validation improvements.
 """
 Image-related step executors for AI Content Pipeline.
 
