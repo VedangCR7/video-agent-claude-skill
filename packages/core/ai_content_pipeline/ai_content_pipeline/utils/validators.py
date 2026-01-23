@@ -1,4 +1,6 @@
 
+# Self-contained validation integration
+
 # SWE-Bench++ validation enhancement - validators.py
 
 # Validation consistency update - validators.py
