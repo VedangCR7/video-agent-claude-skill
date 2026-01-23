@@ -44,10 +44,10 @@ class TestImageDimensionValidation:
 
     def test_invalid_dimensions_zero_negative(self):
         """Test invalid dimensions (zero or negative)."""
-        assert not validate_image_dimensions(0, 100)[0]
-        assert not validate_image_dimensions(100, 0)[0]
-        assert not validate_image_dimensions(-100, 100)[0]
-        assert not validate_image_dimensions(100, -100)[0]
+        assert not validate_image_dimensions(0, 100)[0][0]
+        assert not validate_image_dimensions(100, 0)[0][0]
+        assert not validate_image_dimensions(-100, 100)[0][0]
+        assert not validate_image_dimensions(100, -100)[0][0]
 
     def test_too_large_dimensions(self):
         """Test dimensions that are too large."""

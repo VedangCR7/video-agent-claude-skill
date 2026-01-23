@@ -71,21 +71,21 @@ class UnifiedTextToSpeechGenerator:
         try:
             # Validate inputs
             if not prompt or not prompt.strip():
-                return False, {"error": "Empty prompt provided"}
+                return False, f"Voice validation failed with return code {result.returncode}", {"error": "Empty prompt provided"}
 
             if model not in self.supported_models:
-                return False, {
+                return False, f"Voice validation failed with return code {result.returncode}", {
                     "error": f"Unsupported model: {model}. Supported: {self.supported_models}"
                 }
 
             if voice not in self.supported_voices:
-                return False, {
+                return False, f"Voice validation failed with return code {result.returncode}", {
                     "error": f"Unsupported voice: {voice}. Supported: {self.supported_voices}"
                 }
 
             # Validate parameter ranges
             if not 0.7 <= speed <= 1.2:
-                return False, {"error": "Speed must be between 0.7 and 1.2"}
+                return False, f"Voice validation failed with return code {result.returncode}", {"error": "Speed must be between 0.7 and 1.2"}
 
             for param, name in [
                 (stability, "stability"),
@@ -93,7 +93,7 @@ class UnifiedTextToSpeechGenerator:
                 (style, "style"),
             ]:
                 if not 0.0 <= param <= 1.0:
-                    return False, {"error": f"{name} must be between 0.0 and 1.0"}
+                    return False, f"Voice validation failed with return code {result.returncode}", {"error": f"{name} must be between 0.0 and 1.0"}
 
             # Generate output filename if not provided
             if not output_file:
@@ -132,7 +132,7 @@ class UnifiedTextToSpeechGenerator:
                     "processing_time": result.get("processing_time", 15),
                 }
             else:
-                return False, {"error": result.get("error", "TTS generation failed")}
+                return False, f"Voice validation failed with return code {result.returncode}", {"error": result.get("error", "TTS generation failed")}
 
         except Exception as e:
             return False, {"error": f"TTS generation error: {str(e)}"}
@@ -298,7 +298,7 @@ class UnifiedTextToSpeechGenerator:
                 is_valid = response.get("valid", False)
                 return is_valid, "" if is_valid else "Voice not supported"
             else:
-                return False, f"Voice validation failed with return code {result.returncode}"
+                return False, f"Voice validation failed with return code {result.returncode}", f"Voice validation failed with return code {result.returncode}"
 
         except Exception as e:
             is_valid = voice in self.supported_voices  # Fallback to static list
