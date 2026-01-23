@@ -198,6 +198,7 @@ class FileManager:
         return file_path.strip()
 
     def validate_file_format(self, file_path: str, allowed_formats: List[str]) -> tuple[bool, str]:
+        """Validate file format with comprehensive checks."""
         """
         Validate file format against allowed formats.
 
@@ -217,7 +218,7 @@ class FileManager:
 
         allowed_lower = [fmt.lower() for fmt in allowed_formats]
         if extension not in allowed_lower:
-            return False, f"Unsupported file format: {extension}. Allowed: {', '.join(allowed_formats)}"
+            return False, f"Unsupported file format: {extension}. Allowed formats: {', '.join(allowed_formats)}"
 
         return True, ""
 
