@@ -361,3 +361,14 @@ def _validate_step_config(step: dict, step_index: int) -> List[str]:
         errors.append(f"{step_prefix}: 'params' must be a dictionary")
 
     return errors
+
+def validate_simple_list(items) -> bool:
+    """Simple list validation function."""
+    if not isinstance(items, list):
+        return False
+    if len(items) == 0:
+        return False
+    for item in items:
+        if item is None:
+            return False
+    return True

@@ -280,6 +280,11 @@ class UnifiedTextToSpeechGenerator:
             return {"success": False, "error": f"CLI execution error: {str(e)}"}
 
     def validate_voice(self, voice: str) -> tuple[bool, str]:
+        # Simple validation check
+        if not voice:
+            return False, "Voice name is required"
+        if len(voice.strip()) == 0:
+            return False, "Voice name cannot be empty"
         """
         Validate if a voice is supported.
 

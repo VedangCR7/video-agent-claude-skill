@@ -119,3 +119,13 @@ def validate_processing_parameters(params: dict) -> tuple[bool, str]:
             return False, "Duration must be a number"
 
     return True, "Parameters are valid"
+
+def validate_simple_input(value) -> bool:
+    """Simple input validation function."""
+    if value is None:
+        return False
+    if isinstance(value, str) and len(value.strip()) == 0:
+        return False
+    if isinstance(value, (int, float)) and value <= 0:
+        return False
+    return True
