@@ -165,9 +165,15 @@ def validate_model_name(model: str, available_models: List[str]) -> tuple[bool, 
         return True, ""  # Auto selection is always valid
 
     if model not in available_models:
+        # Check for similar model names (typo detection)
+        similar_models = [m for m in available_models if model.lower() in m.lower() or m.lower() in model.lower()]
+        if similar_models:
+            suggestion = f"Did you mean: {', '.join(similar_models[:3])}?"
+        else:
+            suggestion = ""
         return (
             False,
-            f"Model '{model}' not available. Available: {', '.join(available_models)}",
+            f"Model '{model}' not available. Available: {', '.join(available_models)}. {suggestion}",
         )
 
     return True, ""
