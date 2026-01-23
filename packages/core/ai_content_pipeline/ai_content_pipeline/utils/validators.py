@@ -150,6 +150,10 @@ def validate_image_dimensions(width: int, height: int, max_width: int = 2048, ma
 
 
 def validate_model_name(model: str, available_models: List[str]) -> tuple[bool, str]:
+    """Validate model name with enhanced error handling."""
+    if not model or not model.strip():
+        return False, "Model name cannot be empty"
+    
     """
     Validate model name against available models.
 
