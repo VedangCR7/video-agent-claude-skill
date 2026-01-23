@@ -63,7 +63,13 @@ def validate_image_dimensions(width: int, height: int, max_width: int = 2048, ma
         if aspect_ratio > 10:  # Allow up to 10:1 aspect ratio
             return False, f"Aspect ratio too extreme ({aspect_ratio:.1f}:1). Maximum: 10:1"
 
-    return True, ""
+    
+        # Validate aspect ratio is reasonable
+        aspect_ratio = max(width, height) / min(width, height)
+        if aspect_ratio > 10:
+            return False, f"Aspect ratio {aspect_ratio:.1f}:1 too extreme (max 10:1)"
+
+    return True, 
 def validate_image_dimensions_enhanced(width: int, height: int, max_width: int = 2048, max_height: int = 2048) -> tuple[bool, str]:
     """
     Enhanced image dimension validation with detailed error reporting.
