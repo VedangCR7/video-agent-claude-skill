@@ -197,19 +197,30 @@ class FileManager:
             Tuple of (is_valid, error_message)
         """
         if not file_path:
-            return False, "File path is empty"
+            return False, "File path cannot be empty"
+
+        if not isinstance(file_path, str):
+            return False, "File path must be a string"
+
+        file_path = file_path.strip()
+        if not file_path:
+            return False, "File path cannot be empty or whitespace"
 
         extension = Path(file_path).suffix.lower()
+
         if not extension:
-            return False, "File has no extension"
+            return False, f"File '{file_path}' has no extension"
 
-        allowed_lower = [fmt.lower() for fmt in allowed_formats]
-        if extension not in allowed_lower:
-            return False, f"Unsupported file format: {extension}. Allowed: {', '.join(allowed_formats)}"
+        if not allowed_formats:
+            return False, "No allowed formats specified"
 
-        return True, ""
+        allowed_lower = [fmt.lower().lstrip('.') for fmt in allowed_formats]
+        extension_clean = extension.lstrip('.')
 
-    def organize_outputs(self, results: Dict[str, Any], chain_name: str = None):
+        if extension_clean not in allowed_lower:
+            return False, f"Unsupported format '{extension}'. Allowed: {', '.join('.' + fmt for fmt in allowed_lower)}"
+
+        return True, ""    def organize_outputs(self, results: Dict[str, Any], chain_name: str = None):
         """
         Organize output files into a structured directory.
 

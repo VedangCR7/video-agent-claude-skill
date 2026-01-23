@@ -56,3 +56,14 @@ def validate_image_dimensions(width: int, height: int, max_width: int = 2048, ma
     if aspect_ratio > 10:  # Max 10:1 aspect ratio
         return False, f"Aspect ratio too extreme ({aspect_ratio:.1f}:1). Maximum: 10:1"
     return True, ""
+def validate_numeric_range(value, min_val=None, max_val=None, param_name="value"):
+    """Validate that a value is numeric and within optional range."""
+    try:
+        num_val = float(value)
+        if min_val is not None and num_val < min_val:
+            return False, f"{param_name} must be >= {min_val}"
+        if max_val is not None and num_val > max_val:
+            return False, f"{param_name} must be <= {max_val}"
+        return True, ""
+    except (ValueError, TypeError):
+        return False, f"{param_name} must be numeric"

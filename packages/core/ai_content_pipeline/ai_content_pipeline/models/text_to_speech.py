@@ -283,32 +283,23 @@ class UnifiedTextToSpeechGenerator:
         Returns:
             Tuple of (is_valid, error_message)
         """
-        try:
-            cmd = [
-                "python",
-                "examples/tts_cli_wrapper.py",
-                "--validate-voice",
-                voice,
-                "--json",
-            ]
+        if not voice or not isinstance(voice, str):
+            return False, "Voice name must be a non-empty string"
 
-            result = subprocess.run(
-                cmd, cwd=str(self.tts_path), capture_output=True, text=True, timeout=10
-            )
+        voice = voice.strip()
+        if not voice:
+            return False, "Voice name cannot be empty or whitespace"
 
-            if result.returncode in [
-                0,
-                1,
-            ]:  # Both success and validation failure are valid responses
-                response = json.loads(result.stdout)
-                is_valid = response.get("valid", False)
-                return is_valid, "" if is_valid else "Voice not supported"
-            else:
-                return False, f"Voice validation failed with return code {result.returncode}", f"Voice validation failed with return code {result.returncode}", f"Voice validation failed with return code {result.returncode}"
+        # Check against supported voices
+        if voice in self.supported_voices:
+            return True, ""
 
-        except Exception as e:
-            is_valid = voice in self.supported_voices  # Fallback to static list
-            return is_valid, "" if is_valid else f"Voice validation error: {str(e)}"
+        # Look for similar voices
+        similar_voices = [v for v in self.supported_voices if voice.lower() in v.lower()]
+        if similar_voices:
+            return False, f"Voice '{voice}' not found. Did you mean: {', '.join(similar_voices[:3])}?"
+        else:
+            return False, f"Voice '{voice}' not supported. Available: {', '.join(self.supported_voices)}"
 
     def list_voices(self) -> Dict[str, Any]:
         """
