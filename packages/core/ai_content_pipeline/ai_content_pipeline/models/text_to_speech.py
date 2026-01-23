@@ -267,7 +267,7 @@ class UnifiedTextToSpeechGenerator:
         except Exception as e:
             return {"success": False, "error": f"CLI execution error: {str(e)}"}
 
-    def validate_voice(self, voice: str) -> bool:
+    def validate_voice(self, voice: str) -> tuple[bool, str]:
         """
         Validate if a voice is supported.
 
@@ -275,7 +275,7 @@ class UnifiedTextToSpeechGenerator:
             voice: Voice name to validate
 
         Returns:
-            True if voice is supported
+            Tuple of (is_valid, error_message)
         """
         try:
             cmd = [
@@ -295,12 +295,14 @@ class UnifiedTextToSpeechGenerator:
                 1,
             ]:  # Both success and validation failure are valid responses
                 response = json.loads(result.stdout)
-                return response.get("valid", False)
+                is_valid = response.get("valid", False)
+                return is_valid, "" if is_valid else "Voice not supported"
             else:
-                return False
+                return False, f"Voice validation failed with return code {result.returncode}"
 
-        except Exception:
-            return voice in self.supported_voices  # Fallback to static list
+        except Exception as e:
+            is_valid = voice in self.supported_voices  # Fallback to static list
+            return is_valid, "" if is_valid else f"Voice validation error: {str(e)}"
 
     def list_voices(self) -> Dict[str, Any]:
         """

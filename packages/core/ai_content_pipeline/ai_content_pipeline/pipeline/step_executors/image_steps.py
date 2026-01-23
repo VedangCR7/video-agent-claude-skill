@@ -181,6 +181,19 @@ class ImageToImageExecutor(BaseStepExecutor):
         # Get prompt from step params or kwargs
         prompt = step.params.get("prompt", kwargs.get("prompt", "modify this image"))
 
+        # Validate prompt
+        if not isinstance(prompt, str) or not prompt.strip():
+            return {
+                "success": False,
+                "error": "Prompt must be a non-empty string",
+                "output_path": None,
+                "output_url": None,
+                "processing_time": 0,
+                "cost": 0,
+                "model": step.model,
+                "metadata": {},
+            }
+
         params = self._merge_params(
             step.params, chain_config, kwargs, exclude_keys=["prompt"]
         )

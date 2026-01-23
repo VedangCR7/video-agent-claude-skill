@@ -305,7 +305,10 @@ class UnifiedTextToImageGenerator(BaseContentModel):
         width = kwargs.get("width")
         height = kwargs.get("height")
         if width is not None and height is not None:
-            is_valid, error_msg = validate_image_dimensions(width, height, MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT)
+            # Validate that width and height are numeric
+            if not isinstance(width, (int, float)) or not isinstance(height, (int, float)):
+                return False
+            is_valid, error_msg = validate_image_dimensions(int(width), int(height), MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT)
             if not is_valid:
                 return False
 
