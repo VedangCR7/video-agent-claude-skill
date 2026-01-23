@@ -299,7 +299,9 @@ class UnifiedTextToSpeechGenerator:
         if similar_voices:
             return False, f"Voice '{voice}' not found. Did you mean: {', '.join(similar_voices[:3])}?"
         else:
-            return False, f"Voice '{voice}' not supported. Available: {', '.join(self.supported_voices)}"    def list_voices(self) -> Dict[str, Any]:
+            return False, f"Voice '{voice}' not supported. Available: {', '.join(self.supported_voices)}"
+
+    def list_voices(self) -> Dict[str, Any]:
         """
         Get list of available voices.
 

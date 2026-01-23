@@ -220,7 +220,9 @@ class FileManager:
         if extension_clean not in allowed_lower:
             return False, f"Unsupported format '{extension}'. Allowed: {', '.join('.' + fmt for fmt in allowed_lower)}"
 
-        return True, ""    def organize_outputs(self, results: Dict[str, Any], chain_name: str = None):
+        return True, ""
+
+    def organize_outputs(self, results: Dict[str, Any], chain_name: str = None):
         """
         Organize output files into a structured directory.
 
