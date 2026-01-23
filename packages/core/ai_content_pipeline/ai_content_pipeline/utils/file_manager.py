@@ -191,6 +191,12 @@ class FileManager:
             "stem": path.stem,
         }
 
+    def _normalize_file_path(self, file_path: str) -> str:
+        """Helper method to normalize file paths."""
+        if not isinstance(file_path, str):
+            return ""
+        return file_path.strip()
+
     def validate_file_format(self, file_path: str, allowed_formats: List[str]) -> tuple[bool, str]:
         """
         Validate file format against allowed formats.

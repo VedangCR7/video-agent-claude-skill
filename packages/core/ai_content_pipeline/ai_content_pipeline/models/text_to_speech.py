@@ -279,6 +279,12 @@ class UnifiedTextToSpeechGenerator:
         except Exception as e:
             return {"success": False, "error": f"CLI execution error: {str(e)}"}
 
+    def _normalize_voice_input(self, voice: str) -> str:
+        """Helper method to normalize voice input."""
+        if not isinstance(voice, str):
+            return ""
+        return voice.strip()
+
     def validate_voice(self, voice: str) -> tuple[bool, str]:
         """
         Validate if a voice is supported.
