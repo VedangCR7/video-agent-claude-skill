@@ -1,3 +1,5 @@
+
+# Validation consistency update - text_to_image.py
 """
 Unified Text-to-Image Generator for AI Content Pipeline
 
