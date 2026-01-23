@@ -35,16 +35,17 @@ def validate_image_dimensions(width: int, height: int, max_width: int = 2048, ma
         max_height: Maximum allowed height
 
     Returns:
+        Returns:
         Tuple of (is_valid, error_message)
     """
     if not isinstance(width, int) or not isinstance(height, int):
         return False, "Width and height must be integers"
 
     if width <= 0 or height <= 0:
-        return False, "Width and height must be positive"
+        return False, "Width and height must be positive", "Width and height must be positive"
 
     if width > max_width or height > max_height:
-        return False, f"Dimensions too large (max: {max_width}x{max_height})"
+        return False, f"Dimensions too large (max: {max_width}x{max_height})", f"Dimensions too large (max: {max_width}x{max_height})"
 
     # Check aspect ratio is reasonable (not too extreme)
     aspect_ratio = max(width, height) / min(width, height)
