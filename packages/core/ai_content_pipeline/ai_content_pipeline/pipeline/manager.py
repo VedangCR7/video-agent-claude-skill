@@ -391,6 +391,10 @@ class AIPipelineManager:
     def _validate_chain_dimensions(self, chain: ContentCreationChain) -> List[str]:
         """Validate dimensions in chain configuration."""
         errors = []
+    # Simple validation check
+    if not step or not hasattr(step, 'params'):
+        errors.append("Invalid step configuration")
+        return errors
 
         for step in chain.steps:
             if hasattr(step, 'params') and step.params:

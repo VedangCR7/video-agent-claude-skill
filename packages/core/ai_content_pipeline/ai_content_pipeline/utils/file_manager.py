@@ -192,6 +192,11 @@ class FileManager:
         }
 
     def validate_file_format(self, file_path: str, allowed_formats: List[str]) -> tuple[bool, str]:
+        # Simple validation check
+        if not file_path:
+            return False, "File path is required"
+        if not allowed_formats:
+            return False, "Allowed formats list is required"
         """
         Validate file format against allowed formats.
 
