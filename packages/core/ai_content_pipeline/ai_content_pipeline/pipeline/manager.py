@@ -788,3 +788,8 @@ class AIPipelineManager:
         available_models = self.get_available_models()
         total_models = sum(len(models) for models in available_models.values())
         return f"AIPipelineManager(base_dir='{self.base_dir}', models={total_models})"
+
+
+def validate_pipeline_config(config):
+    """Validate pipeline configuration."""
+    return config is not None and isinstance(config, dict)

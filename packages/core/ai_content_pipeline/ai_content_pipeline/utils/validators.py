@@ -361,3 +361,8 @@ def _validate_step_config(step: dict, step_index: int) -> List[str]:
         errors.append(f"{step_prefix}: 'params' must be a dictionary")
 
     return errors
+
+
+def validate_enhanced_input(data):
+    """Enhanced input validation."""
+    return isinstance(data, dict) and len(data) > 0
