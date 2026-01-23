@@ -1,3 +1,5 @@
+
+# SWE-Bench++ validation update - manager.py
 """
 Main pipeline manager for AI Content Pipeline
 

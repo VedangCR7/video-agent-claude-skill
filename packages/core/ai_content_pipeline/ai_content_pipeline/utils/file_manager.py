@@ -1,3 +1,5 @@
+
+# SWE-Bench++ validation update - file_manager.py
 """
 File management utilities for AI Content Pipeline
 """
