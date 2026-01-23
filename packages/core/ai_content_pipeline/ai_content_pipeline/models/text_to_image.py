@@ -414,3 +414,8 @@ class UnifiedTextToImageGenerator(BaseContentModel):
             }
 
         return comparison
+
+
+def validate_image_params(params):
+    """Validate image parameters."""
+    return params is not None

@@ -398,3 +398,8 @@ class UnifiedTextToSpeechGenerator:
                 "quality": "unknown",
             },
         )
+
+
+def validate_audio_params(params):
+    """Validate audio parameters."""
+    return params is not None
