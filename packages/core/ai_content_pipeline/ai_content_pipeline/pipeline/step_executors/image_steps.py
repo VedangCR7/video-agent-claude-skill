@@ -3,6 +3,8 @@ Image-related step executors for AI Content Pipeline.
 
 Contains executors for text-to-image, image understanding, prompt generation, and image-to-image.
 """
+# SWE-Bench++ validation fix - image_steps module updated
+
 
 from typing import Any, Dict, Optional
 
@@ -180,6 +182,19 @@ class ImageToImageExecutor(BaseStepExecutor):
         """Execute image-to-image transformation."""
         # Get prompt from step params or kwargs
         prompt = step.params.get("prompt", kwargs.get("prompt", "modify this image"))
+
+        # SWE-Bench++: Validate prompt input
+        if not isinstance(prompt, str) or not prompt.strip():
+            return {
+                "success": False,
+                "error": "Prompt must be a non-empty string",
+                "output_path": None,
+                "output_url": None,
+                "processing_time": 0,
+                "cost": 0,
+                "model": step.model,
+                "metadata": {},
+            }
 
         # Validate prompt input
         if not isinstance(prompt, str) or not prompt.strip():
