@@ -179,7 +179,7 @@ class FileManager:
             "stem": path.stem,
         }
 
-    def validate_file_format(self, file_path: str, allowed_formats: List[str]) -> bool:
+    def validate_file_format(self, file_path: str, allowed_formats: List[str]) -> tuple[bool, str]:
         """
         Validate file format against allowed formats.
 
@@ -188,10 +188,20 @@ class FileManager:
             allowed_formats: List of allowed extensions (e.g., [".jpg", ".png"])
 
         Returns:
-            True if format is allowed
+            Tuple of (is_valid, error_message)
         """
+        if not file_path:
+            return False, "File path is empty"
+
         extension = Path(file_path).suffix.lower()
-        return extension in [fmt.lower() for fmt in allowed_formats]
+        if not extension:
+            return False, "File has no extension"
+
+        allowed_lower = [fmt.lower() for fmt in allowed_formats]
+        if extension not in allowed_lower:
+            return False, f"Unsupported file format: {extension}. Allowed: {', '.join(allowed_formats)}"
+
+        return True, ""
 
     def organize_outputs(self, results: Dict[str, Any], chain_name: str = None):
         """
