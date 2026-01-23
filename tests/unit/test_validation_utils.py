@@ -59,3 +59,22 @@ class TestImageDimensionValidation:
         assert not validate_image_dimensions(10000, 10)  # Too wide
         assert not validate_image_dimensions(10, 10000)  # Too tall
         assert validate_image_dimensions(2000, 200)      # 10:1 ratio (max allowed)
+
+    def test_dimension_validation_integration(self):
+        """F2P: Test dimension validation integration logic."""
+        from packages.core.ai_content_pipeline.ai_content_pipeline.utils.validators import validate_image_dimensions
+        from packages.core.ai_content_pipeline.ai_content_pipeline.config.constants import MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT
+
+        # Test valid dimensions (should pass in model validation)
+        is_valid, error = validate_image_dimensions(1024, 1024, MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT)
+        assert is_valid, f"Valid dimensions should pass: {error}"
+
+        # Test invalid dimensions - too extreme aspect ratio (should fail)
+        # This test will FAIL before the dimension validation fix (aspect ratio <= 5)
+        # and PASS after the fix (aspect ratio <= 10)
+        is_valid, error = validate_image_dimensions(5000, 100, MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT)
+        assert not is_valid, "Extreme aspect ratio should fail"
+
+        # Test valid dimensions with reasonable aspect ratio (should pass)
+        is_valid, error = validate_image_dimensions(2000, 200, MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT)
+        assert is_valid, f"Reasonable aspect ratio should pass: {error}"

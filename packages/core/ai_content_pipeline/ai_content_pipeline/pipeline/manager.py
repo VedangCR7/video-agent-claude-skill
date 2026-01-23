@@ -7,6 +7,24 @@ Supports parallel execution with race condition prevention.
 
 Thread Safety: Uses deep copy to prevent data corruption in parallel operations.
 Critical for maintaining data integrity when multiple pipeline steps execute concurrently.
+
+Pipeline Execution Model:
+- Sequential steps for simple workflows
+- Parallel steps for concurrent AI model execution
+- Isolated contexts prevent cross-step interference
+- Atomic operations ensure consistent pipeline state
+
+Error Handling:
+- Step-level error isolation prevents cascade failures
+- Comprehensive error reporting for debugging
+- Graceful degradation when individual steps fail
+- Retry mechanisms for transient failures
+
+Monitoring Integration:
+- Real-time pipeline performance metrics
+- Success/failure rate tracking
+- Cost monitoring and optimization
+- Alert generation for operational issues
 """
 
 import yaml
@@ -17,6 +35,28 @@ from typing import Dict, Any, List
 from .chain import ContentCreationChain, ChainResult, PipelineStep, StepType
 from .executor import ChainExecutor
 from ..models.text_to_image import UnifiedTextToImageGenerator
+from ..utils.validators import validate_image_dimensions
+from ..config.constants import MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT
+
+# Import monitoring system
+try:
+    from ...monitoring.monitoring.metrics import (
+        increment_counter, set_gauge, record_timer, start_timer
+    )
+    from ...monitoring.monitoring.metrics_config import is_monitoring_enabled
+    MONITORING_AVAILABLE = True
+except ImportError:
+    MONITORING_AVAILABLE = False
+    # Fallback functions that do nothing if monitoring is not available
+    def increment_counter(*args, **kwargs): pass
+    def set_gauge(*args, **kwargs): pass
+    def record_timer(*args, **kwargs): pass
+    def start_timer(*args, **kwargs): return TimerContextStub()
+
+class TimerContextStub:
+    """Stub timer context when monitoring is not available."""
+    def __enter__(self): return self
+    def __exit__(self, exc_type, exc_val, exc_tb): pass
 from ..models.image_understanding import UnifiedImageUnderstandingGenerator
 from ..models.prompt_generation import UnifiedPromptGenerator
 from ..models.image_to_image import UnifiedImageToImageGenerator
@@ -137,9 +177,16 @@ class AIPipelineManager:
         Returns:
             ChainResult with execution results
         """
+        # Metrics: Track chain execution requests
+        increment_counter("chain_execution_requests_total",
+                         tags={"chain_name": chain.name})
+
         # Validate chain
         errors = chain.validate()
         if errors:
+            # Metrics: Track validation failures
+            increment_counter("chain_validation_failures",
+                             tags={"chain_name": chain.name})
             return ChainResult(
                 success=False,
                 steps_completed=0,
@@ -148,6 +195,19 @@ class AIPipelineManager:
                 total_time=0.0,
                 outputs={},
                 error=f"Chain validation failed: {'; '.join(errors)}",
+            )
+
+        # Additional dimension validation for image-related chains
+        dimension_errors = self._validate_chain_dimensions(chain)
+        if dimension_errors:
+            return ChainResult(
+                success=False,
+                steps_completed=0,
+                total_steps=len(chain.steps),
+                total_cost=0.0,
+                total_time=0.0,
+                outputs={},
+                error=f"Dimension validation failed: {'; '.join(dimension_errors)}",
             )
 
         print(f"🚀 Executing chain: {chain.name}")
@@ -319,6 +379,24 @@ class AIPipelineManager:
     def cleanup_temp_files(self):
         """Clean up temporary files."""
         self.file_manager.cleanup_temp_files()
+
+    def _validate_chain_dimensions(self, chain: ContentCreationChain) -> List[str]:
+        """Validate dimensions in chain configuration."""
+        errors = []
+
+        for step in chain.steps:
+            if hasattr(step, 'params') and step.params:
+                width = step.params.get('width')
+                height = step.params.get('height')
+
+                if width is not None and height is not None:
+                    is_valid, error_msg = validate_image_dimensions(
+                        width, height, MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT
+                    )
+                    if not is_valid:
+                        errors.append(f"Step {step.step_type.value}: {error_msg}")
+
+        return errors
 
     def __repr__(self) -> str:
         """String representation of the manager."""

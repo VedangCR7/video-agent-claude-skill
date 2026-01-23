@@ -113,6 +113,36 @@ def validate_aspect_ratio(aspect_ratio: str) -> tuple[bool, str]:
     return True, ""
 
 
+def validate_image_dimensions(width: int, height: int, max_width: int = 2048, max_height: int = 2048) -> tuple[bool, str]:
+    """
+    Validate image dimensions with aspect ratio checking.
+
+    Args:
+        width: Image width in pixels
+        height: Image height in pixels
+        max_width: Maximum allowed width
+        max_height: Maximum allowed height
+
+    Returns:
+        Tuple of (is_valid, error_message)
+    """
+    if not isinstance(width, int) or not isinstance(height, int):
+        return False, "Width and height must be integers"
+
+    if width <= 0 or height <= 0:
+        return False, "Width and height must be positive"
+
+    if width > max_width or height > max_height:
+        return False, f"Dimensions too large (max: {max_width}x{max_height})"
+
+    # Check aspect ratio is reasonable (not too extreme)
+    aspect_ratio = max(width, height) / min(width, height)
+    if aspect_ratio > 10:  # Max 10:1 aspect ratio
+        return False, f"Aspect ratio too extreme ({aspect_ratio:.1f}:1). Maximum: 10:1"
+
+    return True, ""
+
+
 def validate_model_name(model: str, available_models: List[str]) -> tuple[bool, str]:
     """
     Validate model name against available models.

@@ -2,6 +2,11 @@
 Configuration constants for AI Content Pipeline
 """
 
+# Image dimension limits
+MAX_IMAGE_WIDTH = 2048
+MAX_IMAGE_HEIGHT = 2048
+MAX_ASPECT_RATIO = 10.0  # Maximum width:height or height:width ratio
+
 # Supported models for each pipeline step
 SUPPORTED_MODELS = {
     "text_to_image": [
