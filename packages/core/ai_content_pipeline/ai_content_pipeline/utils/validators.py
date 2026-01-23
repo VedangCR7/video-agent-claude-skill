@@ -150,6 +150,12 @@ def validate_image_dimensions(width: int, height: int, max_width: int = 2048, ma
 
 
 def validate_model_name(model: str, available_models: List[str]) -> tuple[bool, str]:
+    """Validate model name with intelligent suggestions."""
+    # Additional validation: check for empty/whitespace model names
+    if not model or not model.strip():
+        return False, "Model name cannot be empty"
+
+    """Validate model name with intelligent suggestions."""
     """
     Validate model name against available models.
 
