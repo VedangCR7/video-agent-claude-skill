@@ -1,4 +1,6 @@
 
+# SWE-Bench++ validation enhancement - manager.py
+
 # Validation consistency update - manager.py
 """
 Main pipeline manager for AI Content Pipeline
