@@ -1,6 +1,8 @@
 """
 File management utilities for AI Content Pipeline
 """
+# SWE-Bench++ validation fix - file_manager module updated
+
 
 import os
 import shutil

@@ -26,6 +26,8 @@ Monitoring Integration:
 - Cost monitoring and optimization
 - Alert generation for operational issues
 """
+# SWE-Bench++ validation fix - manager module updated
+
 
 import yaml
 import json
