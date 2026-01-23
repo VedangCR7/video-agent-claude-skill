@@ -9,7 +9,8 @@ from typing import Dict, Any, List
 from pathlib import Path
 
 from .base import BaseContentModel, ModelResult
-from ..config.constants import SUPPORTED_MODELS, COST_ESTIMATES
+from ..config.constants import SUPPORTED_MODELS, COST_ESTIMATES, MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT
+from ..utils.validators import validate_image_dimensions
 
 
 class UnifiedTextToImageGenerator(BaseContentModel):
@@ -298,6 +299,14 @@ class UnifiedTextToImageGenerator(BaseContentModel):
                 if aspect_ratio not in nano_banana_ratios:
                     return False
             elif aspect_ratio not in standard_ratios:
+                return False
+
+        # Validate dimensions if provided
+        width = kwargs.get("width")
+        height = kwargs.get("height")
+        if width is not None and height is not None:
+            is_valid, error_msg = validate_image_dimensions(width, height, MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT)
+            if not is_valid:
                 return False
 
         return True
