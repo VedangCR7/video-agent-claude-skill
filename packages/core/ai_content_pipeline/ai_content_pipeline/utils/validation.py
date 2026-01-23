@@ -24,7 +24,7 @@ def validate_file_extension(filename: str, allowed_extensions: list) -> bool:
     # Check if extension is in allowed list
     return extension in [ext.lower() for ext in allowed_extensions]
 
-def validate_image_dimensions(width: int, height: int, max_width: int = 2048, max_height: int = 2048) -> bool:
+def validate_image_dimensions(width: int, height: int, max_width: int = 2048, max_height: int = 2048) -> tuple[bool, str]:
     """
     Validate image dimensions.
 
@@ -35,14 +35,19 @@ def validate_image_dimensions(width: int, height: int, max_width: int = 2048, ma
         max_height: Maximum allowed height
 
     Returns:
-        True if dimensions are valid, False otherwise
+        Tuple of (is_valid, error_message)
     """
+    if not isinstance(width, int) or not isinstance(height, int):
+        return False, "Width and height must be integers"
+
     if width <= 0 or height <= 0:
-        return False
+        return False, "Width and height must be positive"
 
     if width > max_width or height > max_height:
-        return False
+        return False, f"Dimensions too large (max: {max_width}x{max_height})"
 
     # Check aspect ratio is reasonable (not too extreme)
     aspect_ratio = max(width, height) / min(width, height)
-    return aspect_ratio <= 10  # Max 10:1 aspect ratio
+    if aspect_ratio > 10:  # Max 10:1 aspect ratio
+        return False, f"Aspect ratio too extreme ({aspect_ratio:.1f}:1). Maximum: 10:1"
+    return True, ""

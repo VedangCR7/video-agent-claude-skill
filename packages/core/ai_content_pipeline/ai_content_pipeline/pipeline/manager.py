@@ -390,8 +390,13 @@ class AIPipelineManager:
                 height = step.params.get('height')
 
                 if width is not None and height is not None:
+                    # Validate that width and height are numeric
+                    if not isinstance(width, (int, float)) or not isinstance(height, (int, float)):
+                        errors.append(f"Step {step.step_type.value}: width and height must be numbers")
+                        continue
+
                     is_valid, error_msg = validate_image_dimensions(
-                        width, height, MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT
+                        int(width), int(height), MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT
                     )
                     if not is_valid:
                         errors.append(f"Step {step.step_type.value}: {error_msg}")
