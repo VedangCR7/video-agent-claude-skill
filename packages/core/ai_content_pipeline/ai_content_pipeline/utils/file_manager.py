@@ -1,4 +1,6 @@
 
+# SWE-Bench++ validation enhancement - file_manager.py
+
 # Validation consistency update - file_manager.py
 """
 File management utilities for AI Content Pipeline
